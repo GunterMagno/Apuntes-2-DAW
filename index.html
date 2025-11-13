@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Personal - 2º DAW</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navegación principal -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active">Inicio</a></li>
+                <li><a href="#technologies" class="nav-link">Tecnologías</a></li>
+                <li><a href="#resources" class="nav-link">Recursos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Sección Hero -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Apuntes 2º DAW</h1>
+            <p class="hero-subtitle">Tu repositorio personal de conocimiento en Desarrollo de Aplicaciones Web</p>
+            <a href="#technologies" class="cta-button">Explorar Tecnologías</a>
+        </div>
+    </section>
+
+    <!-- Sección de Tecnologías -->
+    <section id="technologies" class="technologies-section">
+        <div class="container">
+            <h2 class="section-title">Tecnologías del Curso</h2>
+            <p class="section-description">Domina las herramientas y frameworks más demandados en el desarrollo web moderno</p>
+
+            <!-- Grid de Tecnologías -->
+            <div class="tech-grid">
+                
+                <!-- Java Card -->
+                <div class="tech-card" data-tech="java">
+                    <div class="tech-icon">
+                        <i class="fab fa-java"></i>
+                    </div>
+                    <h3 class="tech-title">Java</h3>
+                    <p class="tech-description">Lenguaje de programación orientado a objetos, base fundamental para Spring Boot y desarrollo backend empresarial.</p>
+                    <div class="tech-actions">
+                        <a href="pages/java.html" class="btn-primary">Ver Detalles</a>
+                        <a href="pages/resumen-java.html" class="btn-secondary">Ver Resumen</a>
+                    </div>
+                </div>
+
+                <!-- Spring Boot Card -->
+                <div class="tech-card" data-tech="spring">
+                    <div class="tech-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3 class="tech-title">Spring Boot</h3>
+                    <p class="tech-description">Framework de Java para crear aplicaciones empresariales robustas con configuración mínima. Incluye Maven, Lombok, JPA, H2 y más.</p>
+                    <div class="tech-actions">
+                        <a href="pages/spring-boot.html" class="btn-primary">Ver Detalles</a>
+                        <a href="pages/resumen-spring.html" class="btn-secondary">Ver Resumen</a>
+                    </div>
+                </div>
+
+                <!-- Angular Card -->
+                <div class="tech-card" data-tech="angular">
+                    <div class="tech-icon">
+                        <i class="fab fa-angular"></i>
+                    </div>
+                    <h3 class="tech-title">Angular</h3>
+                    <p class="tech-description">Framework completo para aplicaciones web SPA con TypeScript. Incluye HTML5, CSS3, JavaScript y arquitectura basada en componentes.</p>
+                    <div class="tech-actions">
+                        <a href="pages/angular.html" class="btn-primary">Ver Detalles</a>
+                        <a href="pages/resumen-angular.html" class="btn-secondary">Ver Resumen</a>
+                    </div>
+                </div>
+
+                <!-- Node.js Card -->
+                <div class="tech-card" data-tech="node">
+                    <div class="tech-icon">
+                        <i class="fab fa-node-js"></i>
+                    </div>
+                    <h3 class="tech-title">Node.js</h3>
+                    <p class="tech-description">Entorno de ejecución JavaScript del lado del servidor. Permite construir aplicaciones escalables y de alto rendimiento.</p>
+                    <div class="tech-actions">
+                        <a href="pages/nodejs.html" class="btn-primary">Ver Detalles</a>
+                        <a href="pages/resumen-nodejs.html" class="btn-secondary">Ver Resumen</a>
+                    </div>
+                </div>
+
+                <!-- MongoDB Card -->
+                <div class="tech-card" data-tech="mongodb">
+                    <div class="tech-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3 class="tech-title">MongoDB</h3>
+                    <p class="tech-description">Base de datos NoSQL orientada a documentos. Almacena datos en formato JSON flexible y es ideal para aplicaciones modernas.</p>
+                    <div class="tech-actions">
+                        <a href="pages/mongodb.html" class="btn-primary">Ver Detalles</a>
+                        <a href="pages/resumen-mongodb.html" class="btn-secondary">Ver Resumen</a>
+                    </div>
+                </div>
+
+                <!-- Express.js Card -->
+                <div class="tech-card" data-tech="express">
+                    <div class="tech-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3 class="tech-title">Express.js</h3>
+                    <p class="tech-description">Framework minimalista para Node.js que facilita la creación de APIs REST y aplicaciones web de forma rápida y eficiente.</p>
+                    <div class="tech-actions">
+                        <a href="pages/express.html" class="btn-primary">Ver Detalles</a>
+                        <a href="pages/resumen-express.html" class="btn-secondary">Ver Resumen</a>
+                    </div>
+                </div>
+
+                <!-- React Card -->
+                <div class="tech-card" data-tech="react">
+                    <div class="tech-icon">
+                        <i class="fab fa-react"></i>
+                    </div>
+                    <h3 class="tech-title">React</h3>
+                    <p class="tech-description">Librería de JavaScript para construir interfaces de usuario interactivas mediante componentes reutilizables y estado eficiente.</p>
+                    <div class="tech-actions">
+                        <a href="pages/react.html" class="btn-primary">Ver Detalles</a>
+                        <a href="pages/resumen-react.html" class="btn-secondary">Ver Resumen</a>
+                    </div>
+                </div>
+
+                <!-- Docker Card -->
+                <div class="tech-card" data-tech="docker">
+                    <div class="tech-icon">
+                        <i class="fab fa-docker"></i>
+                    </div>
+                    <h3 class="tech-title">Docker</h3>
+                    <p class="tech-description">Plataforma de contenedores que permite empaquetar aplicaciones con sus dependencias para ejecutarlas en cualquier entorno de forma consistente.</p>
+                    <div class="tech-actions">
+                        <a href="pages/docker.html" class="btn-primary">Ver Detalles</a>
+                        <a href="pages/resumen-docker.html" class="btn-secondary">Ver Resumen</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Recursos -->
+    <section id="resources" class="resources-section">
+        <div class="container">
+            <h2 class="section-title">Recursos Adicionales</h2>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <i class="fas fa-book"></i>
+                    <h3>Documentación Oficial</h3>
+                    <p>Enlaces a documentación oficial de cada tecnología</p>
+                </div>
+                <div class="resource-card">
+                    <i class="fas fa-code"></i>
+                    <h3>Ejemplos de Código</h3>
+                    <p>Repositorio con ejemplos prácticos y proyectos</p>
+                </div>
+                <div class="resource-card">
+                    <i class="fas fa-video"></i>
+                    <h3>Tutoriales</h3>
+                    <p>Videos y guías paso a paso</p>
+                </div>
+                <div class="resource-card">
+                    <i class="fas fa-file-pdf"></i>
+                    <h3>PDFs y Cheatsheets</h3>
+                    <p>Material de estudio y referencia rápida</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Wiki Personal 2º DAW - Desarrollo de Aplicaciones Web</p>
+        </div>
+    </footer>
+
+    <!-- Script principal -->
+    <script src="js/main.js"></script>
+</body>
+</html>

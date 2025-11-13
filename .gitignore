@@ -1,0 +1,19 @@
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporales
+*.tmp
+*.bak
+
+# Logs
+*.log
+npm-debug.log*

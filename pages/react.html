@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <div class="detail-page">
+        <div class="detail-header">
+            <div class="detail-icon" style="color: var(--react-color);">
+                <i class="fab fa-react"></i>
+            </div>
+            <h1 class="detail-title">React</h1>
+            <p class="detail-subtitle">Librería JavaScript para construir interfaces de usuario</p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-info-circle"></i> ¿Qué es React?</h2>
+            <p>
+                React es una librería JavaScript de código abierto creada por Facebook para construir interfaces de 
+                usuario interactivas y dinámicas. Se basa en componentes reutilizables y utiliza un Virtual DOM para 
+                optimizar las actualizaciones de la interfaz.
+            </p>
+            
+            <div class="info-box">
+                <h4><i class="fas fa-lightbulb"></i> Características principales</h4>
+                <ul>
+                    <li><strong>Basado en componentes:</strong> UI construida con piezas reutilizables</li>
+                    <li><strong>Virtual DOM:</strong> Optimización de rendimiento</li>
+                    <li><strong>JSX:</strong> Sintaxis que combina JavaScript y HTML</li>
+                    <li><strong>Unidireccional:</strong> Flujo de datos de arriba hacia abajo</li>
+                    <li><strong>Hooks:</strong> Gestión de estado y efectos en componentes funcionales</li>
+                    <li><strong>Ecosistema rico:</strong> React Router, Redux, Next.js, etc.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-code"></i> Componentes básicos</h2>
+            
+            <h3>1. Componente funcional simple</h3>
+            <div class="code-block">
+                <pre>
+// Componente funcional
+function Saludo() {
+  return &lt;h1&gt;¡Hola Mundo!&lt;/h1&gt;;
+}
+
+// Con arrow function
+const Saludo = () => {
+  return &lt;h1&gt;¡Hola Mundo!&lt;/h1&gt;;
+};
+
+// Return implícito
+const Saludo = () => &lt;h1&gt;¡Hola Mundo!&lt;/h1&gt;;
+
+// Exportar
+export default Saludo;
+                </pre>
+            </div>
+
+            <h3>2. Props (Propiedades)</h3>
+            <div class="code-block">
+                <pre>
+// Componente con props
+function Saludo({ nombre, edad }) {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Hola {nombre}!&lt;/h1&gt;
+      &lt;p&gt;Tienes {edad} años&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Uso del componente
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;Saludo nombre="Juan" edad={25} /&gt;
+      &lt;Saludo nombre="Ana" edad={30} /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Props con valores por defecto
+function Saludo({ nombre = "Invitado", edad = 18 }) {
+  return &lt;h1&gt;Hola {nombre}, tienes {edad} años&lt;/h1&gt;;
+}
+                </pre>
+            </div>
+
+            <h3>3. JSX - JavaScript XML</h3>
+            <div class="code-block">
+                <pre>
+function Ejemplo() {
+  const nombre = "Juan";
+  const edad = 25;
+  const esAdulto = edad >= 18;
+  const hobbies = ["programar", "leer", "música"];
+  
+  return (
+    &lt;div className="contenedor"&gt;
+      {/* Comentarios en JSX */}
+      
+      {/* Variables */}
+      &lt;h1&gt;{nombre}&lt;/h1&gt;
+      
+      {/* Expresiones */}
+      &lt;p&gt;{2 + 2}&lt;/p&gt;
+      &lt;p&gt;{edad * 2}&lt;/p&gt;
+      
+      {/* Condicionales */}
+      {esAdulto ? &lt;p&gt;Mayor de edad&lt;/p&gt; : &lt;p&gt;Menor de edad&lt;/p&gt;}
+      
+      {esAdulto && &lt;p&gt;Puede votar&lt;/p&gt;}
+      
+      {/* Listas */}
+      &lt;ul&gt;
+        {hobbies.map((hobby, index) => (
+          &lt;li key={index}&gt;{hobby}&lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+      
+      {/* Estilos inline */}
+      &lt;div style={{ color: 'red', fontSize: '20px' }}&gt;
+        Texto rojo
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+                </pre>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-magic"></i> Hooks principales</h2>
+            
+            <h3>1. useState - Estado del componente</h3>
+            <div class="code-block">
+                <pre>
+import { useState } from 'react';
+
+function Contador() {
+  // Declarar estado
+  const [contador, setContador] = useState(0);
+  
+  const incrementar = () => {
+    setContador(contador + 1);
+  };
+  
+  const decrementar = () => {
+    setContador(contador - 1);
+  };
+  
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Contador: {contador}&lt;/h2&gt;
+      &lt;button onClick={incrementar}&gt;+&lt;/button&gt;
+      &lt;button onClick={decrementar}&gt;-&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Estado con objeto
+function Formulario() {
+  const [usuario, setUsuario] = useState({
+    nombre: '',
+    email: '',
+    edad: 0
+  });
+  
+  const handleChange = (e) => {
+    setUsuario({
+      ...usuario,
+      [e.target.name]: e.target.value
+    });
+  };
+  
+  return (
+    &lt;form&gt;
+      &lt;input
+        name="nombre"
+        value={usuario.nombre}
+        onChange={handleChange}
+      /&gt;
+      &lt;input
+        name="email"
+        value={usuario.email}
+        onChange={handleChange}
+      /&gt;
+    &lt;/form&gt;
+  );
+}
+                </pre>
+            </div>
+
+            <h3>2. useEffect - Efectos secundarios</h3>
+            <div class="code-block">
+                <pre>
+import { useState, useEffect } from 'react';
+
+function Ejemplo() {
+  const [contador, setContador] = useState(0);
+  
+  // Se ejecuta después de cada render
+  useEffect(() => {
+    console.log('Componente renderizado');
+  });
+  
+  // Se ejecuta solo una vez (al montar)
+  useEffect(() => {
+    console.log('Componente montado');
+    
+    // Cleanup (al desmontar)
+    return () => {
+      console.log('Componente desmontado');
+    };
+  }, []);
+  
+  // Se ejecuta cuando cambia 'contador'
+  useEffect(() => {
+    document.title = `Contador: ${contador}`;
+  }, [contador]);
+  
+  return (
+    &lt;div&gt;
+      &lt;p&gt;{contador}&lt;/p&gt;
+      &lt;button onClick={() => setContador(contador + 1)}&gt;
+        Incrementar
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Fetch de datos
+function Usuarios() {
+  const [usuarios, setUsuarios] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    fetch('https://api.example.com/usuarios')
+      .then(res => res.json())
+      .then(data => {
+        setUsuarios(data);
+        setLoading(false);
+      })
+      .catch(err => console.error(err));
+  }, []);
+  
+  if (loading) return &lt;p&gt;Cargando...&lt;/p&gt;;
+  
+  return (
+    &lt;ul&gt;
+      {usuarios.map(usuario => (
+        &lt;li key={usuario.id}&gt;{usuario.nombre}&lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+                </pre>
+            </div>
+
+            <h3>3. useContext - Contexto global</h3>
+            <div class="code-block">
+                <pre>
+import { createContext, useContext, useState } from 'react';
+
+// Crear contexto
+const UsuarioContext = createContext();
+
+// Provider
+function UsuarioProvider({ children }) {
+  const [usuario, setUsuario] = useState(null);
+  
+  return (
+    &lt;UsuarioContext.Provider value={{ usuario, setUsuario }}&gt;
+      {children}
+    &lt;/UsuarioContext.Provider&gt;
+  );
+}
+
+// Hook personalizado
+function useUsuario() {
+  return useContext(UsuarioContext);
+}
+
+// Componente que usa el contexto
+function Perfil() {
+  const { usuario, setUsuario } = useUsuario();
+  
+  return (
+    &lt;div&gt;
+      {usuario ? (
+        &lt;p&gt;Hola {usuario.nombre}&lt;/p&gt;
+      ) : (
+        &lt;p&gt;No hay usuario&lt;/p&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+
+// App
+function App() {
+  return (
+    &lt;UsuarioProvider&gt;
+      &lt;Perfil /&gt;
+    &lt;/UsuarioProvider&gt;
+  );
+}
+                </pre>
+            </div>
+
+            <h3>4. useRef - Referencias</h3>
+            <div class="code-block">
+                <pre>
+import { useRef, useEffect } from 'react';
+
+function Ejemplo() {
+  const inputRef = useRef(null);
+  const contadorRef = useRef(0);
+  
+  useEffect(() => {
+    // Enfocar input al montar
+    inputRef.current.focus();
+  }, []);
+  
+  const handleClick = () => {
+    contadorRef.current += 1;
+    console.log(`Clicks: ${contadorRef.current}`);
+  };
+  
+  return (
+    &lt;div&gt;
+      &lt;input ref={inputRef} type="text" /&gt;
+      &lt;button onClick={handleClick}&gt;Click&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+                </pre>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-project-diagram"></i> Ejemplo completo: CRUD con API</h2>
+            
+            <div class="code-block">
+                <pre>
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function UsuariosApp() {
+  const [usuarios, setUsuarios] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [formulario, setFormulario] = useState({
+    nombre: '',
+    email: '',
+    edad: ''
+  });
+  const [editando, setEditando] = useState(null);
+  
+  const API_URL = 'http://localhost:3000/api/usuarios';
+  
+  // Obtener usuarios
+  useEffect(() => {
+    obtenerUsuarios();
+  }, []);
+  
+  const obtenerUsuarios = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(API_URL);
+      setUsuarios(response.data);
+      setError(null);
+    } catch (err) {
+      setError('Error al cargar usuarios');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Crear o actualizar usuario
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      if (editando) {
+        // Actualizar
+        await axios.put(`${API_URL}/${editando}`, formulario);
+        setEditando(null);
+      } else {
+        // Crear
+        await axios.post(API_URL, formulario);
+      }
+      
+      // Limpiar formulario
+      setFormulario({ nombre: '', email: '', edad: '' });
+      
+      // Recargar lista
+      obtenerUsuarios();
+    } catch (err) {
+      setError('Error al guardar usuario');
+      console.error(err);
+    }
+  };
+  
+  // Editar usuario
+  const handleEditar = (usuario) => {
+    setFormulario({
+      nombre: usuario.nombre,
+      email: usuario.email,
+      edad: usuario.edad
+    });
+    setEditando(usuario.id);
+  };
+  
+  // Eliminar usuario
+  const handleEliminar = async (id) => {
+    if (window.confirm('¿Eliminar usuario?')) {
+      try {
+        await axios.delete(`${API_URL}/${id}`);
+        obtenerUsuarios();
+      } catch (err) {
+        setError('Error al eliminar usuario');
+        console.error(err);
+      }
+    }
+  };
+  
+  // Manejar cambios en el formulario
+  const handleChange = (e) => {
+    setFormulario({
+      ...formulario,
+      [e.target.name]: e.target.value
+    });
+  };
+  
+  if (loading) return &lt;div&gt;Cargando...&lt;/div&gt;;
+  if (error) return &lt;div&gt;Error: {error}&lt;/div&gt;;
+  
+  return (
+    &lt;div className="container"&gt;
+      &lt;h1&gt;Gestión de Usuarios&lt;/h1&gt;
+      
+      {/* Formulario */}
+      &lt;form onSubmit={handleSubmit}&gt;
+        &lt;input
+          type="text"
+          name="nombre"
+          placeholder="Nombre"
+          value={formulario.nombre}
+          onChange={handleChange}
+          required
+        /&gt;
+        &lt;input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formulario.email}
+          onChange={handleChange}
+          required
+        /&gt;
+        &lt;input
+          type="number"
+          name="edad"
+          placeholder="Edad"
+          value={formulario.edad}
+          onChange={handleChange}
+          required
+        /&gt;
+        &lt;button type="submit"&gt;
+          {editando ? 'Actualizar' : 'Crear'}
+        &lt;/button&gt;
+        {editando && (
+          &lt;button onClick={() => {
+            setEditando(null);
+            setFormulario({ nombre: '', email: '', edad: '' });
+          }}&gt;
+            Cancelar
+          &lt;/button&gt;
+        )}
+      &lt;/form&gt;
+      
+      {/* Lista de usuarios */}
+      &lt;table&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;th&gt;Nombre&lt;/th&gt;
+            &lt;th&gt;Email&lt;/th&gt;
+            &lt;th&gt;Edad&lt;/th&gt;
+            &lt;th&gt;Acciones&lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          {usuarios.map(usuario => (
+            &lt;tr key={usuario.id}&gt;
+              &lt;td&gt;{usuario.nombre}&lt;/td&gt;
+              &lt;td&gt;{usuario.email}&lt;/td&gt;
+              &lt;td&gt;{usuario.edad}&lt;/td&gt;
+              &lt;td&gt;
+                &lt;button onClick={() => handleEditar(usuario)}&gt;
+                  Editar
+                &lt;/button&gt;
+                &lt;button onClick={() => handleEliminar(usuario.id)}&gt;
+                  Eliminar
+                &lt;/button&gt;
+              &lt;/td&gt;
+            &lt;/tr&gt;
+          ))}
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default UsuariosApp;
+                </pre>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-terminal"></i> Comandos React</h2>
+            
+            <div class="command-item">
+                <code>npx create-react-app mi-app</code>
+                <span>Crea una nueva aplicación React</span>
+            </div>
+
+            <div class="command-item">
+                <code>npm start</code>
+                <span>Inicia el servidor de desarrollo (puerto 3000)</span>
+            </div>
+
+            <div class="command-item">
+                <code>npm run build</code>
+                <span>Compila la aplicación para producción</span>
+            </div>
+
+            <div class="command-item">
+                <code>npm test</code>
+                <span>Ejecuta los tests</span>
+            </div>
+
+            <div class="command-item">
+                <code>npm install axios</code>
+                <span>Instala Axios para peticiones HTTP</span>
+            </div>
+
+            <div class="command-item">
+                <code>npm install react-router-dom</code>
+                <span>Instala React Router para navegación</span>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-link"></i> Recursos adicionales</h2>
+            <ul>
+                <li><a href="https://react.dev/" target="_blank">React Official Docs</a> - Nueva documentación oficial</li>
+                <li><a href="https://react.dev/learn" target="_blank">React Learn</a> - Tutorial interactivo</li>
+                <li><a href="https://reactrouter.com/" target="_blank">React Router</a> - Documentación de React Router</li>
+                <li><a href="https://redux.js.org/" target="_blank">Redux</a> - Gestión de estado global</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Wiki Personal 2º DAW</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

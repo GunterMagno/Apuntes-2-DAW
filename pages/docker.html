@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <div class="detail-page">
+        <div class="detail-header">
+            <div class="detail-icon" style="color: var(--docker-color);">
+                <i class="fab fa-docker"></i>
+            </div>
+            <h1 class="detail-title">Docker</h1>
+            <p class="detail-subtitle">Plataforma de contenedores para desarrollar, enviar y ejecutar aplicaciones</p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-info-circle"></i> ¿Qué es Docker?</h2>
+            <p>
+                Docker es una plataforma de código abierto que permite automatizar el despliegue de aplicaciones dentro 
+                de contenedores de software. Un contenedor empaqueta una aplicación con todas sus dependencias, 
+                garantizando que funcione de manera idéntica en cualquier entorno.
+            </p>
+            
+            <div class="info-box">
+                <h4><i class="fas fa-lightbulb"></i> Ventajas de Docker</h4>
+                <ul>
+                    <li><strong>Portabilidad:</strong> Ejecuta contenedores en cualquier sistema operativo</li>
+                    <li><strong>Aislamiento:</strong> Cada contenedor está aislado de los demás</li>
+                    <li><strong>Ligero:</strong> Más eficiente que máquinas virtuales</li>
+                    <li><strong>Escalabilidad:</strong> Fácil de escalar horizontal y verticalmente</li>
+                    <li><strong>Versionado:</strong> Control de versiones de imágenes</li>
+                    <li><strong>Consistencia:</strong> Mismo entorno en desarrollo y producción</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-cube"></i> Conceptos clave</h2>
+            
+            <h3>Arquitectura de Docker</h3>
+            <ul>
+                <li><strong>Imagen:</strong> Plantilla de solo lectura con instrucciones para crear un contenedor</li>
+                <li><strong>Contenedor:</strong> Instancia ejecutable de una imagen</li>
+                <li><strong>Dockerfile:</strong> Archivo con instrucciones para construir una imagen</li>
+                <li><strong>Docker Hub:</strong> Registro público de imágenes Docker</li>
+                <li><strong>Volume:</strong> Persistencia de datos fuera del contenedor</li>
+                <li><strong>Network:</strong> Comunicación entre contenedores</li>
+                <li><strong>Docker Compose:</strong> Herramienta para definir aplicaciones multi-contenedor</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-code"></i> Dockerfile - Crear imágenes</h2>
+            
+            <h3>Ejemplo básico de Dockerfile</h3>
+            <div class="code-block">
+                <pre>
+# Imagen base
+FROM node:18-alpine
+
+# Metadata
+LABEL maintainer="tu@email.com"
+LABEL description="Aplicación Node.js"
+
+# Directorio de trabajo
+WORKDIR /app
+
+# Copiar package.json
+COPY package*.json ./
+
+# Instalar dependencias
+RUN npm install
+
+# Copiar código fuente
+COPY . .
+
+# Exponer puerto
+EXPOSE 3000
+
+# Comando por defecto
+CMD ["npm", "start"]
+                </pre>
+            </div>
+
+            <h3>Dockerfile para aplicación React</h3>
+            <div class="code-block">
+                <pre>
+# Build stage
+FROM node:18-alpine AS build
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+# Production stage
+FROM nginx:alpine
+
+# Copiar build de React a Nginx
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Copiar configuración de Nginx (opcional)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+                </pre>
+            </div>
+
+            <h3>Dockerfile para Spring Boot</h3>
+            <div class="code-block">
+                <pre>
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+# Copiar JAR
+COPY target/mi-app-1.0.0.jar app.jar
+
+# Exponer puerto
+EXPOSE 8080
+
+# Variables de entorno
+ENV SPRING_PROFILES_ACTIVE=prod
+
+# Ejecutar aplicación
+ENTRYPOINT ["java", "-jar", "app.jar"]
+                </pre>
+            </div>
+
+            <h3>Instrucciones Dockerfile</h3>
+            <div class="code-block">
+                <pre>
+# FROM - Imagen base
+FROM ubuntu:22.04
+
+# RUN - Ejecutar comandos durante el build
+RUN apt-get update && apt-get install -y python3
+
+# COPY - Copiar archivos del host al contenedor
+COPY ./src /app/src
+
+# ADD - Similar a COPY pero puede descomprimir archivos
+ADD archivo.tar.gz /destino
+
+# WORKDIR - Establece el directorio de trabajo
+WORKDIR /app
+
+# ENV - Variables de entorno
+ENV NODE_ENV=production
+ENV PORT=3000
+
+# EXPOSE - Documenta qué puertos usa el contenedor
+EXPOSE 3000
+
+# CMD - Comando por defecto (puede ser sobrescrito)
+CMD ["node", "app.js"]
+
+# ENTRYPOINT - Comando principal (no se sobrescribe fácilmente)
+ENTRYPOINT ["python3"]
+
+# ARG - Variables solo durante el build
+ARG VERSION=1.0
+
+# VOLUME - Punto de montaje para volúmenes
+VOLUME ["/data"]
+
+# USER - Usuario con el que se ejecuta el contenedor
+USER node
+                </pre>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-layer-group"></i> Docker Compose</h2>
+            
+            <h3>docker-compose.yml - Stack completo MERN</h3>
+            <div class="code-block">
+                <pre>
+version: '3.8'
+
+services:
+  # Backend Node.js + Express
+  backend:
+    build: ./backend
+    container_name: backend-api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://mongodb:27017/miapp
+      - PORT=3000
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  # Frontend React
+  frontend:
+    build: ./frontend
+    container_name: frontend-react
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  # Base de datos MongoDB
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password123
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - app-network
+
+# Volúmenes
+volumes:
+  mongodb-data:
+    driver: local
+
+# Redes
+networks:
+  app-network:
+    driver: bridge
+                </pre>
+            </div>
+
+            <h3>docker-compose.yml - Spring Boot + PostgreSQL</h3>
+            <div class="code-block">
+                <pre>
+version: '3.8'
+
+services:
+  # Aplicación Spring Boot
+  app:
+    build: .
+    container_name: spring-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/midb
+      - SPRING_DATASOURCE_USERNAME=usuario
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - postgres
+    networks:
+      - spring-network
+
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=midb
+      - POSTGRES_USER=usuario
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - spring-network
+
+volumes:
+  postgres-data:
+
+networks:
+  spring-network:
+    driver: bridge
+                </pre>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-terminal"></i> Comandos Docker esenciales</h2>
+            
+            <h3>Imágenes</h3>
+            <div class="command-item">
+                <code>docker build -t mi-app:1.0 .</code>
+                <span>Construye una imagen desde un Dockerfile</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker images</code>
+                <span>Lista todas las imágenes locales</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker pull imagen:tag</code>
+                <span>Descarga una imagen de Docker Hub</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker rmi imagen</code>
+                <span>Elimina una imagen</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker tag imagen:tag nueva:tag</code>
+                <span>Crea una nueva etiqueta para una imagen</span>
+            </div>
+
+            <h3>Contenedores</h3>
+            <div class="command-item">
+                <code>docker run -d -p 8080:80 --name mi-contenedor nginx</code>
+                <span>Crea y ejecuta un contenedor (-d: detached, -p: mapeo de puertos)</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker ps</code>
+                <span>Lista contenedores en ejecución</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker ps -a</code>
+                <span>Lista todos los contenedores (incluidos los detenidos)</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker start contenedor</code>
+                <span>Inicia un contenedor detenido</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker stop contenedor</code>
+                <span>Detiene un contenedor en ejecución</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker restart contenedor</code>
+                <span>Reinicia un contenedor</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker rm contenedor</code>
+                <span>Elimina un contenedor detenido</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker rm -f contenedor</code>
+                <span>Fuerza la eliminación de un contenedor en ejecución</span>
+            </div>
+
+            <h3>Logs y debugging</h3>
+            <div class="command-item">
+                <code>docker logs contenedor</code>
+                <span>Muestra los logs de un contenedor</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker logs -f contenedor</code>
+                <span>Muestra logs en tiempo real (follow)</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker exec -it contenedor bash</code>
+                <span>Abre una terminal dentro del contenedor</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker inspect contenedor</code>
+                <span>Muestra información detallada del contenedor</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker stats</code>
+                <span>Muestra uso de recursos de los contenedores</span>
+            </div>
+
+            <h3>Volúmenes</h3>
+            <div class="command-item">
+                <code>docker volume create mi-volumen</code>
+                <span>Crea un volumen</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker volume ls</code>
+                <span>Lista todos los volúmenes</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker volume rm mi-volumen</code>
+                <span>Elimina un volumen</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker run -v mi-volumen:/app/data imagen</code>
+                <span>Ejecuta contenedor con volumen montado</span>
+            </div>
+
+            <h3>Docker Compose</h3>
+            <div class="command-item">
+                <code>docker-compose up</code>
+                <span>Inicia todos los servicios definidos en docker-compose.yml</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker-compose up -d</code>
+                <span>Inicia servicios en segundo plano (detached)</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker-compose down</code>
+                <span>Detiene y elimina todos los contenedores</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker-compose ps</code>
+                <span>Lista servicios en ejecución</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker-compose logs -f servicio</code>
+                <span>Muestra logs de un servicio</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker-compose build</code>
+                <span>Construye las imágenes de los servicios</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker-compose exec servicio bash</code>
+                <span>Ejecuta comando en un servicio en ejecución</span>
+            </div>
+
+            <h3>Limpieza</h3>
+            <div class="command-item">
+                <code>docker system prune</code>
+                <span>Elimina recursos no utilizados (contenedores, redes, imágenes)</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker system prune -a</code>
+                <span>Elimina todo lo no utilizado, incluidas imágenes sin contenedores</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker container prune</code>
+                <span>Elimina contenedores detenidos</span>
+            </div>
+
+            <div class="command-item">
+                <code>docker image prune</code>
+                <span>Elimina imágenes no utilizadas</span>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-lightbulb"></i> Mejores prácticas</h2>
+            <ul>
+                <li><strong>Imágenes ligeras:</strong> Usa imágenes alpine cuando sea posible</li>
+                <li><strong>.dockerignore:</strong> Excluye archivos innecesarios (node_modules, .git)</li>
+                <li><strong>Multi-stage builds:</strong> Reduce el tamaño de la imagen final</li>
+                <li><strong>Un proceso por contenedor:</strong> No ejecutes múltiples servicios en un contenedor</li>
+                <li><strong>Variables de entorno:</strong> Usa .env para configuraciones sensibles</li>
+                <li><strong>Health checks:</strong> Define verificaciones de salud en tus contenedores</li>
+                <li><strong>Versionado:</strong> Siempre etiqueta tus imágenes con versiones específicas</li>
+                <li><strong>No root:</strong> Ejecuta contenedores con usuarios no privilegiados</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-link"></i> Recursos adicionales</h2>
+            <ul>
+                <li><a href="https://docs.docker.com/" target="_blank">Docker Official Docs</a> - Documentación oficial</li>
+                <li><a href="https://hub.docker.com/" target="_blank">Docker Hub</a> - Registro de imágenes</li>
+                <li><a href="https://docs.docker.com/compose/" target="_blank">Docker Compose Docs</a> - Documentación de Compose</li>
+                <li><a href="https://www.docker.com/play-with-docker" target="_blank">Play with Docker</a> - Laboratorio online</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Wiki Personal 2º DAW</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

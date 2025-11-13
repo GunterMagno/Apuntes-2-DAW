@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <div class="detail-page">
+        <div class="detail-header">
+            <div class="detail-icon" style="color: var(--angular-color);">
+                <i class="fab fa-angular"></i>
+            </div>
+            <h1 class="detail-title">Angular</h1>
+            <p class="detail-subtitle">Framework completo para aplicaciones web SPA con TypeScript</p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-info-circle"></i> ¿Qué es Angular?</h2>
+            <p>
+                Angular es un framework de desarrollo web completo creado por Google. Permite construir Single Page Applications 
+                (SPA) usando TypeScript, HTML5 y CSS3. Es un framework "opinionado" que proporciona una estructura completa 
+                para desarrollar aplicaciones escalables.
+            </p>
+            
+            <div class="info-box">
+                <h4><i class="fas fa-lightbulb"></i> Características principales</h4>
+                <ul>
+                    <li><strong>TypeScript:</strong> Lenguaje tipado que compila a JavaScript</li>
+                    <li><strong>Arquitectura basada en componentes:</strong> Reutilización y modularidad</li>
+                    <li><strong>Two-way data binding:</strong> Sincronización automática vista-modelo</li>
+                    <li><strong>Dependency Injection:</strong> Gestión eficiente de dependencias</li>
+                    <li><strong>RxJS:</strong> Programación reactiva con Observables</li>
+                    <li><strong>Angular CLI:</strong> Herramienta poderosa para generar código</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-sitemap"></i> Arquitectura de Angular</h2>
+            <h3>Estructura de un proyecto Angular</h3>
+            <div class="code-block">
+                <pre>
+mi-app/
+├── src/
+│   ├── app/
+│   │   ├── components/          // Componentes
+│   │   ├── services/            // Servicios
+│   │   ├── models/              // Modelos/Interfaces
+│   │   ├── guards/              // Guards de rutas
+│   │   ├── interceptors/        // Interceptores HTTP
+│   │   ├── app.component.ts     // Componente raíz
+│   │   ├── app.component.html   // Template raíz
+│   │   ├── app.component.css    // Estilos raíz
+│   │   ├── app.module.ts        // Módulo principal
+│   │   └── app-routing.module.ts // Configuración de rutas
+│   ├── assets/                  // Imágenes, archivos estáticos
+│   ├── environments/            // Configuraciones por entorno
+│   ├── index.html               // HTML principal
+│   ├── main.ts                  // Punto de entrada
+│   └── styles.css               // Estilos globales
+├── angular.json                 // Configuración de Angular
+├── package.json                 // Dependencias npm
+└── tsconfig.json                // Configuración TypeScript
+                </pre>
+            </div>
+
+            <h3>Conceptos clave</h3>
+            <ul>
+                <li><strong>Módulos:</strong> Agrupan componentes, servicios y otras funcionalidades</li>
+                <li><strong>Componentes:</strong> Unidad básica de la UI (template + lógica + estilos)</li>
+                <li><strong>Servicios:</strong> Lógica de negocio y comunicación con APIs</li>
+                <li><strong>Directivas:</strong> Modifican el comportamiento del DOM</li>
+                <li><strong>Pipes:</strong> Transforman datos en las plantillas</li>
+                <li><strong>Routing:</strong> Navegación entre vistas</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-code"></i> Ejemplos prácticos completos</h2>
+            
+            <h3>1. Crear componente básico</h3>
+            <div class="code-block">
+                <pre>
+// usuario.component.ts
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-usuario',
+  templateUrl: './usuario.component.html',
+  styleUrls: ['./usuario.component.css']
+})
+export class UsuarioComponent implements OnInit {
+  // Propiedades
+  nombre: string = 'Juan';
+  edad: number = 25;
+  activo: boolean = true;
+  usuarios: string[] = ['Ana', 'Pedro', 'María'];
+  
+  // Constructor
+  constructor() { }
+  
+  // Inicialización
+  ngOnInit(): void {
+    console.log('Componente inicializado');
+  }
+  
+  // Métodos
+  saludar(): void {
+    alert(`Hola ${this.nombre}`);
+  }
+  
+  agregarUsuario(nombre: string): void {
+    this.usuarios.push(nombre);
+  }
+}
+                </pre>
+            </div>
+
+            <div class="code-block">
+                <pre>
+&lt;!-- usuario.component.html --&gt;
+&lt;div class="usuario-container"&gt;
+  &lt;h2&gt;{{ nombre }}&lt;/h2&gt;
+  &lt;p&gt;Edad: {{ edad }}&lt;/p&gt;
+  &lt;p&gt;Estado: {{ activo ? 'Activo' : 'Inactivo' }}&lt;/p&gt;
+  
+  &lt;button (click)="saludar()"&gt;Saludar&lt;/button&gt;
+  
+  &lt;ul&gt;
+    &lt;li *ngFor="let usuario of usuarios"&gt;{{ usuario }}&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+                </pre>
+            </div>
+
+            <h3>2. Servicio para llamadas HTTP</h3>
+            <div class="code-block">
+                <pre>
+// usuario.service.ts
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { Usuario } from '../models/usuario.model';
+
+@Injectable({
+  providedIn: 'root'  // Singleton en toda la app
+})
+export class UsuarioService {
+  private apiUrl = 'http://localhost:8080/api/usuarios';
+  
+  constructor(private http: HttpClient) { }
+  
+  // GET - Obtener todos
+  obtenerTodos(): Observable&lt;Usuario[]&gt; {
+    return this.http.get&lt;Usuario[]&gt;(this.apiUrl)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+  
+  // GET - Obtener por ID
+  obtenerPorId(id: number): Observable&lt;Usuario&gt; {
+    return this.http.get&lt;Usuario&gt;(`${this.apiUrl}/${id}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+  
+  // POST - Crear
+  crear(usuario: Usuario): Observable&lt;Usuario&gt; {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post&lt;Usuario&gt;(this.apiUrl, usuario, { headers })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+  
+  // PUT - Actualizar
+  actualizar(id: number, usuario: Usuario): Observable&lt;Usuario&gt; {
+    return this.http.put&lt;Usuario&gt;(`${this.apiUrl}/${id}`, usuario)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+  
+  // DELETE - Eliminar
+  eliminar(id: number): Observable&lt;void&gt; {
+    return this.http.delete&lt;void&gt;(`${this.apiUrl}/${id}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+  
+  // Manejo de errores
+  private handleError(error: any) {
+    console.error('Error:', error);
+    return throwError(() => new Error(error.message || 'Error del servidor'));
+  }
+}
+                </pre>
+            </div>
+
+            <h3>3. Modelo/Interface</h3>
+            <div class="code-block">
+                <pre>
+// models/usuario.model.ts
+export interface Usuario {
+  id?: number;
+  nombre: string;
+  email: string;
+  edad?: number;
+  activo?: boolean;
+}
+
+// También puedes usar una clase
+export class UsuarioClass {
+  constructor(
+    public id: number,
+    public nombre: string,
+    public email: string,
+    public edad?: number,
+    public activo: boolean = true
+  ) {}
+}
+                </pre>
+            </div>
+
+            <h3>4. Componente con formulario reactivo</h3>
+            <div class="code-block">
+                <pre>
+// formulario-usuario.component.ts
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UsuarioService } from '../services/usuario.service';
+import { Usuario } from '../models/usuario.model';
+
+@Component({
+  selector: 'app-formulario-usuario',
+  templateUrl: './formulario-usuario.component.html'
+})
+export class FormularioUsuarioComponent implements OnInit {
+  usuarioForm: FormGroup;
+  submitted = false;
+  
+  constructor(
+    private formBuilder: FormBuilder,
+    private usuarioService: UsuarioService
+  ) {
+    // Inicializar formulario
+    this.usuarioForm = this.formBuilder.group({
+      nombre: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      edad: ['', [Validators.required, Validators.min(18)]]
+    });
+  }
+  
+  ngOnInit(): void { }
+  
+  // Getters para validaciones
+  get f() { return this.usuarioForm.controls; }
+  
+  onSubmit(): void {
+    this.submitted = true;
+    
+    // Si el formulario es inválido, no continuar
+    if (this.usuarioForm.invalid) {
+      return;
+    }
+    
+    // Crear usuario
+    const usuario: Usuario = this.usuarioForm.value;
+    this.usuarioService.crear(usuario).subscribe({
+      next: (response) => {
+        console.log('Usuario creado:', response);
+        this.usuarioForm.reset();
+        this.submitted = false;
+      },
+      error: (error) => {
+        console.error('Error al crear usuario:', error);
+      }
+    });
+  }
+}
+                </pre>
+            </div>
+
+            <div class="code-block">
+                <pre>
+&lt;!-- formulario-usuario.component.html --&gt;
+&lt;form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()"&gt;
+  
+  &lt;!-- Nombre --&gt;
+  &lt;div class="form-group"&gt;
+    &lt;label&gt;Nombre:&lt;/label&gt;
+    &lt;input type="text" formControlName="nombre" class="form-control"
+           [ngClass]="{ 'is-invalid': submitted && f['nombre'].errors }" /&gt;
+    &lt;div *ngIf="submitted && f['nombre'].errors" class="invalid-feedback"&gt;
+      &lt;div *ngIf="f['nombre'].errors['required']"&gt;El nombre es requerido&lt;/div&gt;
+      &lt;div *ngIf="f['nombre'].errors['minlength']"&gt;Mínimo 3 caracteres&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;!-- Email --&gt;
+  &lt;div class="form-group"&gt;
+    &lt;label&gt;Email:&lt;/label&gt;
+    &lt;input type="email" formControlName="email" class="form-control"
+           [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" /&gt;
+    &lt;div *ngIf="submitted && f['email'].errors" class="invalid-feedback"&gt;
+      &lt;div *ngIf="f['email'].errors['required']"&gt;El email es requerido&lt;/div&gt;
+      &lt;div *ngIf="f['email'].errors['email']"&gt;Email inválido&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;!-- Edad --&gt;
+  &lt;div class="form-group"&gt;
+    &lt;label&gt;Edad:&lt;/label&gt;
+    &lt;input type="number" formControlName="edad" class="form-control"
+           [ngClass]="{ 'is-invalid': submitted && f['edad'].errors }" /&gt;
+    &lt;div *ngIf="submitted && f['edad'].errors" class="invalid-feedback"&gt;
+      &lt;div *ngIf="f['edad'].errors['required']"&gt;La edad es requerida&lt;/div&gt;
+      &lt;div *ngIf="f['edad'].errors['min']"&gt;Debe ser mayor de 18&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;button type="submit" class="btn btn-primary"&gt;Guardar&lt;/button&gt;
+&lt;/form&gt;
+                </pre>
+            </div>
+
+            <h3>5. Routing (navegación)</h3>
+            <div class="code-block">
+                <pre>
+// app-routing.module.ts
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { DetalleComponent } from './components/detalle/detalle.component';
+import { AuthGuard } from './guards/auth.guard';
+
+const routes: Routes = [
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
+  { path: 'usuarios/:id', component: DetalleComponent },
+  { path: '**', redirectTo: '/home' }  // 404
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+                </pre>
+            </div>
+
+            <div class="code-block">
+                <pre>
+&lt;!-- Navegación en HTML --&gt;
+&lt;nav&gt;
+  &lt;a routerLink="/home" routerLinkActive="active"&gt;Inicio&lt;/a&gt;
+  &lt;a routerLink="/usuarios" routerLinkActive="active"&gt;Usuarios&lt;/a&gt;
+&lt;/nav&gt;
+
+&lt;!-- Outlet donde se renderizan las rutas --&gt;
+&lt;router-outlet&gt;&lt;/router-outlet&gt;
+                </pre>
+            </div>
+
+            <h3>6. Directivas comunes</h3>
+            <div class="code-block">
+                <pre>
+&lt;!-- *ngIf - Condicional --&gt;
+&lt;div *ngIf="usuario; else noUsuario"&gt;
+  Bienvenido {{ usuario.nombre }}
+&lt;/div&gt;
+&lt;ng-template #noUsuario&gt;
+  &lt;p&gt;No hay usuario&lt;/p&gt;
+&lt;/ng-template&gt;
+
+&lt;!-- *ngFor - Bucle --&gt;
+&lt;ul&gt;
+  &lt;li *ngFor="let item of items; let i = index"&gt;
+    {{ i + 1 }}. {{ item.nombre }}
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- *ngSwitch - Switch --&gt;
+&lt;div [ngSwitch]="tipo"&gt;
+  &lt;p *ngSwitchCase="'admin'"&gt;Panel de Admin&lt;/p&gt;
+  &lt;p *ngSwitchCase="'user'"&gt;Panel de Usuario&lt;/p&gt;
+  &lt;p *ngSwitchDefault&gt;Panel Invitado&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;!-- ngClass - Clases dinámicas --&gt;
+&lt;div [ngClass]="{'activo': isActive, 'error': hasError}"&gt;&lt;/div&gt;
+
+&lt;!-- ngStyle - Estilos dinámicos --&gt;
+&lt;div [ngStyle]="{'color': colorTexto, 'font-size': tamaño + 'px'}"&gt;&lt;/div&gt;
+                </pre>
+            </div>
+
+            <h3>7. Pipes (transformación de datos)</h3>
+            <div class="code-block">
+                <pre>
+&lt;!-- Pipes incorporados --&gt;
+&lt;p&gt;{{ nombre | uppercase }}&lt;/p&gt;
+&lt;p&gt;{{ nombre | lowercase }}&lt;/p&gt;
+&lt;p&gt;{{ fecha | date:'dd/MM/yyyy' }}&lt;/p&gt;
+&lt;p&gt;{{ precio | currency:'EUR':'symbol' }}&lt;/p&gt;
+&lt;p&gt;{{ porcentaje | percent }}&lt;/p&gt;
+&lt;p&gt;{{ objeto | json }}&lt;/p&gt;
+
+&lt;!-- Encadenar pipes --&gt;
+&lt;p&gt;{{ nombre | lowercase | titlecase }}&lt;/p&gt;
+                </pre>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-terminal"></i> Comandos Angular CLI</h2>
+            
+            <div class="command-item">
+                <code>ng new mi-app</code>
+                <span>Crea un nuevo proyecto Angular</span>
+            </div>
+
+            <div class="command-item">
+                <code>ng serve</code>
+                <span>Inicia el servidor de desarrollo en http://localhost:4200</span>
+            </div>
+
+            <div class="command-item">
+                <code>ng serve --open</code>
+                <span>Inicia el servidor y abre el navegador automáticamente</span>
+            </div>
+
+            <div class="command-item">
+                <code>ng generate component nombre</code>
+                <span>Genera un nuevo componente (también: ng g c nombre)</span>
+            </div>
+
+            <div class="command-item">
+                <code>ng generate service nombre</code>
+                <span>Genera un nuevo servicio (también: ng g s nombre)</span>
+            </div>
+
+            <div class="command-item">
+                <code>ng generate module nombre</code>
+                <span>Genera un nuevo módulo (también: ng g m nombre)</span>
+            </div>
+
+            <div class="command-item">
+                <code>ng build</code>
+                <span>Compila la aplicación para producción en la carpeta dist/</span>
+            </div>
+
+            <div class="command-item">
+                <code>ng build --configuration production</code>
+                <span>Build optimizado para producción</span>
+            </div>
+
+            <div class="command-item">
+                <code>ng test</code>
+                <span>Ejecuta las pruebas unitarias con Karma</span>
+            </div>
+
+            <div class="command-item">
+                <code>ng e2e</code>
+                <span>Ejecuta las pruebas end-to-end</span>
+            </div>
+
+            <div class="command-item">
+                <code>ng lint</code>
+                <span>Analiza el código en busca de errores de estilo</span>
+            </div>
+
+            <div class="command-item">
+                <code>ng version</code>
+                <span>Muestra la versión de Angular CLI y dependencias</span>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-link"></i> Recursos adicionales</h2>
+            <ul>
+                <li><a href="https://angular.io/docs" target="_blank">Angular Official Docs</a> - Documentación oficial</li>
+                <li><a href="https://angular.io/tutorial" target="_blank">Tour of Heroes</a> - Tutorial oficial</li>
+                <li><a href="https://www.typescriptlang.org/docs/" target="_blank">TypeScript Docs</a> - Documentación de TypeScript</li>
+                <li><a href="https://rxjs.dev/" target="_blank">RxJS Documentation</a> - Guía de RxJS</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Wiki Personal 2º DAW</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

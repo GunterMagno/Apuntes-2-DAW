@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen Java - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos específicos para tablas de resumen */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-md) 0;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        
+        .summary-table thead {
+            background-color: var(--accent-primary);
+            color: var(--bg-primary);
+        }
+        
+        .summary-table th,
+        .summary-table td {
+            padding: var(--spacing-sm) var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+        
+        .summary-table th {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .summary-table td:first-child {
+            font-family: 'Courier New', monospace;
+            color: var(--react-color);
+            font-weight: 600;
+        }
+        
+        .summary-table tr:hover {
+            background-color: var(--bg-card-hover);
+        }
+        
+        .summary-table code {
+            background-color: var(--bg-primary);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        
+        .quick-ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
+        }
+        
+        .quick-ref-card {
+            background-color: var(--bg-card);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--accent-primary);
+        }
+        
+        .quick-ref-card h4 {
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <div class="detail-page">
+        <div class="detail-header">
+            <div class="detail-icon" style="color: var(--java-color);">
+                <i class="fab fa-java"></i>
+            </div>
+            <h1 class="detail-title">Resumen Rápido: Java</h1>
+            <p class="detail-subtitle">Referencia rápida de comandos, sintaxis y conceptos clave</p>
+        </div>
+
+        <!-- Comandos esenciales -->
+        <div class="content-section">
+            <h2><i class="fas fa-terminal"></i> Comandos más utilizados</h2>
+            <p>Esta tabla contiene los comandos de Java que usarás con más frecuencia en tu día a día como desarrollador.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo práctico</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>javac MiClase.java</td>
+                        <td>Compila un archivo .java a bytecode (.class)</td>
+                        <td><code>javac Calculadora.java</code> genera Calculadora.class</td>
+                    </tr>
+                    <tr>
+                        <td>java MiClase</td>
+                        <td>Ejecuta una clase compilada (debe tener método main)</td>
+                        <td><code>java Calculadora</code> ejecuta el programa</td>
+                    </tr>
+                    <tr>
+                        <td>java -version</td>
+                        <td>Muestra la versión de Java instalada en tu sistema</td>
+                        <td>Útil para verificar que Java está instalado correctamente</td>
+                    </tr>
+                    <tr>
+                        <td>javac -d bin src/*.java</td>
+                        <td>Compila todos los archivos .java de src/ y guarda los .class en bin/</td>
+                        <td>Organiza mejor los archivos compilados</td>
+                    </tr>
+                    <tr>
+                        <td>jar -cvf app.jar *.class</td>
+                        <td>Crea un archivo JAR con todas las clases compiladas</td>
+                        <td>Empaqueta tu aplicación para distribuir</td>
+                    </tr>
+                    <tr>
+                        <td>java -jar app.jar</td>
+                        <td>Ejecuta un archivo JAR ejecutable</td>
+                        <td>El JAR debe tener un MANIFEST con la clase Main</td>
+                    </tr>
+                    <tr>
+                        <td>javap -c MiClase</td>
+                        <td>Desensambla y muestra el bytecode de una clase</td>
+                        <td>Útil para entender cómo funciona internamente</td>
+                    </tr>
+                    <tr>
+                        <td>jshell</td>
+                        <td>Abre el shell interactivo de Java (desde Java 9+)</td>
+                        <td>Perfecto para probar código rápidamente</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tipos de datos -->
+        <div class="content-section">
+            <h2><i class="fas fa-database"></i> Tipos de datos primitivos</h2>
+            <p>Java tiene 8 tipos primitivos básicos. Es importante conocer su rango y cuándo usar cada uno para optimizar memoria.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Tamaño</th>
+                        <th>Rango</th>
+                        <th>Cuándo usarlo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>byte</td>
+                        <td>8 bits</td>
+                        <td>-128 a 127</td>
+                        <td>Para ahorrar memoria con números muy pequeños</td>
+                    </tr>
+                    <tr>
+                        <td>short</td>
+                        <td>16 bits</td>
+                        <td>-32,768 a 32,767</td>
+                        <td>Números pequeños cuando byte no es suficiente</td>
+                    </tr>
+                    <tr>
+                        <td>int</td>
+                        <td>32 bits</td>
+                        <td>-2,147,483,648 a 2,147,483,647</td>
+                        <td><strong>Más usado</strong> para números enteros normales</td>
+                    </tr>
+                    <tr>
+                        <td>long</td>
+                        <td>64 bits</td>
+                        <td>-9,223,372,036,854,775,808 a 9,223,372,036,854,775,807</td>
+                        <td>Números muy grandes (usar sufijo L: 123456789L)</td>
+                    </tr>
+                    <tr>
+                        <td>float</td>
+                        <td>32 bits</td>
+                        <td>~7 dígitos decimales</td>
+                        <td>Decimales con precisión limitada (usar sufijo f: 3.14f)</td>
+                    </tr>
+                    <tr>
+                        <td>double</td>
+                        <td>64 bits</td>
+                        <td>~15 dígitos decimales</td>
+                        <td><strong>Más usado</strong> para números decimales</td>
+                    </tr>
+                    <tr>
+                        <td>char</td>
+                        <td>16 bits</td>
+                        <td>Unicode 0 a 65,535</td>
+                        <td>Un solo carácter: 'A', '5', '@'</td>
+                    </tr>
+                    <tr>
+                        <td>boolean</td>
+                        <td>1 bit</td>
+                        <td>true o false</td>
+                        <td>Valores lógicos, condicionales, banderas</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Operadores -->
+        <div class="content-section">
+            <h2><i class="fas fa-calculator"></i> Operadores principales</h2>
+            
+            <div class="quick-ref-grid">
+                <div class="quick-ref-card">
+                    <h4>Aritméticos</h4>
+                    <table class="summary-table">
+                        <tr><td>+</td><td>Suma</td></tr>
+                        <tr><td>-</td><td>Resta</td></tr>
+                        <tr><td>*</td><td>Multiplicación</td></tr>
+                        <tr><td>/</td><td>División</td></tr>
+                        <tr><td>%</td><td>Módulo (resto)</td></tr>
+                        <tr><td>++</td><td>Incremento</td></tr>
+                        <tr><td>--</td><td>Decremento</td></tr>
+                    </table>
+                </div>
+                
+                <div class="quick-ref-card">
+                    <h4>Comparación</h4>
+                    <table class="summary-table">
+                        <tr><td>==</td><td>Igual a</td></tr>
+                        <tr><td>!=</td><td>Diferente de</td></tr>
+                        <tr><td>&gt;</td><td>Mayor que</td></tr>
+                        <tr><td>&lt;</td><td>Menor que</td></tr>
+                        <tr><td>&gt;=</td><td>Mayor o igual</td></tr>
+                        <tr><td>&lt;=</td><td>Menor o igual</td></tr>
+                    </table>
+                </div>
+                
+                <div class="quick-ref-card">
+                    <h4>Lógicos</h4>
+                    <table class="summary-table">
+                        <tr><td>&&</td><td>AND lógico (y)</td></tr>
+                        <tr><td>||</td><td>OR lógico (o)</td></tr>
+                        <tr><td>!</td><td>NOT lógico (no)</td></tr>
+                    </table>
+                </div>
+                
+                <div class="quick-ref-card">
+                    <h4>Asignación</h4>
+                    <table class="summary-table">
+                        <tr><td>=</td><td>Asignación simple</td></tr>
+                        <tr><td>+=</td><td>Suma y asigna</td></tr>
+                        <tr><td>-=</td><td>Resta y asigna</td></tr>
+                        <tr><td>*=</td><td>Multiplica y asigna</td></tr>
+                        <tr><td>/=</td><td>Divide y asigna</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estructuras de control -->
+        <div class="content-section">
+            <h2><i class="fas fa-code-branch"></i> Estructuras de control</h2>
+            <p>Las estructuras que controlan el flujo de ejecución del programa.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Estructura</th>
+                        <th>Sintaxis básica</th>
+                        <th>Cuándo usarla</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>if</td>
+                        <td><code>if (condicion) { ... }</code></td>
+                        <td>Ejecutar código solo si se cumple una condición</td>
+                    </tr>
+                    <tr>
+                        <td>if-else</td>
+                        <td><code>if (condicion) { ... } else { ... }</code></td>
+                        <td>Dos caminos posibles según la condición</td>
+                    </tr>
+                    <tr>
+                        <td>else if</td>
+                        <td><code>if (...) { } else if (...) { } else { }</code></td>
+                        <td>Múltiples condiciones secuenciales</td>
+                    </tr>
+                    <tr>
+                        <td>switch</td>
+                        <td><code>switch (variable) { case valor: ... break; }</code></td>
+                        <td>Múltiples opciones basadas en un valor específico</td>
+                    </tr>
+                    <tr>
+                        <td>for</td>
+                        <td><code>for (int i = 0; i < 10; i++) { ... }</code></td>
+                        <td>Repetir un número conocido de veces</td>
+                    </tr>
+                    <tr>
+                        <td>while</td>
+                        <td><code>while (condicion) { ... }</code></td>
+                        <td>Repetir mientras se cumpla una condición</td>
+                    </tr>
+                    <tr>
+                        <td>do-while</td>
+                        <td><code>do { ... } while (condicion);</code></td>
+                        <td>Ejecutar al menos una vez y repetir si se cumple</td>
+                    </tr>
+                    <tr>
+                        <td>for-each</td>
+                        <td><code>for (Tipo elem : coleccion) { ... }</code></td>
+                        <td>Recorrer todos los elementos de una colección</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Colecciones principales -->
+        <div class="content-section">
+            <h2><i class="fas fa-boxes"></i> Colecciones más usadas</h2>
+            <p>Las estructuras de datos que usarás constantemente para almacenar múltiples elementos.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Colección</th>
+                        <th>Características</th>
+                        <th>Cuándo usarla</th>
+                        <th>Métodos clave</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ArrayList&lt;T&gt;</td>
+                        <td>Lista dinámica, permite duplicados, mantiene orden</td>
+                        <td>Cuando necesitas una lista que puede crecer</td>
+                        <td>add(), get(), remove(), size(), contains()</td>
+                    </tr>
+                    <tr>
+                        <td>LinkedList&lt;T&gt;</td>
+                        <td>Lista enlazada, mejor para inserción/eliminación</td>
+                        <td>Muchas operaciones de insertar/eliminar en medio</td>
+                        <td>addFirst(), addLast(), removeFirst(), removeLast()</td>
+                    </tr>
+                    <tr>
+                        <td>HashSet&lt;T&gt;</td>
+                        <td>No permite duplicados, sin orden garantizado</td>
+                        <td>Cuando necesitas elementos únicos sin importar el orden</td>
+                        <td>add(), remove(), contains(), size()</td>
+                    </tr>
+                    <tr>
+                        <td>HashMap&lt;K,V&gt;</td>
+                        <td>Pares clave-valor, claves únicas</td>
+                        <td>Buscar valores por una clave específica</td>
+                        <td>put(), get(), remove(), containsKey(), keySet()</td>
+                    </tr>
+                    <tr>
+                        <td>TreeSet&lt;T&gt;</td>
+                        <td>Sin duplicados, elementos ordenados</td>
+                        <td>Elementos únicos que necesitan estar ordenados</td>
+                        <td>add(), remove(), first(), last()</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Conceptos POO -->
+        <div class="content-section">
+            <h2><i class="fas fa-cubes"></i> Conceptos de POO (Programación Orientada a Objetos)</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Qué es</th>
+                        <th>Para qué sirve</th>
+                        <th>Palabra clave</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Clase</td>
+                        <td>Plantilla o molde para crear objetos</td>
+                        <td>Define la estructura y comportamiento de los objetos</td>
+                        <td><code>class MiClase { }</code></td>
+                    </tr>
+                    <tr>
+                        <td>Objeto</td>
+                        <td>Instancia concreta de una clase</td>
+                        <td>Representa una entidad específica con datos propios</td>
+                        <td><code>new MiClase()</code></td>
+                    </tr>
+                    <tr>
+                        <td>Encapsulación</td>
+                        <td>Ocultar datos internos, exponer solo lo necesario</td>
+                        <td>Proteger datos y controlar el acceso</td>
+                        <td><code>private, public, protected</code></td>
+                    </tr>
+                    <tr>
+                        <td>Herencia</td>
+                        <td>Una clase puede heredar de otra (padre-hijo)</td>
+                        <td>Reutilizar código y crear jerarquías</td>
+                        <td><code>extends</code></td>
+                    </tr>
+                    <tr>
+                        <td>Polimorfismo</td>
+                        <td>Un método puede tener diferentes implementaciones</td>
+                        <td>Mismo método se comporta diferente según el objeto</td>
+                        <td><code>@Override</code></td>
+                    </tr>
+                    <tr>
+                        <td>Abstracción</td>
+                        <td>Definir estructura sin implementación completa</td>
+                        <td>Crear contratos que otras clases deben cumplir</td>
+                        <td><code>abstract, interface</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Modificadores de acceso -->
+        <div class="content-section">
+            <h2><i class="fas fa-lock"></i> Modificadores de acceso</h2>
+            <p>Controlan quién puede acceder a tus clases, métodos y variables.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Modificador</th>
+                        <th>Misma clase</th>
+                        <th>Mismo paquete</th>
+                        <th>Subclases</th>
+                        <th>Todos</th>
+                        <th>Cuándo usarlo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>public</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>Para métodos y clases que quieres exponer públicamente</td>
+                    </tr>
+                    <tr>
+                        <td>protected</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>❌</td>
+                        <td>Para heredar pero no exponer públicamente</td>
+                    </tr>
+                    <tr>
+                        <td>(default)</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>Cuando no pones modificador, solo acceso en el paquete</td>
+                    </tr>
+                    <tr>
+                        <td>private</td>
+                        <td>✅</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td><strong>Más usado</strong> para atributos, encapsulación</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Manejo de excepciones -->
+        <div class="content-section">
+            <h2><i class="fas fa-exclamation-triangle"></i> Manejo de excepciones</h2>
+            <p>Cómo manejar errores de forma controlada en tus programas.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Bloque</th>
+                        <th>Propósito</th>
+                        <th>Cuándo se ejecuta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>try { }</td>
+                        <td>Código que puede lanzar una excepción</td>
+                        <td>Siempre se intenta ejecutar</td>
+                    </tr>
+                    <tr>
+                        <td>catch (Exception e) { }</td>
+                        <td>Captura y maneja la excepción</td>
+                        <td>Solo si ocurre un error en el try</td>
+                    </tr>
+                    <tr>
+                        <td>finally { }</td>
+                        <td>Código que siempre se ejecuta (limpieza)</td>
+                        <td>Siempre, haya o no excepción</td>
+                    </tr>
+                    <tr>
+                        <td>throw new Exception()</td>
+                        <td>Lanza manualmente una excepción</td>
+                        <td>Cuando detectas una condición de error</td>
+                    </tr>
+                    <tr>
+                        <td>throws Exception</td>
+                        <td>Declara que un método puede lanzar excepciones</td>
+                        <td>En la firma del método</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- String - métodos comunes -->
+        <div class="content-section">
+            <h2><i class="fas fa-font"></i> Métodos comunes de String</h2>
+            <p>Los métodos de String que usarás todo el tiempo para manipular texto.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Qué hace</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>length()</td>
+                        <td>Devuelve el número de caracteres</td>
+                        <td>"Hola".length() → 4</td>
+                    </tr>
+                    <tr>
+                        <td>charAt(i)</td>
+                        <td>Devuelve el carácter en la posición i</td>
+                        <td>"Hola".charAt(0) → 'H'</td>
+                    </tr>
+                    <tr>
+                        <td>substring(inicio, fin)</td>
+                        <td>Extrae una porción del texto</td>
+                        <td>"Hola".substring(0, 2) → "Ho"</td>
+                    </tr>
+                    <tr>
+                        <td>toLowerCase()</td>
+                        <td>Convierte a minúsculas</td>
+                        <td>"HOLA".toLowerCase() → "hola"</td>
+                    </tr>
+                    <tr>
+                        <td>toUpperCase()</td>
+                        <td>Convierte a mayúsculas</td>
+                        <td>"hola".toUpperCase() → "HOLA"</td>
+                    </tr>
+                    <tr>
+                        <td>trim()</td>
+                        <td>Elimina espacios al inicio y final</td>
+                        <td>" hola ".trim() → "hola"</td>
+                    </tr>
+                    <tr>
+                        <td>replace(old, new)</td>
+                        <td>Reemplaza texto</td>
+                        <td>"hola".replace('o', 'a') → "hala"</td>
+                    </tr>
+                    <tr>
+                        <td>split(separador)</td>
+                        <td>Divide el string en un array</td>
+                        <td>"a,b,c".split(",") → ["a", "b", "c"]</td>
+                    </tr>
+                    <tr>
+                        <td>contains(texto)</td>
+                        <td>Verifica si contiene un texto</td>
+                        <td>"hola".contains("ol") → true</td>
+                    </tr>
+                    <tr>
+                        <td>equals(otro)</td>
+                        <td>Compara contenido (¡NO uses ==!)</td>
+                        <td>"hola".equals("hola") → true</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <div class="info-box">
+                <h4><i class="fas fa-lightbulb"></i> Consejo importante</h4>
+                <p><strong>Usa este resumen como referencia rápida</strong>, pero siempre revisa la página de detalles completa para ver ejemplos de código reales y explicaciones más profundas de cada concepto.</p>
+                <p>La práctica es fundamental: <strong>escribe código, prueba, comete errores y aprende de ellos</strong>. Este resumen te ayudará a recordar la sintaxis rápidamente.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Wiki Personal 2º DAW</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
