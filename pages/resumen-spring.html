@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen Spring Boot - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos específicos para tablas de resumen */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-md) 0;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        
+        .summary-table thead {
+            background-color: var(--accent-primary);
+            color: var(--bg-primary);
+        }
+        
+        .summary-table th,
+        .summary-table td {
+            padding: var(--spacing-sm) var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+        
+        .summary-table th {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .summary-table td:first-child {
+            font-family: 'Courier New', monospace;
+            color: var(--spring-color);
+            font-weight: 600;
+        }
+        
+        .summary-table tr:hover {
+            background-color: var(--bg-card-hover);
+        }
+        
+        .summary-table code {
+            background-color: var(--bg-primary);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        
+        .quick-ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
+        }
+        
+        .quick-ref-card {
+            background-color: var(--bg-card);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--accent-primary);
+        }
+        
+        .quick-ref-card h4 {
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <div class="detail-page">
+        <div class="detail-header">
+            <div class="detail-icon" style="color: var(--spring-color);">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <h1 class="detail-title">Resumen Rápido: Spring Boot</h1>
+            <p class="detail-subtitle">Referencia rápida de anotaciones, comandos Maven y conceptos clave</p>
+        </div>
+
+        <!-- Comandos Maven más utilizados -->
+        <div class="content-section">
+            <h2><i class="fas fa-terminal"></i> Comandos Maven más utilizados</h2>
+            <p>Maven es la herramienta de gestión de dependencias y construcción más usada con Spring Boot. Estos son los comandos esenciales.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Descripción</th>
+                        <th>Cuándo usarlo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>mvn clean</td>
+                        <td>Limpia archivos compilados anteriores (carpeta target/)</td>
+                        <td>Antes de compilar de nuevo para asegurar un build limpio</td>
+                    </tr>
+                    <tr>
+                        <td>mvn compile</td>
+                        <td>Compila el código fuente del proyecto</td>
+                        <td>Para verificar que no hay errores de compilación</td>
+                    </tr>
+                    <tr>
+                        <td>mvn test</td>
+                        <td>Ejecuta todos los tests unitarios</td>
+                        <td>Verificar que los cambios no rompieron nada</td>
+                    </tr>
+                    <tr>
+                        <td>mvn package</td>
+                        <td>Compila, testea y crea el JAR/WAR</td>
+                        <td>Crear el archivo ejecutable de tu aplicación</td>
+                    </tr>
+                    <tr>
+                        <td>mvn spring-boot:run</td>
+                        <td>Ejecuta la aplicación Spring Boot directamente</td>
+                        <td>Durante desarrollo para probar cambios rápidamente</td>
+                    </tr>
+                    <tr>
+                        <td>mvn clean install</td>
+                        <td>Limpia, compila, testea e instala en repositorio local</td>
+                        <td>El comando más completo para builds definitivos</td>
+                    </tr>
+                    <tr>
+                        <td>mvn dependency:tree</td>
+                        <td>Muestra el árbol de dependencias del proyecto</td>
+                        <td>Depurar conflictos de versiones de librerías</td>
+                    </tr>
+                    <tr>
+                        <td>java -jar target/app.jar</td>
+                        <td>Ejecuta el JAR generado por Maven</td>
+                        <td>Ejecutar la aplicación en producción</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Anotaciones principales -->
+        <div class="content-section">
+            <h2><i class="fas fa-at"></i> Anotaciones principales de Spring Boot</h2>
+            <p>Las anotaciones son fundamentales en Spring Boot. Configuran el comportamiento sin necesidad de XML.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Anotación</th>
+                        <th>Dónde se usa</th>
+                        <th>Qué hace</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@SpringBootApplication</td>
+                        <td>Clase principal</td>
+                        <td>Combina @Configuration, @EnableAutoConfiguration y @ComponentScan. Marca el punto de entrada de la aplicación</td>
+                    </tr>
+                    <tr>
+                        <td>@RestController</td>
+                        <td>Clase controller</td>
+                        <td>Indica que es un controlador REST. Combina @Controller + @ResponseBody</td>
+                    </tr>
+                    <tr>
+                        <td>@GetMapping("/ruta")</td>
+                        <td>Método controller</td>
+                        <td>Mapea peticiones HTTP GET a este método</td>
+                    </tr>
+                    <tr>
+                        <td>@PostMapping("/ruta")</td>
+                        <td>Método controller</td>
+                        <td>Mapea peticiones HTTP POST (crear recursos)</td>
+                    </tr>
+                    <tr>
+                        <td>@PutMapping("/ruta")</td>
+                        <td>Método controller</td>
+                        <td>Mapea peticiones HTTP PUT (actualizar recursos)</td>
+                    </tr>
+                    <tr>
+                        <td>@DeleteMapping("/ruta")</td>
+                        <td>Método controller</td>
+                        <td>Mapea peticiones HTTP DELETE (eliminar recursos)</td>
+                    </tr>
+                    <tr>
+                        <td>@RequestBody</td>
+                        <td>Parámetro método</td>
+                        <td>Convierte el JSON del body de la petición a un objeto Java</td>
+                    </tr>
+                    <tr>
+                        <td>@PathVariable</td>
+                        <td>Parámetro método</td>
+                        <td>Extrae valores de la URL (ej: /users/{id})</td>
+                    </tr>
+                    <tr>
+                        <td>@RequestParam</td>
+                        <td>Parámetro método</td>
+                        <td>Extrae parámetros de query (ej: /users?name=Juan)</td>
+                    </tr>
+                    <tr>
+                        <td>@Service</td>
+                        <td>Clase service</td>
+                        <td>Marca una clase como servicio (lógica de negocio)</td>
+                    </tr>
+                    <tr>
+                        <td>@Repository</td>
+                        <td>Interface repository</td>
+                        <td>Marca una clase como repositorio (acceso a datos)</td>
+                    </tr>
+                    <tr>
+                        <td>@Entity</td>
+                        <td>Clase modelo</td>
+                        <td>Indica que es una entidad JPA mapeada a una tabla BD</td>
+                    </tr>
+                    <tr>
+                        <td>@Id</td>
+                        <td>Campo entidad</td>
+                        <td>Marca el campo como clave primaria</td>
+                    </tr>
+                    <tr>
+                        <td>@GeneratedValue</td>
+                        <td>Campo entidad</td>
+                        <td>Genera automáticamente el valor del ID</td>
+                    </tr>
+                    <tr>
+                        <td>@Autowired</td>
+                        <td>Campo/Constructor</td>
+                        <td>Inyección de dependencias automática</td>
+                    </tr>
+                    <tr>
+                        <td>@Configuration</td>
+                        <td>Clase config</td>
+                        <td>Indica que la clase contiene configuración de beans</td>
+                    </tr>
+                    <tr>
+                        <td>@Bean</td>
+                        <td>Método config</td>
+                        <td>Define un bean gestionado por Spring</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Estructura de proyecto -->
+        <div class="content-section">
+            <h2><i class="fas fa-folder-tree"></i> Estructura típica de proyecto</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Carpeta/Archivo</th>
+                        <th>Contenido</th>
+                        <th>Propósito</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>src/main/java</td>
+                        <td>Código fuente Java</td>
+                        <td>Todo tu código de aplicación</td>
+                    </tr>
+                    <tr>
+                        <td>controller/</td>
+                        <td>Clases @RestController</td>
+                        <td>Manejan peticiones HTTP y devuelven respuestas</td>
+                    </tr>
+                    <tr>
+                        <td>service/</td>
+                        <td>Clases @Service</td>
+                        <td>Lógica de negocio de la aplicación</td>
+                    </tr>
+                    <tr>
+                        <td>repository/</td>
+                        <td>Interfaces @Repository</td>
+                        <td>Acceso a base de datos (extienden JpaRepository)</td>
+                    </tr>
+                    <tr>
+                        <td>model/ o entity/</td>
+                        <td>Clases @Entity</td>
+                        <td>Entidades que mapean a tablas de BD</td>
+                    </tr>
+                    <tr>
+                        <td>dto/</td>
+                        <td>Clases DTO (Data Transfer Object)</td>
+                        <td>Objetos para transferir datos entre capas</td>
+                    </tr>
+                    <tr>
+                        <td>config/</td>
+                        <td>Clases @Configuration</td>
+                        <td>Configuración de beans, seguridad, CORS, etc.</td>
+                    </tr>
+                    <tr>
+                        <td>src/main/resources</td>
+                        <td>Recursos no-Java</td>
+                        <td>Archivos de configuración y estáticos</td>
+                    </tr>
+                    <tr>
+                        <td>application.properties</td>
+                        <td>Configuración de Spring Boot</td>
+                        <td>Puerto, BD, logging, perfiles, etc.</td>
+                    </tr>
+                    <tr>
+                        <td>static/</td>
+                        <td>Archivos estáticos</td>
+                        <td>CSS, JS, imágenes servidos directamente</td>
+                    </tr>
+                    <tr>
+                        <td>templates/</td>
+                        <td>Plantillas HTML</td>
+                        <td>Si usas Thymeleaf para renderizar HTML</td>
+                    </tr>
+                    <tr>
+                        <td>src/test/java</td>
+                        <td>Tests unitarios</td>
+                        <td>Tests con JUnit y Mockito</td>
+                    </tr>
+                    <tr>
+                        <td>pom.xml</td>
+                        <td>Configuración Maven</td>
+                        <td>Dependencias, plugins, versiones</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Configuraciones comunes en application.properties -->
+        <div class="content-section">
+            <h2><i class="fas fa-cog"></i> Configuraciones comunes (application.properties)</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Propiedad</th>
+                        <th>Ejemplo de valor</th>
+                        <th>Qué configura</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>server.port</td>
+                        <td>8080</td>
+                        <td>Puerto donde se ejecuta la aplicación</td>
+                    </tr>
+                    <tr>
+                        <td>spring.application.name</td>
+                        <td>mi-app</td>
+                        <td>Nombre de la aplicación</td>
+                    </tr>
+                    <tr>
+                        <td>spring.datasource.url</td>
+                        <td>jdbc:h2:mem:testdb</td>
+                        <td>URL de conexión a la base de datos</td>
+                    </tr>
+                    <tr>
+                        <td>spring.datasource.username</td>
+                        <td>sa</td>
+                        <td>Usuario de la base de datos</td>
+                    </tr>
+                    <tr>
+                        <td>spring.datasource.password</td>
+                        <td>password</td>
+                        <td>Contraseña de la base de datos</td>
+                    </tr>
+                    <tr>
+                        <td>spring.jpa.hibernate.ddl-auto</td>
+                        <td>update</td>
+                        <td>Cómo manejar el esquema BD (create, update, validate, none)</td>
+                    </tr>
+                    <tr>
+                        <td>spring.jpa.show-sql</td>
+                        <td>true</td>
+                        <td>Mostrar las queries SQL en la consola</td>
+                    </tr>
+                    <tr>
+                        <td>spring.h2.console.enabled</td>
+                        <td>true</td>
+                        <td>Habilitar consola web de H2 para ver la BD</td>
+                    </tr>
+                    <tr>
+                        <td>logging.level.root</td>
+                        <td>INFO</td>
+                        <td>Nivel de logging global (TRACE, DEBUG, INFO, WARN, ERROR)</td>
+                    </tr>
+                    <tr>
+                        <td>spring.profiles.active</td>
+                        <td>dev</td>
+                        <td>Perfil activo (dev, test, prod)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Respuestas HTTP comunes -->
+        <div class="content-section">
+            <h2><i class="fas fa-exchange-alt"></i> Códigos de respuesta HTTP</h2>
+            <p>Spring Boot usa estos códigos para comunicar el resultado de las peticiones.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Cuándo usarlo</th>
+                        <th>En Spring Boot</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>200</td>
+                        <td>OK</td>
+                        <td>Petición exitosa (GET, PUT)</td>
+                        <td>ResponseEntity.ok()</td>
+                    </tr>
+                    <tr>
+                        <td>201</td>
+                        <td>Created</td>
+                        <td>Recurso creado exitosamente (POST)</td>
+                        <td>ResponseEntity.status(201).body()</td>
+                    </tr>
+                    <tr>
+                        <td>204</td>
+                        <td>No Content</td>
+                        <td>Éxito sin contenido (DELETE)</td>
+                        <td>ResponseEntity.noContent().build()</td>
+                    </tr>
+                    <tr>
+                        <td>400</td>
+                        <td>Bad Request</td>
+                        <td>Datos inválidos en la petición</td>
+                        <td>ResponseEntity.badRequest()</td>
+                    </tr>
+                    <tr>
+                        <td>404</td>
+                        <td>Not Found</td>
+                        <td>Recurso no encontrado</td>
+                        <td>ResponseEntity.notFound().build()</td>
+                    </tr>
+                    <tr>
+                        <td>500</td>
+                        <td>Internal Server Error</td>
+                        <td>Error en el servidor</td>
+                        <td>Spring lo devuelve automáticamente en excepciones</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- JPA Repository métodos -->
+        <div class="content-section">
+            <h2><i class="fas fa-database"></i> Métodos principales de JpaRepository</h2>
+            <p>Cuando tu repositorio extiende JpaRepository, heredas automáticamente estos métodos.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Qué hace</th>
+                        <th>Ejemplo de uso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>save(entity)</td>
+                        <td>Guarda o actualiza una entidad</td>
+                        <td>repository.save(usuario)</td>
+                    </tr>
+                    <tr>
+                        <td>findAll()</td>
+                        <td>Obtiene todas las entidades</td>
+                        <td>List&lt;User&gt; users = repository.findAll()</td>
+                    </tr>
+                    <tr>
+                        <td>findById(id)</td>
+                        <td>Busca por ID, devuelve Optional</td>
+                        <td>Optional&lt;User&gt; user = repository.findById(1L)</td>
+                    </tr>
+                    <tr>
+                        <td>existsById(id)</td>
+                        <td>Verifica si existe una entidad con ese ID</td>
+                        <td>boolean exists = repository.existsById(1L)</td>
+                    </tr>
+                    <tr>
+                        <td>count()</td>
+                        <td>Cuenta cuántas entidades hay</td>
+                        <td>long total = repository.count()</td>
+                    </tr>
+                    <tr>
+                        <td>deleteById(id)</td>
+                        <td>Elimina por ID</td>
+                        <td>repository.deleteById(1L)</td>
+                    </tr>
+                    <tr>
+                        <td>delete(entity)</td>
+                        <td>Elimina una entidad</td>
+                        <td>repository.delete(usuario)</td>
+                    </tr>
+                    <tr>
+                        <td>deleteAll()</td>
+                        <td>Elimina todas las entidades</td>
+                        <td>repository.deleteAll()</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Lombok anotaciones -->
+        <div class="content-section">
+            <h2><i class="fas fa-magic"></i> Anotaciones de Lombok</h2>
+            <p>Lombok reduce código boilerplate generando automáticamente getters, setters, constructores, etc.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Anotación</th>
+                        <th>Qué genera</th>
+                        <th>Cuándo usarla</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Data</td>
+                        <td>@Getter, @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor</td>
+                        <td>Para DTOs y entidades simples (la más usada)</td>
+                    </tr>
+                    <tr>
+                        <td>@Getter</td>
+                        <td>Métodos getter para todos los campos</td>
+                        <td>Cuando solo necesitas getters</td>
+                    </tr>
+                    <tr>
+                        <td>@Setter</td>
+                        <td>Métodos setter para todos los campos</td>
+                        <td>Cuando solo necesitas setters</td>
+                    </tr>
+                    <tr>
+                        <td>@NoArgsConstructor</td>
+                        <td>Constructor sin parámetros</td>
+                        <td>Requerido por JPA para entidades</td>
+                    </tr>
+                    <tr>
+                        <td>@AllArgsConstructor</td>
+                        <td>Constructor con todos los parámetros</td>
+                        <td>Para crear objetos con todos los valores</td>
+                    </tr>
+                    <tr>
+                        <td>@RequiredArgsConstructor</td>
+                        <td>Constructor con campos final y @NonNull</td>
+                        <td>Para inyección de dependencias</td>
+                    </tr>
+                    <tr>
+                        <td>@Builder</td>
+                        <td>Patrón Builder para crear objetos</td>
+                        <td>Crear objetos de forma fluida y legible</td>
+                    </tr>
+                    <tr>
+                        <td>@ToString</td>
+                        <td>Método toString()</td>
+                        <td>Para debugging y logging</td>
+                    </tr>
+                    <tr>
+                        <td>@Slf4j</td>
+                        <td>Logger automático (log variable)</td>
+                        <td>Para logging en la clase</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <div class="info-box">
+                <h4><i class="fas fa-lightbulb"></i> Consejo importante</h4>
+                <p><strong>Usa este resumen como referencia rápida</strong>, pero siempre revisa la página de detalles completa para ver ejemplos de código reales y explicaciones más profundas de cada concepto.</p>
+                <p>Spring Boot tiene una curva de aprendizaje, pero una vez dominas las anotaciones y la arquitectura en capas, es muy productivo. <strong>Practica creando APIs REST simples</strong> y ve añadiendo complejidad gradualmente.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Wiki Personal 2º DAW</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
