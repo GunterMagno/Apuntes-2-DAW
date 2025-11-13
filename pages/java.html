@@ -115,6 +115,24 @@ java HolaMundo  // Ejecuta el programa
                 <li><strong>Abstracción:</strong> Modelar conceptos del mundo real</li>
             </ul>
 
+            <p><strong>Ejemplo de Encapsulación:</strong></p>
+            <p>
+                En este ejemplo creamos una clase <code>Persona</code> que demuestra el concepto de encapsulación.
+                Los atributos <code>nombre</code> y <code>edad</code> son <strong>privados</strong>, lo que significa que 
+                no se puede acceder a ellos directamente desde fuera de la clase. Esto es importante porque nos permite 
+                controlar cómo se modifican estos datos.
+            </p>
+            <p>
+                Para acceder a estos atributos privados, usamos <strong>getters</strong> (métodos que obtienen el valor) 
+                y <strong>setters</strong> (métodos que establecen el valor). Observa cómo en <code>setEdad()</code> 
+                validamos que la edad sea mayor que 0 antes de asignarla. Sin encapsulación, alguien podría asignar 
+                un valor negativo directamente, lo cual no tendría sentido.
+            </p>
+            <p>
+                El <strong>constructor</strong> <code>public Persona(String nombre, int edad)</code> es un método especial 
+                que se ejecuta cuando creamos un nuevo objeto Persona. Recibe los valores iniciales y los asigna a los atributos.
+            </p>
+
             <div class="code-block">
                 <pre>
 // Ejemplo de clase con encapsulación
@@ -157,6 +175,27 @@ public class Persona {
             </div>
 
             <h3>Tipos de datos</h3>
+            <p>
+                Java tiene dos categorías principales de tipos de datos: <strong>primitivos</strong> y <strong>de referencia</strong>.
+            </p>
+            <p>
+                Los <strong>tipos primitivos</strong> son los tipos de datos más básicos y almacenan valores directamente en memoria. 
+                Java tiene 8 tipos primitivos: <code>byte</code>, <code>short</code>, <code>int</code>, <code>long</code> para números enteros; 
+                <code>float</code> y <code>double</code> para números decimales; <code>char</code> para caracteres individuales; 
+                y <code>boolean</code> para valores verdadero/falso.
+            </p>
+            <p>
+                Para números enteros, normalmente usarás <code>int</code> a menos que necesites números muy grandes (entonces usa <code>long</code> 
+                y añade una 'L' al final del número). Para decimales, <code>double</code> es el más común. Si usas <code>float</code>, 
+                debes añadir una 'f' al final del número.
+            </p>
+            <p>
+                Los <strong>tipos de referencia</strong> son objetos que almacenan referencias a la ubicación en memoria donde están los datos. 
+                <code>String</code> es el tipo de referencia más usado y representa cadenas de texto. Los tipos wrapper como <code>Integer</code> 
+                son versiones objeto de los tipos primitivos y permiten usar null y métodos útiles. <code>ArrayList</code> es una colección 
+                dinámica que puede crecer o reducirse según necesites.
+            </p>
+
             <div class="code-block">
                 <pre>
 // Tipos primitivos
@@ -179,6 +218,48 @@ ArrayList<String> lista = new ArrayList<>();
             </div>
 
             <h3>Estructuras de control</h3>
+            <p>
+                Las estructuras de control determinan el flujo de ejecución de tu programa. Sin ellas, el código 
+                simplemente se ejecutaría línea por línea de arriba a abajo sin ninguna lógica.
+            </p>
+            
+            <h4>Condicionales (if, else if, else)</h4>
+            <p>
+                Los condicionales te permiten ejecutar diferentes bloques de código según si se cumple o no una condición. 
+                La condición dentro del paréntesis debe evaluarse a <code>true</code> o <code>false</code>. Si es <code>true</code>, 
+                se ejecuta el código dentro de las llaves. Si no, pasa al <code>else if</code> siguiente o al <code>else</code>.
+            </p>
+            <p>
+                En el ejemplo, si la edad es 18 o más, imprime "Mayor de edad". Si no, pero es 13 o más, imprime "Adolescente". 
+                Si ninguna condición se cumple, ejecuta el <code>else</code> e imprime "Niño".
+            </p>
+            
+            <h4>Switch</h4>
+            <p>
+                El <code>switch</code> es útil cuando quieres comparar una variable con múltiples valores específicos. 
+                Es más limpio que escribir muchos <code>if-else if</code>. El <code>break</code> es crucial: sin él, 
+                el código continuaría ejecutando los siguientes casos (esto se llama "fall-through").
+            </p>
+            
+            <h4>Bucles (for, while, do-while)</h4>
+            <p>
+                Los bucles repiten un bloque de código varias veces. El <code>for</code> se usa cuando sabes cuántas veces 
+                quieres repetir (en el ejemplo, 10 veces). Tiene tres partes: inicialización (<code>int i = 0</code>), 
+                condición (<code>i < 10</code>), e incremento (<code>i++</code>).
+            </p>
+            <p>
+                El <code>while</code> repite mientras la condición sea verdadera. Se evalúa ANTES de ejecutar el código, 
+                así que podría no ejecutarse nunca si la condición es falsa desde el principio.
+            </p>
+            <p>
+                El <code>do-while</code> es similar al <code>while</code>, pero la condición se evalúa DESPUÉS de ejecutar 
+                el código, garantizando que se ejecute al menos una vez.
+            </p>
+            <p>
+                El <code>for-each</code> (también llamado enhanced for loop) es perfecto para recorrer colecciones o arrays 
+                cuando no necesitas el índice. Lee cada elemento de la colección uno por uno.
+            </p>
+
             <div class="code-block">
                 <pre>
 // Condicionales
@@ -228,6 +309,34 @@ for (String nombre : nombres) {
             <h2><i class="fas fa-code"></i> Ejemplos prácticos</h2>
             
             <h3>Ejemplo 1: Clase completa con herencia</h3>
+            <p>
+                <strong>¿Qué es la herencia?</strong> La herencia permite crear una nueva clase basada en una clase existente, 
+                heredando sus atributos y métodos. Esto evita duplicar código y crea relaciones lógicas entre clases.
+            </p>
+            <p>
+                En este ejemplo, <code>Vehiculo</code> es la <strong>clase padre</strong> (también llamada superclase o clase base). 
+                Define atributos comunes a todos los vehículos: <code>marca</code> y <code>año</code>. Los atributos son 
+                <code>protected</code>, lo que significa que las clases hijas pueden acceder a ellos directamente.
+            </p>
+            <p>
+                <code>Coche</code> es la <strong>clase hija</strong> (también llamada subclase o clase derivada). Usa 
+                <code>extends Vehiculo</code> para indicar que hereda de Vehiculo. Esto significa que Coche automáticamente 
+                tiene los atributos <code>marca</code> y <code>año</code>, más el método <code>mostrarInfo()</code>.
+            </p>
+            <p>
+                El constructor de <code>Coche</code> usa <code>super(marca, año)</code> para llamar al constructor del padre 
+                y inicializar esos atributos. Luego inicializa su propio atributo específico: <code>numPuertas</code>.
+            </p>
+            <p>
+                La anotación <code>@Override</code> indica que estamos reemplazando (sobrescribiendo) el método 
+                <code>mostrarInfo()</code> del padre. Primero llamamos a <code>super.mostrarInfo()</code> para ejecutar 
+                el método del padre, y luego añadimos información adicional específica de Coche.
+            </p>
+            <p>
+                <strong>¿Cuándo usar herencia?</strong> Cuando tienes una relación "es un". Un Coche "es un" Vehiculo, 
+                por lo que tiene sentido usar herencia. Si la relación fuera "tiene un", usarías composición en su lugar.
+            </p>
+
             <div class="code-block">
                 <pre>
 // Clase padre
@@ -277,6 +386,32 @@ public class Main {
             </div>
 
             <h3>Ejemplo 2: Colecciones (ArrayList)</h3>
+            <p>
+                <strong>¿Qué es un ArrayList?</strong> Es una lista dinámica que puede crecer o reducirse automáticamente. 
+                A diferencia de los arrays normales (que tienen tamaño fijo), un ArrayList puede añadir o eliminar elementos 
+                según necesites. Es parte del Java Collections Framework.
+            </p>
+            <p>
+                En este ejemplo, creamos un <code>ArrayList&lt;String&gt;</code>, lo que significa una lista que solo puede 
+                contener Strings. El <code>&lt;String&gt;</code> es un "tipo genérico" que garantiza seguridad de tipos 
+                en tiempo de compilación.
+            </p>
+            <p>
+                <strong>Operaciones básicas:</strong>
+            </p>
+            <ul>
+                <li><code>add()</code> añade un elemento al final de la lista</li>
+                <li><code>get(indice)</code> obtiene el elemento en esa posición (empieza en 0)</li>
+                <li><code>size()</code> devuelve cuántos elementos hay en la lista</li>
+                <li><code>Collections.sort()</code> ordena la lista alfabéticamente</li>
+                <li><code>contains()</code> verifica si un elemento existe en la lista</li>
+                <li><code>remove()</code> puede eliminar por objeto o por índice</li>
+            </ul>
+            <p>
+                El bucle <code>for-each</code> es la forma más sencilla de recorrer todos los elementos. 
+                En cada iteración, la variable <code>fruta</code> toma el valor del siguiente elemento de la lista.
+            </p>
+
             <div class="code-block">
                 <pre>
 import java.util.ArrayList;
@@ -320,6 +455,35 @@ public class EjemploArrayList {
             </div>
 
             <h3>Ejemplo 3: Manejo de excepciones</h3>
+            <p>
+                <strong>¿Por qué manejar excepciones?</strong> Las excepciones son errores que ocurren durante la ejecución 
+                del programa. Si no las manejas, el programa se detendrá abruptamente. El manejo de excepciones te permite 
+                controlar estos errores y decidir qué hacer cuando ocurren.
+            </p>
+            <p>
+                El bloque <code>try</code> contiene el código que podría lanzar una excepción (causar un error). En este caso, 
+                intentamos dividir por cero, lo cual es una operación inválida en matemáticas y causa un 
+                <code>ArithmeticException</code>.
+            </p>
+            <p>
+                Los bloques <code>catch</code> capturan diferentes tipos de excepciones. Java evalúa los catch de arriba 
+                hacia abajo, ejecutando el primero que coincida. Por eso ponemos excepciones específicas primero 
+                (<code>ArithmeticException</code>) y las más generales al final (<code>Exception</code>).
+            </p>
+            <p>
+                <code>e.printStackTrace()</code> imprime toda la información del error, mostrando exactamente dónde ocurrió. 
+                <code>e.getMessage()</code> solo devuelve el mensaje descriptivo del error.
+            </p>
+            <p>
+                El bloque <code>finally</code> es opcional pero muy útil. Se ejecuta SIEMPRE, haya o no excepción. 
+                Es perfecto para cerrar recursos como archivos o conexiones de base de datos.
+            </p>
+            <p>
+                El método <code>dividir()</code> incluye <code>throws ArithmeticException</code> en su firma. Esto indica 
+                que este método puede lanzar ese tipo de excepción. El método también usa <code>throw new ArithmeticException()</code> 
+                para lanzar manualmente la excepción cuando detecta una división por cero.
+            </p>
+
             <div class="code-block">
                 <pre>
 public class ManejoExcepciones {
@@ -353,6 +517,38 @@ public class ManejoExcepciones {
             </div>
 
             <h3>Ejemplo 4: Lectura de archivos</h3>
+            <p>
+                <strong>Lectura de archivos en Java:</strong> Java ofrece varias formas de leer archivos. Aquí mostramos 
+                dos de las más comunes.
+            </p>
+            <p>
+                <strong>Método 1 - Files.readAllLines():</strong> Esta es la forma más simple y moderna (desde Java 7). 
+                <code>Files.readAllLines()</code> lee TODO el archivo de una vez y devuelve una lista de Strings, 
+                donde cada String es una línea del archivo. <code>Paths.get(ruta)</code> crea un objeto Path a partir 
+                de la ruta del archivo como String.
+            </p>
+            <p>
+                <strong>Ventaja:</strong> Código simple y legible.<br>
+                <strong>Desventaja:</strong> Carga todo el archivo en memoria, puede ser problemático con archivos muy grandes.
+            </p>
+            <p>
+                <strong>Método 2 - BufferedReader:</strong> Lee el archivo línea por línea, lo cual es más eficiente 
+                para archivos grandes porque no carga todo en memoria a la vez.
+            </p>
+            <p>
+                El <code>try-with-resources</code> (el try con paréntesis) es una característica desde Java 7 que 
+                automáticamente cierra el archivo cuando termina el bloque try, incluso si ocurre una excepción. 
+                Antes tenías que cerrar manualmente con <code>.close()</code> en un bloque finally.
+            </p>
+            <p>
+                <code>readLine()</code> devuelve <code>null</code> cuando llega al final del archivo, por eso el bucle 
+                <code>while</code> continúa mientras la línea no sea null.
+            </p>
+            <p>
+                <strong>Escribir archivos:</strong> <code>Files.writeString()</code> escribe el contenido completo 
+                en el archivo. Si el archivo existe, lo sobrescribe; si no existe, lo crea.
+            </p>
+
             <div class="code-block">
                 <pre>
 import java.io.*;
