@@ -122,62 +122,6 @@ Apuntes-2-DAW/
 └── README.md                       # Este archivo
 ```
 
-## 💻 Desarrollo Local
-
-### Opción 1: Servidor HTTP Simple
-
-```bash
-# Con Python 3
-python -m http.server 8000
-
-# Con Node.js
-npx http-server -p 8000
-
-# Con PHP
-php -S localhost:8000
-```
-
-Luego abre `http://localhost:8000` en tu navegador.
-
-### Opción 2: VS Code Live Server
-
-1. Instala la extensión **Live Server** en VS Code
-2. Click derecho en `index.html` → **"Open with Live Server"**
-3. Se abrirá automáticamente en `http://127.0.0.1:5500`
-
-### Opción 3: Abrir Directamente
-
-Simplemente abre `index.html` en tu navegador favorito (funciona sin servidor).
-
-## � Despliegue en GitHub Pages
-
-Esta wiki puede desplegarse automáticamente en GitHub Pages. Consulta `DEPLOYMENT.md` para instrucciones completas.
-
-**Resumen rápido:**
-1. Habilita GitHub Pages en Settings → Pages
-2. Selecciona "GitHub Actions" como source
-3. Haz push a la rama `main`
-4. Tu sitio estará en: `https://[usuario].github.io/Apuntes-2-DAW/`
-
-## 🎨 Paleta de Colores (Tema Oscuro)
-
-```css
-/* Fondos - Grises Oscuros */
---bg-primary: #2a2d35      /* Fondo principal */
---bg-secondary: #1f2228    /* Fondo secundario */
---bg-card: #32353d         /* Tarjetas */
---bg-tertiary: #363940     /* Bordes y elementos terciarios */
-
-/* Textos - Grises Claros */
---text-primary: #e8eaed    /* Texto principal */
---text-secondary: #b8bcc4  /* Texto secundario */
---text-tertiary: #8f94a0   /* Texto terciario */
-
-/* Acentos - Púrpura/Índigo */
---accent-primary: #6366f1  /* Índigo principal */
---accent-secondary: #818cf8 /* Índigo claro */
-```
-
 ## 📖 Contenido de las Páginas
 
 ### Páginas `index.html` (Temarios)
