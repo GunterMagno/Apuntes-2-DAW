@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen Node.js - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-md) 0;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .summary-table thead {
+            background-color: var(--accent-primary);
+            color: var(--bg-primary);
+        }
+        .summary-table th, .summary-table td {
+            padding: var(--spacing-sm) var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+        .summary-table th {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .summary-table td:first-child {
+            font-family: 'Courier New', monospace;
+            color: var(--node-color);
+            font-weight: 600;
+        }
+        .summary-table tr:hover {
+            background-color: var(--bg-card-hover);
+        }
+        .summary-table code {
+            background-color: var(--bg-primary);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <div class="detail-page">
+        <div class="detail-header">
+            <div class="detail-icon" style="color: var(--node-color);">
+                <i class="fab fa-node-js"></i>
+            </div>
+            <h1 class="detail-title">Resumen Rápido: Node.js</h1>
+            <p class="detail-subtitle">Referencia rápida de comandos npm, módulos core y conceptos clave</p>
+        </div>
+
+        <!-- Comandos NPM -->
+        <div class="content-section">
+            <h2><i class="fas fa-terminal"></i> Comandos npm más utilizados</h2>
+            <p>npm (Node Package Manager) es el gestor de paquetes por defecto de Node.js.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo/Uso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>npm init</td>
+                        <td>Crea un nuevo proyecto Node (package.json)</td>
+                        <td>npm init -y (con valores por defecto)</td>
+                    </tr>
+                    <tr>
+                        <td>npm install</td>
+                        <td>Instala todas las dependencias del package.json</td>
+                        <td>npm install o npm i</td>
+                    </tr>
+                    <tr>
+                        <td>npm install paquete</td>
+                        <td>Instala un paquete específico</td>
+                        <td>npm install express</td>
+                    </tr>
+                    <tr>
+                        <td>npm install -D paquete</td>
+                        <td>Instala como dependencia de desarrollo</td>
+                        <td>npm install -D nodemon</td>
+                    </tr>
+                    <tr>
+                        <td>npm uninstall paquete</td>
+                        <td>Desinstala un paquete</td>
+                        <td>npm uninstall lodash</td>
+                    </tr>
+                    <tr>
+                        <td>npm update</td>
+                        <td>Actualiza todos los paquetes</td>
+                        <td>Actualiza a versiones compatibles según package.json</td>
+                    </tr>
+                    <tr>
+                        <td>npm run script</td>
+                        <td>Ejecuta un script definido en package.json</td>
+                        <td>npm run dev, npm run test</td>
+                    </tr>
+                    <tr>
+                        <td>npm start</td>
+                        <td>Ejecuta el script "start"</td>
+                        <td>Atajo para npm run start</td>
+                    </tr>
+                    <tr>
+                        <td>npm test</td>
+                        <td>Ejecuta el script "test"</td>
+                        <td>Atajo para npm run test</td>
+                    </tr>
+                    <tr>
+                        <td>node archivo.js</td>
+                        <td>Ejecuta un archivo JavaScript con Node</td>
+                        <td>node index.js, node app.js</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Módulos Core de Node.js -->
+        <div class="content-section">
+            <h2><i class="fas fa-cube"></i> Módulos Core más importantes</h2>
+            <p>Node.js incluye módulos nativos que no necesitas instalar. Solo impórtalos con require().</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Módulo</th>
+                        <th>Para qué sirve</th>
+                        <th>Métodos principales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>fs</td>
+                        <td>Sistema de archivos (leer/escribir archivos)</td>
+                        <td>readFile(), writeFile(), readdir(), unlink()</td>
+                    </tr>
+                    <tr>
+                        <td>path</td>
+                        <td>Trabajar con rutas de archivos</td>
+                        <td>join(), resolve(), dirname(), basename()</td>
+                    </tr>
+                    <tr>
+                        <td>http</td>
+                        <td>Crear servidores HTTP</td>
+                        <td>createServer(), listen()</td>
+                    </tr>
+                    <tr>
+                        <td>https</td>
+                        <td>Crear servidores HTTPS seguros</td>
+                        <td>createServer() con certificados SSL</td>
+                    </tr>
+                    <tr>
+                        <td>os</td>
+                        <td>Información del sistema operativo</td>
+                        <td>platform(), cpus(), totalmem(), freemem()</td>
+                    </tr>
+                    <tr>
+                        <td>events</td>
+                        <td>Manejo de eventos (EventEmitter)</td>
+                        <td>on(), emit(), once(), removeListener()</td>
+                    </tr>
+                    <tr>
+                        <td>crypto</td>
+                        <td>Encriptación y hashing</td>
+                        <td>createHash(), randomBytes(), pbkdf2()</td>
+                    </tr>
+                    <tr>
+                        <td>util</td>
+                        <td>Utilidades varias</td>
+                        <td>promisify(), inspect(), format()</td>
+                    </tr>
+                    <tr>
+                        <td>stream</td>
+                        <td>Trabajar con streams de datos</td>
+                        <td>Readable, Writable, pipe()</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Métodos del módulo fs -->
+        <div class="content-section">
+            <h2><i class="fas fa-folder-open"></i> Módulo fs (File System)</h2>
+            <p>Los métodos más usados para trabajar con archivos. Cada uno tiene versión síncrona (Sync) y asíncrona.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Qué hace</th>
+                        <th>Cuándo usarlo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>readFile(path, callback)</td>
+                        <td>Lee un archivo completo de forma asíncrona</td>
+                        <td>Leer archivos de configuración, templates</td>
+                    </tr>
+                    <tr>
+                        <td>readFileSync(path)</td>
+                        <td>Lee un archivo de forma síncrona (bloquea)</td>
+                        <td>Al iniciar app, cuando necesitas el archivo inmediatamente</td>
+                    </tr>
+                    <tr>
+                        <td>writeFile(path, data, callback)</td>
+                        <td>Escribe datos en un archivo (sobrescribe)</td>
+                        <td>Guardar logs, datos de usuario, configs</td>
+                    </tr>
+                    <tr>
+                        <td>appendFile(path, data, callback)</td>
+                        <td>Añade datos al final de un archivo</td>
+                        <td>Logs que deben crecer, no sobrescribirse</td>
+                    </tr>
+                    <tr>
+                        <td>unlink(path, callback)</td>
+                        <td>Elimina un archivo</td>
+                        <td>Borrar archivos temporales, uploads antiguos</td>
+                    </tr>
+                    <tr>
+                        <td>readdir(path, callback)</td>
+                        <td>Lista archivos de un directorio</td>
+                        <td>Ver contenido de una carpeta</td>
+                    </tr>
+                    <tr>
+                        <td>mkdir(path, callback)</td>
+                        <td>Crea un directorio</td>
+                        <td>Crear carpetas para uploads, logs</td>
+                    </tr>
+                    <tr>
+                        <td>stat(path, callback)</td>
+                        <td>Obtiene información del archivo/directorio</td>
+                        <td>Verificar si existe, tamaño, fecha modificación</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Conceptos importantes -->
+        <div class="content-section">
+            <h2><i class="fas fa-lightbulb"></i> Conceptos fundamentales</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Qué es</th>
+                        <th>Por qué es importante</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Event Loop</td>
+                        <td>Bucle que gestiona operaciones asíncronas</td>
+                        <td>Permite que Node sea no-bloqueante y maneje muchas conexiones</td>
+                    </tr>
+                    <tr>
+                        <td>Non-blocking I/O</td>
+                        <td>Operaciones de entrada/salida no bloquean ejecución</td>
+                        <td>Node puede hacer otras cosas mientras espera I/O (BD, archivos)</td>
+                    </tr>
+                    <tr>
+                        <td>Callback</td>
+                        <td>Función que se ejecuta cuando termina operación asíncrona</td>
+                        <td>Forma tradicional de manejar asincronía en Node</td>
+                    </tr>
+                    <tr>
+                        <td>Promise</td>
+                        <td>Objeto que representa resultado futuro de operación asíncrona</td>
+                        <td>Evita callback hell, más legible con .then() y .catch()</td>
+                    </tr>
+                    <tr>
+                        <td>async/await</td>
+                        <td>Sintaxis moderna para trabajar con Promises</td>
+                        <td>Código asíncrono parece síncrono, más fácil de leer</td>
+                    </tr>
+                    <tr>
+                        <td>CommonJS (require)</td>
+                        <td>Sistema de módulos tradicional de Node</td>
+                        <td>const express = require('express')</td>
+                    </tr>
+                    <tr>
+                        <td>ES Modules (import)</td>
+                        <td>Sistema de módulos moderno de JavaScript</td>
+                        <td>import express from 'express' (necesita "type": "module")</td>
+                    </tr>
+                    <tr>
+                        <td>package.json</td>
+                        <td>Archivo de configuración del proyecto</td>
+                        <td>Define dependencias, scripts, metadatos del proyecto</td>
+                    </tr>
+                    <tr>
+                        <td>node_modules</td>
+                        <td>Carpeta donde se instalan las dependencias</td>
+                        <td>Nunca subir a Git (usar .gitignore)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Variables de entorno -->
+        <div class="content-section">
+            <h2><i class="fas fa-key"></i> Variables de entorno</h2>
+            <p>Para manejar configuración sensible como API keys, contraseñas, URLs de BD.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>process.env.VARIABLE</td>
+                        <td>Accede a variables de entorno</td>
+                        <td>const port = process.env.PORT || 3000</td>
+                    </tr>
+                    <tr>
+                        <td>Archivo .env</td>
+                        <td>Archivo para definir variables (con dotenv)</td>
+                        <td>PORT=3000<br>DB_URL=mongodb://localhost</td>
+                    </tr>
+                    <tr>
+                        <td>dotenv package</td>
+                        <td>Librería para cargar .env en process.env</td>
+                        <td>require('dotenv').config()</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Manejo de errores -->
+        <div class="content-section">
+            <h2><i class="fas fa-exclamation-triangle"></i> Manejo de errores</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Patrón</th>
+                        <th>Cuándo usarlo</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>try-catch</td>
+                        <td>Con código síncrono o async/await</td>
+                        <td>try { await fn() } catch(err) { }</td>
+                    </tr>
+                    <tr>
+                        <td>Error-first callbacks</td>
+                        <td>Callbacks tradicionales de Node</td>
+                        <td>fs.readFile(path, (err, data) => { if(err)... })</td>
+                    </tr>
+                    <tr>
+                        <td>.catch()</td>
+                        <td>Con Promises</td>
+                        <td>promise.then().catch(err => ...)</td>
+                    </tr>
+                    <tr>
+                        <td>process.on('uncaughtException')</td>
+                        <td>Captura errores no manejados globalmente</td>
+                        <td>Para logging antes de que app muera</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Debugging -->
+        <div class="content-section">
+            <h2><i class="fas fa-bug"></i> Debugging y desarrollo</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Herramienta/Comando</th>
+                        <th>Qué hace</th>
+                        <th>Uso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>console.log()</td>
+                        <td>Imprime en consola (debugging básico)</td>
+                        <td>console.log('Usuario:', user)</td>
+                    </tr>
+                    <tr>
+                        <td>console.error()</td>
+                        <td>Imprime errores en stderr</td>
+                        <td>console.error('Error:', err.message)</td>
+                    </tr>
+                    <tr>
+                        <td>console.table()</td>
+                        <td>Muestra objetos/arrays como tabla</td>
+                        <td>console.table(users)</td>
+                    </tr>
+                    <tr>
+                        <td>node --inspect</td>
+                        <td>Inicia debugger de Chrome DevTools</td>
+                        <td>node --inspect index.js</td>
+                    </tr>
+                    <tr>
+                        <td>nodemon</td>
+                        <td>Reinicia app automáticamente al guardar</td>
+                        <td>nodemon index.js (instalar con npm i -D nodemon)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Scripts comunes en package.json -->
+        <div class="content-section">
+            <h2><i class="fas fa-file-code"></i> Scripts comunes en package.json</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Script</th>
+                        <th>Comando</th>
+                        <th>Uso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>"start"</td>
+                        <td>"node index.js"</td>
+                        <td>Ejecutar app en producción</td>
+                    </tr>
+                    <tr>
+                        <td>"dev"</td>
+                        <td>"nodemon index.js"</td>
+                        <td>Desarrollo con auto-reload</td>
+                    </tr>
+                    <tr>
+                        <td>"test"</td>
+                        <td>"jest" o "mocha"</td>
+                        <td>Ejecutar tests</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <div class="info-box">
+                <h4><i class="fas fa-lightbulb"></i> Consejo importante</h4>
+                <p><strong>Node.js brilla en aplicaciones I/O intensivas</strong>: APIs REST, aplicaciones en tiempo real (chat, gaming), streaming de datos.</p>
+                <p>La clave es entender la <strong>programación asíncrona</strong>. Empieza con callbacks, luego Promises, y finalmente async/await. Practica leyendo y escribiendo archivos, haciendo peticiones HTTP.</p>
+                <p><strong>npm es tu mejor amigo</strong>: hay paquetes para casi todo. Busca en npmjs.com antes de reinventar la rueda.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Wiki Personal 2º DAW</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
