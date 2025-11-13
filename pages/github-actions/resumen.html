@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen GitHub Actions - Wiki 2º DAW</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-md) 0;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .command-table th {
+            background-color: var(--github-actions-color);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .command-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .command-table tr:last-child td {
+            border-bottom: none;
+        }
+        .command-table tr:hover {
+            background-color: rgba(32, 136, 255, 0.05);
+        }
+        .command-table code {
+            background-color: rgba(32, 136, 255, 0.15);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+        </div>
+    </nav>
+
+    <div class="topics-page">
+        <div class="topics-header">
+            <div class="topics-icon" style="color: var(--github-actions-color);">
+                <i class="fab fa-github"></i>
+            </div>
+            <h1 class="topics-title">Resumen GitHub Actions</h1>
+            <p class="topics-subtitle">Workflows, eventos y sintaxis YAML</p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-file-code"></i> Estructura de Workflow</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Sección</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>name</code></td>
+                        <td><code>name: Mi Workflow</code></td>
+                        <td>Nombre del workflow</td>
+                    </tr>
+                    <tr>
+                        <td><code>on</code></td>
+                        <td><code>on: [push, pull_request]</code></td>
+                        <td>Eventos que disparan el workflow</td>
+                    </tr>
+                    <tr>
+                        <td><code>jobs</code></td>
+                        <td><code>jobs:</code></td>
+                        <td>Define trabajos a ejecutar</td>
+                    </tr>
+                    <tr>
+                        <td><code>runs-on</code></td>
+                        <td><code>runs-on: ubuntu-latest</code></td>
+                        <td>Sistema operativo del runner</td>
+                    </tr>
+                    <tr>
+                        <td><code>steps</code></td>
+                        <td><code>steps:</code></td>
+                        <td>Pasos a ejecutar en el job</td>
+                    </tr>
+                    <tr>
+                        <td><code>uses</code></td>
+                        <td><code>uses: actions/checkout@v3</code></td>
+                        <td>Usa una action existente</td>
+                    </tr>
+                    <tr>
+                        <td><code>run</code></td>
+                        <td><code>run: npm install</code></td>
+                        <td>Ejecuta comando shell</td>
+                    </tr>
+                    <tr>
+                        <td><code>env</code></td>
+                        <td><code>env: NODE_ENV: production</code></td>
+                        <td>Variables de entorno</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-bolt"></i> Eventos (Triggers)</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Evento</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>push</code></td>
+                        <td><code>on: push</code></td>
+                        <td>Cuando se hace push</td>
+                    </tr>
+                    <tr>
+                        <td><code>pull_request</code></td>
+                        <td><code>on: pull_request</code></td>
+                        <td>Cuando se crea/actualiza PR</td>
+                    </tr>
+                    <tr>
+                        <td><code>workflow_dispatch</code></td>
+                        <td><code>on: workflow_dispatch</code></td>
+                        <td>Ejecutar manualmente desde UI</td>
+                    </tr>
+                    <tr>
+                        <td><code>schedule</code></td>
+                        <td><code>on: schedule: - cron: '0 0 * * *'</code></td>
+                        <td>Ejecutar en horario (cron)</td>
+                    </tr>
+                    <tr>
+                        <td><code>release</code></td>
+                        <td><code>on: release: types: [published]</code></td>
+                        <td>Cuando se publica release</td>
+                    </tr>
+                    <tr>
+                        <td><code>push (branches)</code></td>
+                        <td><code>on: push: branches: [main, dev]</code></td>
+                        <td>Solo en ramas específicas</td>
+                    </tr>
+                    <tr>
+                        <td><code>push (paths)</code></td>
+                        <td><code>on: push: paths: ['src/**']</code></td>
+                        <td>Solo si cambios en paths</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-desktop"></i> Runners Disponibles</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Runner</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Ubuntu</strong></td>
+                        <td><code>runs-on: ubuntu-latest</code></td>
+                        <td>Linux Ubuntu (más usado)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Windows</strong></td>
+                        <td><code>runs-on: windows-latest</code></td>
+                        <td>Windows Server</td>
+                    </tr>
+                    <tr>
+                        <td><strong>macOS</strong></td>
+                        <td><code>runs-on: macos-latest</code></td>
+                        <td>macOS</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ubuntu 20.04</strong></td>
+                        <td><code>runs-on: ubuntu-20.04</code></td>
+                        <td>Versión específica de Ubuntu</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-puzzle-piece"></i> Actions Comunes</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Uso</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>actions/checkout</code></td>
+                        <td><code>uses: actions/checkout@v3</code></td>
+                        <td>Clona el repositorio</td>
+                    </tr>
+                    <tr>
+                        <td><code>actions/setup-node</code></td>
+                        <td><code>uses: actions/setup-node@v3<br>with: node-version: '18'</code></td>
+                        <td>Configura Node.js</td>
+                    </tr>
+                    <tr>
+                        <td><code>actions/setup-java</code></td>
+                        <td><code>uses: actions/setup-java@v3<br>with: java-version: '17'</code></td>
+                        <td>Configura Java</td>
+                    </tr>
+                    <tr>
+                        <td><code>actions/setup-python</code></td>
+                        <td><code>uses: actions/setup-python@v4<br>with: python-version: '3.10'</code></td>
+                        <td>Configura Python</td>
+                    </tr>
+                    <tr>
+                        <td><code>actions/cache</code></td>
+                        <td><code>uses: actions/cache@v3<br>with: path: ~/.npm</code></td>
+                        <td>Cachea dependencias</td>
+                    </tr>
+                    <tr>
+                        <td><code>actions/upload-artifact</code></td>
+                        <td><code>uses: actions/upload-artifact@v3</code></td>
+                        <td>Sube artefactos</td>
+                    </tr>
+                    <tr>
+                        <td><code>actions/download-artifact</code></td>
+                        <td><code>uses: actions/download-artifact@v3</code></td>
+                        <td>Descarga artefactos</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker/build-push-action</code></td>
+                        <td><code>uses: docker/build-push-action@v4</code></td>
+                        <td>Construye y sube imagen Docker</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-code-branch"></i> Contextos y Expresiones</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Contexto</th>
+                        <th>Ejemplo</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>github</code></td>
+                        <td><code>${{ github.sha }}</code></td>
+                        <td>SHA del commit</td>
+                    </tr>
+                    <tr>
+                        <td><code>github.ref</code></td>
+                        <td><code>${{ github.ref }}</code></td>
+                        <td>Referencia (rama/tag)</td>
+                    </tr>
+                    <tr>
+                        <td><code>github.actor</code></td>
+                        <td><code>${{ github.actor }}</code></td>
+                        <td>Usuario que disparó el workflow</td>
+                    </tr>
+                    <tr>
+                        <td><code>github.event_name</code></td>
+                        <td><code>${{ github.event_name }}</code></td>
+                        <td>Nombre del evento</td>
+                    </tr>
+                    <tr>
+                        <td><code>secrets</code></td>
+                        <td><code>${{ secrets.API_KEY }}</code></td>
+                        <td>Accede a secretos</td>
+                    </tr>
+                    <tr>
+                        <td><code>env</code></td>
+                        <td><code>${{ env.NODE_ENV }}</code></td>
+                        <td>Variables de entorno</td>
+                    </tr>
+                    <tr>
+                        <td><code>steps</code></td>
+                        <td><code>${{ steps.build.outputs.result }}</code></td>
+                        <td>Salida de steps anteriores</td>
+                    </tr>
+                    <tr>
+                        <td><code>job</code></td>
+                        <td><code>${{ job.status }}</code></td>
+                        <td>Estado del job actual</td>
+                    </tr>
+                    <tr>
+                        <td><code>runner</code></td>
+                        <td><code>${{ runner.os }}</code></td>
+                        <td>Info del runner (OS, temp, etc.)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-filter"></i> Condicionales (if)</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Condición</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Ejecutar si</strong></td>
+                        <td><code>if: success()</code></td>
+                        <td>Solo si pasos anteriores exitosos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Siempre ejecutar</strong></td>
+                        <td><code>if: always()</code></td>
+                        <td>Ejecuta siempre, incluso si falla</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Si falla</strong></td>
+                        <td><code>if: failure()</code></td>
+                        <td>Solo si algún paso falló</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rama específica</strong></td>
+                        <td><code>if: github.ref == 'refs/heads/main'</code></td>
+                        <td>Solo en rama main</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Evento específico</strong></td>
+                        <td><code>if: github.event_name == 'push'</code></td>
+                        <td>Solo en push</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Con operadores</strong></td>
+                        <td><code>if: runner.os == 'Linux' && success()</code></td>
+                        <td>Combina condiciones con &&, ||</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-key"></i> Secrets</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Ejemplo</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Usar secret</strong></td>
+                        <td><code>env: API_KEY: ${{ secrets.API_KEY }}</code></td>
+                        <td>Accede a secreto en variable de entorno</td>
+                    </tr>
+                    <tr>
+                        <td><strong>En comando</strong></td>
+                        <td><code>run: echo "${{ secrets.TOKEN }}"</code></td>
+                        <td>Usa secreto directamente (no recomendado)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Crear secret</strong></td>
+                        <td>Settings → Secrets → New repository secret</td>
+                        <td>Se crea desde la UI de GitHub</td>
+                    </tr>
+                    <tr>
+                        <td><strong>GITHUB_TOKEN</strong></td>
+                        <td><code>${{ secrets.GITHUB_TOKEN }}</code></td>
+                        <td>Token automático para permisos del repo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-sitemap"></i> Jobs y Dependencias</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Jobs paralelos</strong></td>
+                        <td><code>jobs:<br>&nbsp;&nbsp;job1:<br>&nbsp;&nbsp;job2:</code></td>
+                        <td>Se ejecutan en paralelo por defecto</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dependencias</strong></td>
+                        <td><code>needs: [build, test]</code></td>
+                        <td>Job espera a que otros terminen</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Matrix strategy</strong></td>
+                        <td><code>strategy: matrix: node: [14, 16, 18]</code></td>
+                        <td>Ejecuta job en múltiples versiones</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Timeout</strong></td>
+                        <td><code>timeout-minutes: 30</code></td>
+                        <td>Tiempo máximo de ejecución</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Continue on error</strong></td>
+                        <td><code>continue-on-error: true</code></td>
+                        <td>Continúa aunque falle</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-rocket"></i> Ejemplo: CI/CD Completo Node.js</h2>
+            <div class="code-block"><pre>name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run tests
+        run: npm test
+        
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Build
+        run: npm run build
+        
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: dist/
+          
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          
+      - name: Deploy
+        run: echo "Deploying to production..."
+        env:
+          API_KEY: ${{ secrets.DEPLOY_KEY }}</pre></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Wiki 2º DAW - Tu repositorio de conocimiento en desarrollo web</p>
+    </footer>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

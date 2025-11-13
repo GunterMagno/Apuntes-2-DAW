@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Routing y Navegación - Angular</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-angular"></i> Routing</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#introduccion" class="active">Introducción al Routing</a></li>
+                <li><a href="#configuracion">Configurar Rutas</a></li>
+                <li><a href="#navegacion">Navegación</a></li>
+                <li><a href="#parametros">Parámetros de Ruta</a></li>
+                <li><a href="#guards">Guards (Guardias)</a></li>
+                <li><a href="#lazy">Lazy Loading</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color:var(--angular-color)"><i class="fab fa-angular"></i></div>
+                <h1>5. Routing y Navegación</h1>
+                <p class="detail-subtitle">Sistema de navegación entre vistas en Angular</p>
+            </div>
+
+            <div class="content-section" id="introduccion">
+                <h2><i class="fas fa-route"></i> Introducción al Routing</h2>
+                <p>El <strong>Router de Angular</strong> permite navegar entre diferentes vistas (componentes) de tu aplicación sin recargar la página completa. Convierte tu aplicación en una SPA (Single Page Application).</p>
+
+                <div class="info-box">
+                    <p><strong>¿Por qué usar Routing?</strong></p>
+                    <ul>
+                        <li><strong>Navegación sin recargas:</strong> Experiencia de usuario fluida</li>
+                        <li><strong>URLs amigables:</strong> Cada vista tiene su propia URL</li>
+                        <li><strong>Navegación por historial:</strong> Botones atrás/adelante funcionan</li>
+                        <li><strong>Lazy Loading:</strong> Cargar módulos solo cuando se necesitan</li>
+                        <li><strong>Protección de rutas:</strong> Guards para autenticación/autorización</li>
+                    </ul>
+                </div>
+
+                <h3>Configurar Routing al crear el proyecto:</h3>
+                <div class="code-block"><pre># Al crear un nuevo proyecto, Angular CLI pregunta:
+? Would you like to add Angular routing? (y/N) y
+
+# O manualmente después:
+ng generate module app-routing --flat --module=app
+
+# --flat: No crea carpeta
+# --module=app: Lo importa automáticamente en AppModule</pre></div>
+            </div>
+
+            <div class="content-section" id="configuracion">
+                <h2><i class="fas fa-cog"></i> Configurar Rutas</h2>
+                <p>Las rutas se definen en un <strong>array de configuración</strong> que mapea URLs a componentes.</p>
+
+                <h3>Estructura básica del routing:</h3>
+                <div class="code-block"><pre>// app-routing.module.ts
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+// Importar componentes
+import { HomeComponent } from './home/home.component';
+import { AboutComponent } from './about/about.component';
+import { ContactComponent } from './contact/contact.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+
+// Definir rutas
+const routes: Routes = [
+  { path: '', component: HomeComponent },           // Ruta raíz: /
+  { path: 'about', component: AboutComponent },     // /about
+  { path: 'contact', component: ContactComponent }, // /contact
+  { path: '**', component: NotFoundComponent }      // 404 - Debe ir AL FINAL
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }</pre></div>
+
+                <h3>Usar Router en el template:</h3>
+                <div class="code-block"><pre>&lt;!-- app.component.html --&gt;
+&lt;nav&gt;
+  &lt;a routerLink="/"&gt;Inicio&lt;/a&gt;
+  &lt;a routerLink="/about"&gt;Acerca de&lt;/a&gt;
+  &lt;a routerLink="/contact"&gt;Contacto&lt;/a&gt;
+&lt;/nav&gt;
+
+&lt;!-- Aquí se renderizan los componentes según la ruta activa --&gt;
+&lt;router-outlet&gt;&lt;/router-outlet&gt;</pre></div>
+
+                <h3>Rutas anidadas (child routes):</h3>
+                <div class="code-block"><pre>const routes: Routes = [
+  { path: '', component: HomeComponent },
+  { 
+    path: 'productos', 
+    component: ProductosComponent,
+    children: [
+      { path: '', component: ListaProductosComponent },        // /productos
+      { path: 'nuevo', component: NuevoProductoComponent },    // /productos/nuevo
+      { path: ':id', component: DetalleProductoComponent },    // /productos/123
+      { path: ':id/editar', component: EditarProductoComponent } // /productos/123/editar
+    ]
+  }
+];
+
+&lt;!-- productos.component.html necesita su propio router-outlet --&gt;
+&lt;h1&gt;Productos&lt;/h1&gt;
+&lt;router-outlet&gt;&lt;/router-outlet&gt;  &lt;!-- Aquí se renderizan las rutas hijas --&gt;</pre></div>
+
+                <h3>Redirecciones:</h3>
+                <div class="code-block"><pre>const routes: Routes = [
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  
+  // Redirección con parámetros
+  { path: 'old-path/:id', redirectTo: 'new-path/:id', pathMatch: 'full' },
+  
+  // 404 - Siempre al final
+  { path: '**', redirectTo: '/home' }
+];
+
+// pathMatch: 'full' → La ruta debe coincidir EXACTAMENTE
+// pathMatch: 'prefix' → La ruta coincide si empieza con el path (por defecto)</pre></div>
+            </div>
+
+            <div class="content-section" id="navegacion">
+                <h2><i class="fas fa-compass"></i> Navegación</h2>
+                <p>Angular ofrece varias formas de navegar entre rutas: con directivas en templates o programáticamente en TypeScript.</p>
+
+                <h3>routerLink - Navegación en templates:</h3>
+                <div class="code-block"><pre>&lt;!-- String simple --&gt;
+&lt;a routerLink="/about"&gt;Acerca de&lt;/a&gt;
+
+&lt;!-- Array (útil para construir rutas dinámicas) --&gt;
+&lt;a [routerLink]="['/productos', producto.id]"&gt;Ver producto&lt;/a&gt;
+&lt;!-- Genera: /productos/123 --&gt;
+
+&lt;!-- Rutas relativas --&gt;
+&lt;a routerLink="./hijo"&gt;Ruta relativa&lt;/a&gt;      &lt;!-- Agrega al path actual --&gt;
+&lt;a routerLink="../hermano"&gt;Subir nivel&lt;/a&gt;   &lt;!-- Sube un nivel --&gt;
+
+&lt;!-- Con query params (?categoria=electronica) --&gt;
+&lt;a [routerLink]="['/productos']" [queryParams]="{categoria: 'electronica', orden: 'precio'}"&gt;
+  Productos
+&lt;/a&gt;
+&lt;!-- Genera: /productos?categoria=electronica&orden=precio --&gt;
+
+&lt;!-- Con fragment (#seccion) --&gt;
+&lt;a [routerLink]="['/about']" fragment="contacto"&gt;Ir a contacto&lt;/a&gt;
+&lt;!-- Genera: /about#contacto --&gt;</pre></div>
+
+                <h3>routerLinkActive - Resaltar ruta activa:</h3>
+                <div class="code-block"><pre>&lt;nav&gt;
+  &lt;a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"&gt;
+    Inicio
+  &lt;/a&gt;
+  &lt;a routerLink="/productos" routerLinkActive="active"&gt;Productos&lt;/a&gt;
+  &lt;a routerLink="/about" routerLinkActive="active"&gt;Acerca de&lt;/a&gt;
+&lt;/nav&gt;
+
+&lt;!-- CSS --&gt;
+&lt;style&gt;
+.active {
+  font-weight: bold;
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+}
+&lt;/style&gt;
+
+&lt;!-- routerLinkActiveOptions: {exact: true} 
+     → Solo activa si la ruta coincide EXACTAMENTE (útil para '/') --&gt;</pre></div>
+
+                <h3>Router - Navegación programática:</h3>
+                <div class="code-block"><pre>import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html'
+})
+export class HomeComponent {
+  
+  constructor(private router: Router) { }
+  
+  // Navegación simple
+  irAProductos(): void {
+    this.router.navigate(['/productos']);
+  }
+  
+  // Navegación con parámetros
+  verProducto(id: number): void {
+    this.router.navigate(['/productos', id]);
+    // Va a: /productos/123
+  }
+  
+  // Navegación con query params
+  buscarProductos(): void {
+    this.router.navigate(['/productos'], {
+      queryParams: { categoria: 'electronica', min: 100 }
+    });
+    // Va a: /productos?categoria=electronica&min=100
+  }
+  
+  // Navegación relativa (necesita ActivatedRoute)
+  irAEditar(id: number): void {
+    this.router.navigate(['../editar', id], { relativeTo: this.route });
+  }
+  
+  // Navegar y reemplazar en el historial (no se puede "volver")
+  login(): void {
+    this.router.navigate(['/dashboard'], { replaceUrl: true });
+  }
+  
+  // Navegar con datos de estado
+  irConDatos(): void {
+    this.router.navigate(['/resultado'], {
+      state: { data: { mensaje: 'Datos enviados' } }
+    });
+  }
+}</pre></div>
+
+                <h3>Acceder a datos de navegación:</h3>
+                <div class="code-block"><pre>import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+export class ResultadoComponent implements OnInit {
+  
+  constructor(private router: Router) { }
+  
+  ngOnInit(): void {
+    // Acceder a datos pasados por navigate()
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      const data = navigation.extras.state['data'];
+      console.log('Datos recibidos:', data);
+    }
+  }
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="parametros">
+                <h2><i class="fas fa-sliders-h"></i> Parámetros de Ruta</h2>
+                <p>Las rutas pueden contener <strong>parámetros dinámicos</strong> para pasar datos. Angular ofrece dos tipos: parámetros de ruta y query params.</p>
+
+                <h3>Parámetros de ruta (/productos/:id):</h3>
+                <div class="code-block"><pre>// Definir ruta con parámetros
+const routes: Routes = [
+  { path: 'producto/:id', component: DetalleProductoComponent },
+  { path: 'usuario/:id/perfil', component: PerfilComponent },
+  { path: 'blog/:categoria/:slug', component: BlogComponent }
+];
+
+// Leer parámetros en el componente
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+export class DetalleProductoComponent implements OnInit {
+  productoId: number = 0;
+  
+  constructor(private route: ActivatedRoute) { }
+  
+  ngOnInit(): void {
+    // Método 1: Snapshot (valor actual, no reactivo)
+    this.productoId = Number(this.route.snapshot.paramMap.get('id'));
+    console.log('Producto ID:', this.productoId);
+    
+    // Método 2: Observable (reactivo, se actualiza si cambia la ruta)
+    this.route.paramMap.subscribe(params => {
+      this.productoId = Number(params.get('id'));
+      console.log('Producto ID (actualizado):', this.productoId);
+      this.cargarProducto();
+    });
+  }
+  
+  cargarProducto(): void {
+    // Cargar datos del producto usando this.productoId
+  }
+}</pre></div>
+
+                <h3>Query Parameters (?categoria=electronica&min=100):</h3>
+                <div class="code-block"><pre>// Leer query params
+export class ProductosComponent implements OnInit {
+  categoria: string = '';
+  precioMin: number = 0;
+  
+  constructor(private route: ActivatedRoute) { }
+  
+  ngOnInit(): void {
+    // Snapshot (no reactivo)
+    this.categoria = this.route.snapshot.queryParamMap.get('categoria') || '';
+    this.precioMin = Number(this.route.snapshot.queryParamMap.get('min')) || 0;
+    
+    // Observable (reactivo)
+    this.route.queryParamMap.subscribe(params => {
+      this.categoria = params.get('categoria') || '';
+      this.precioMin = Number(params.get('min')) || 0;
+      this.filtrarProductos();
+    });
+  }
+  
+  filtrarProductos(): void {
+    console.log(`Filtrando: ${this.categoria}, mínimo: ${this.precioMin}`);
+    // Aplicar filtros
+  }
+}</pre></div>
+
+                <h3>Combinar parámetros y query params:</h3>
+                <div class="code-block"><pre>// URL: /producto/123?tab=reviews&sort=date
+export class ProductoComponent implements OnInit {
+  productoId: number = 0;
+  tabActiva: string = 'info';
+  ordenamiento: string = 'relevance';
+  
+  constructor(private route: ActivatedRoute) { }
+  
+  ngOnInit(): void {
+    // Leer parámetro de ruta
+    this.productoId = Number(this.route.snapshot.paramMap.get('id'));
+    
+    // Leer query params
+    this.tabActiva = this.route.snapshot.queryParamMap.get('tab') || 'info';
+    this.ordenamiento = this.route.snapshot.queryParamMap.get('sort') || 'relevance';
+  }
+}</pre></div>
+
+                <h3>Fragment (anchor #seccion):</h3>
+                <div class="code-block"><pre>// URL: /about#contacto
+export class AboutComponent implements OnInit {
+  
+  constructor(private route: ActivatedRoute) { }
+  
+  ngOnInit(): void {
+    this.route.fragment.subscribe(fragment => {
+      if (fragment) {
+        // Hacer scroll a la sección
+        const element = document.getElementById(fragment);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  }
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="guards">
+                <h2><i class="fas fa-shield-alt"></i> Guards (Guardias de Ruta)</h2>
+                <p>Los <strong>Guards</strong> protegen rutas controlando si un usuario puede acceder, salir o cargar una ruta. Útiles para autenticación, autorización y prevenir pérdida de datos.</p>
+
+                <h3>Tipos de Guards:</h3>
+                <div class="code-block"><pre>// CanActivate - ¿Puede entrar a la ruta?
+// CanActivateChild - ¿Puede entrar a rutas hijas?
+// CanDeactivate - ¿Puede salir de la ruta?
+// CanLoad - ¿Puede cargar un módulo lazy-loaded?
+// Resolve - Pre-cargar datos antes de activar la ruta</pre></div>
+
+                <h3>CanActivate - Proteger rutas (autenticación):</h3>
+                <div class="code-block"><pre>// Generar guard
+ng generate guard auth
+
+// auth.guard.ts
+import { Injectable } from '@angular/core';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { AuthService } from './services/auth.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthGuard implements CanActivate {
+  
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) { }
+  
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean {
+    
+    if (this.authService.isLoggedIn()) {
+      return true;  // Permitir acceso
+    }
+    
+    // No autenticado → redirigir a login
+    this.router.navigate(['/login'], {
+      queryParams: { returnUrl: state.url }  // Guardar URL destino
+    });
+    return false;  // Denegar acceso
+  }
+}
+
+// Aplicar guard en rutas
+const routes: Routes = [
+  { path: 'login', component: LoginComponent },
+  { 
+    path: 'dashboard', 
+    component: DashboardComponent,
+    canActivate: [AuthGuard]  // Proteger ruta
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AuthGuard]
+  }
+];</pre></div>
+
+                <h3>RoleGuard - Autorización por roles:</h3>
+                <div class="code-block"><pre>// role.guard.ts
+import { Injectable } from '@angular/core';
+import { CanActivate, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { AuthService } from './services/auth.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RoleGuard implements CanActivate {
+  
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) { }
+  
+  canActivate(route: ActivatedRouteSnapshot): boolean {
+    const requiredRole = route.data['role'];  // Rol requerido en la ruta
+    const userRole = this.authService.getUserRole();
+    
+    if (userRole === requiredRole) {
+      return true;
+    }
+    
+    // No autorizado
+    this.router.navigate(['/acceso-denegado']);
+    return false;
+  }
+}
+
+// Aplicar con datos
+const routes: Routes = [
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'admin' }  // Pasar datos al guard
+  },
+  {
+    path: 'editor',
+    component: EditorComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'editor' }
+  }
+];</pre></div>
+
+                <h3>CanDeactivate - Prevenir pérdida de datos:</h3>
+                <div class="code-block"><pre>// form-deactivate.guard.ts
+import { Injectable } from '@angular/core';
+import { CanDeactivate } from '@angular/router';
+
+// Interface que deben implementar los componentes
+export interface CanComponentDeactivate {
+  canDeactivate: () => boolean;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class FormDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
+  
+  canDeactivate(component: CanComponentDeactivate): boolean {
+    return component.canDeactivate ? component.canDeactivate() : true;
+  }
+}
+
+// Componente con formulario
+export class FormularioComponent implements CanComponentDeactivate {
+  formularioModificado: boolean = false;
+  
+  canDeactivate(): boolean {
+    if (this.formularioModificado) {
+      return confirm('Tienes cambios sin guardar. ¿Quieres salir?');
+    }
+    return true;
+  }
+}
+
+// Aplicar guard
+const routes: Routes = [
+  {
+    path: 'formulario',
+    component: FormularioComponent,
+    canDeactivate: [FormDeactivateGuard]
+  }
+];</pre></div>
+            </div>
+
+            <div class="content-section" id="lazy">
+                <h2><i class="fas fa-spinner"></i> Lazy Loading - Carga Diferida</h2>
+                <p><strong>Lazy Loading</strong> carga módulos solo cuando el usuario navega a esa ruta, reduciendo el tamaño del bundle inicial y mejorando el tiempo de carga.</p>
+
+                <h3>Configurar Lazy Loading:</h3>
+                <div class="code-block"><pre>// app-routing.module.ts
+const routes: Routes = [
+  { path: '', component: HomeComponent },
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+    // Solo carga AdminModule cuando navegas a /admin
+  },
+  {
+    path: 'productos',
+    loadChildren: () => import('./productos/productos.module').then(m => m.ProductosModule)
+  },
+  {
+    path: 'usuarios',
+    loadChildren: () => import('./usuarios/usuarios.module').then(m => m.UsuariosModule)
+  }
+];
+
+// admin/admin-routing.module.ts (rutas del módulo lazy)
+const routes: Routes = [
+  { path: '', component: AdminDashboardComponent },     // /admin
+  { path: 'users', component: AdminUsersComponent },    // /admin/users
+  { path: 'settings', component: AdminSettingsComponent } // /admin/settings
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],  // forChild para módulos lazy
+  exports: [RouterModule]
+})
+export class AdminRoutingModule { }</pre></div>
+
+                <h3>Preloading Strategy - Precargar módulos lazy:</h3>
+                <div class="code-block"><pre>// app-routing.module.ts
+import { PreloadAllModules } from '@angular/router';
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes, {
+    preloadingStrategy: PreloadAllModules  // Precarga todos los módulos lazy
+  })],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+// Opciones de preloading:
+// - NoPreloading (por defecto): No precarga nada
+// - PreloadAllModules: Precarga todos los módulos lazy después de cargar la app
+// - Custom: Puedes crear tu propia estrategia</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Ventajas de Lazy Loading:</strong>
+                    <ul>
+                        <li>✓ Reduce el tamaño del bundle inicial (faster first load)</li>
+                        <li>✓ Mejora el performance percibido</li>
+                        <li>✓ Solo carga código que realmente se usa</li>
+                        <li>✓ Ideal para aplicaciones grandes con muchas secciones</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Cuándo usar Lazy Loading:</strong>
+                    <ul>
+                        <li>✓ Secciones grandes que no todos los usuarios visitan (Admin, Reports)</li>
+                        <li>✓ Features que requieren autenticación</li>
+                        <li>✓ Módulos con muchas dependencias pesadas</li>
+                        <li>❌ Módulos que se usan en casi todas las páginas (mejor en el bundle principal)</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

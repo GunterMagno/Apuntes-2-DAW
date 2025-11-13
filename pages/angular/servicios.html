@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Servicios e Inyección de Dependencias - Angular</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-angular"></i> Servicios</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#introduccion" class="active">¿Qué son los Servicios?</a></li>
+                <li><a href="#injectable">@Injectable y DI</a></li>
+                <li><a href="#http">HttpClient</a></li>
+                <li><a href="#crud">Operaciones CRUD</a></li>
+                <li><a href="#observables">RxJS y Observables</a></li>
+                <li><a href="#interceptores">Interceptores HTTP</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color:var(--angular-color)"><i class="fab fa-angular"></i></div>
+                <h1>4. Servicios e Inyección de Dependencias</h1>
+                <p class="detail-subtitle">Compartir lógica y datos entre componentes</p>
+            </div>
+
+            <div class="content-section" id="introduccion">
+                <h2><i class="fas fa-cogs"></i> ¿Qué son los Servicios?</h2>
+                <p>Los <strong>servicios</strong> son clases TypeScript que encapsulan lógica de negocio, acceso a datos o funcionalidades compartidas que NO pertenecen a un componente específico. Son la forma de compartir datos y lógica entre múltiples componentes.</p>
+
+                <div class="info-box">
+                    <p><strong>¿Por qué usar servicios?</strong></p>
+                    <ul>
+                        <li><strong>Separación de responsabilidades:</strong> Los componentes manejan la UI, los servicios manejan la lógica y datos</li>
+                        <li><strong>Reutilización:</strong> Un servicio puede ser inyectado en múltiples componentes</li>
+                        <li><strong>Mantenibilidad:</strong> Lógica centralizada es más fácil de mantener y testear</li>
+                        <li><strong>Singleton por defecto:</strong> Una única instancia compartida en toda la app</li>
+                    </ul>
+                </div>
+
+                <h3>Cuándo crear un servicio:</h3>
+                <div class="code-block"><pre>// ✓ USA SERVICIOS PARA:
+// - Obtener datos de una API
+// - Compartir estado entre componentes
+// - Lógica de negocio compleja
+// - Validaciones reutilizables
+// - Logging, analytics, autenticación
+// - Comunicación con LocalStorage
+
+// ❌ NO uses servicios para:
+// - Lógica específica de un solo componente
+// - Manipulación del DOM (eso va en directivas)
+// - Templates o estilos</pre></div>
+
+                <h3>Generar servicio con Angular CLI:</h3>
+                <div class="code-block"><pre># Crear servicio en src/app/services/
+ng generate service services/usuario
+
+# O abreviado:
+ng g s services/usuario
+
+# Crea:
+# - services/usuario.service.ts
+# - services/usuario.service.spec.ts (tests)</pre></div>
+            </div>
+
+            <div class="content-section" id="injectable">
+                <h2><i class="fas fa-syringe"></i> @Injectable e Inyección de Dependencias</h2>
+                <p>La <strong>Inyección de Dependencias (DI)</strong> es un patrón de diseño donde Angular proporciona automáticamente las instancias de clases que un componente o servicio necesita. El decorador <code>@Injectable</code> marca una clase como disponible para la inyección.</p>
+
+                <h3>Estructura básica de un servicio:</h3>
+                <div class="code-block"><pre>// usuario.service.ts
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'  // Singleton global - UNA instancia para toda la app
+})
+export class UsuarioService {
+  
+  private usuarios: Usuario[] = [
+    { id: 1, nombre: 'Ana García', email: 'ana@example.com' },
+    { id: 2, nombre: 'Luis Pérez', email: 'luis@example.com' }
+  ];
+  
+  // Obtener todos los usuarios
+  getUsuarios(): Usuario[] {
+    return this.usuarios;
+  }
+  
+  // Obtener usuario por ID
+  getUsuarioPorId(id: number): Usuario | undefined {
+    return this.usuarios.find(u => u.id === id);
+  }
+  
+  // Agregar usuario
+  agregarUsuario(usuario: Usuario): void {
+    this.usuarios.push(usuario);
+  }
+  
+  // Eliminar usuario
+  eliminarUsuario(id: number): void {
+    this.usuarios = this.usuarios.filter(u => u.id !== id);
+  }
+}
+
+// Interface para tipado
+export interface Usuario {
+  id: number;
+  nombre: string;
+  email: string;
+}</pre></div>
+
+                <h3>Inyectar servicio en componente:</h3>
+                <div class="code-block"><pre>// lista-usuarios.component.ts
+import { Component, OnInit } from '@angular/core';
+import { UsuarioService, Usuario } from '../services/usuario.service';
+
+@Component({
+  selector: 'app-lista-usuarios',
+  templateUrl: './lista-usuarios.component.html'
+})
+export class ListaUsuariosComponent implements OnInit {
+  usuarios: Usuario[] = [];
+  
+  // Inyección en el constructor
+  constructor(private usuarioService: UsuarioService) {
+    // Angular crea/proporciona la instancia automáticamente
+  }
+  
+  ngOnInit(): void {
+    // Usar el servicio
+    this.usuarios = this.usuarioService.getUsuarios();
+  }
+  
+  agregarNuevoUsuario(): void {
+    const nuevoUsuario: Usuario = {
+      id: Date.now(),
+      nombre: 'María López',
+      email: 'maria@example.com'
+    };
+    this.usuarioService.agregarUsuario(nuevoUsuario);
+    this.usuarios = this.usuarioService.getUsuarios(); // Actualizar lista
+  }
+}</pre></div>
+
+                <h3>Niveles de providedIn:</h3>
+                <div class="code-block"><pre>// 1. providedIn: 'root' - Singleton global (MÁS COMÚN)
+@Injectable({
+  providedIn: 'root'
+})
+export class GlobalService {
+  // Una única instancia compartida en TODA la aplicación
+}
+
+// 2. providedIn: 'any' - Nueva instancia por módulo lazy-loaded
+@Injectable({
+  providedIn: 'any'
+})
+export class ModuleService {
+  // Útil para módulos lazy-loaded que necesitan su propia instancia
+}
+
+// 3. Proveído en un módulo específico
+@Injectable()  // Sin providedIn
+export class LocalService { }
+
+@NgModule({
+  providers: [LocalService]  // Solo disponible en este módulo
+})
+export class FeatureModule { }
+
+// 4. Proveído en un componente específico
+@Component({
+  selector: 'app-ejemplo',
+  providers: [LocalService]  // Nueva instancia POR CADA componente
+})
+export class EjemploComponent { }</pre></div>
+
+                <h3>Servicio que depende de otro servicio:</h3>
+                <div class="code-block"><pre>// log.service.ts
+@Injectable({
+  providedIn: 'root'
+})
+export class LogService {
+  log(mensaje: string): void {
+    console.log(`[LOG] ${new Date().toISOString()}: ${mensaje}`);
+  }
+}
+
+// usuario.service.ts
+@Injectable({
+  providedIn: 'root'
+})
+export class UsuarioService {
+  private usuarios: Usuario[] = [];
+  
+  // Inyectar otro servicio
+  constructor(private logService: LogService) { }
+  
+  agregarUsuario(usuario: Usuario): void {
+    this.usuarios.push(usuario);
+    this.logService.log(`Usuario agregado: ${usuario.nombre}`);
+  }
+  
+  eliminarUsuario(id: number): void {
+    this.usuarios = this.usuarios.filter(u => u.id !== id);
+    this.logService.log(`Usuario eliminado: ID ${id}`);
+  }
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="http">
+                <h2><i class="fas fa-globe"></i> HttpClient - Peticiones HTTP</h2>
+                <p><strong>HttpClient</strong> es el servicio de Angular para hacer peticiones HTTP a APIs REST. Basado en Observables de RxJS, permite operaciones asíncronas potentes.</p>
+
+                <h3>Configurar HttpClient:</h3>
+                <div class="code-block"><pre>// 1. Importar HttpClientModule en app.module.ts
+import { HttpClientModule } from '@angular/common/http';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    HttpClientModule  // Necesario para usar HttpClient
+  ]
+})
+export class AppModule { }</pre></div>
+
+                <h3>Servicio con HttpClient:</h3>
+                <div class="code-block"><pre>// api.service.ts
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiService {
+  private apiUrl = 'https://jsonplaceholder.typicode.com';
+  
+  constructor(private http: HttpClient) { }
+  
+  // GET - Obtener lista
+  getUsuarios(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.apiUrl}/users`);
+  }
+  
+  // GET - Obtener por ID
+  getUsuarioPorId(id: number): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.apiUrl}/users/${id}`);
+  }
+  
+  // POST - Crear
+  crearUsuario(usuario: Usuario): Observable<Usuario> {
+    return this.http.post<Usuario>(`${this.apiUrl}/users`, usuario);
+  }
+  
+  // PUT - Actualizar completo
+  actualizarUsuario(id: number, usuario: Usuario): Observable<Usuario> {
+    return this.http.put<Usuario>(`${this.apiUrl}/users/${id}`, usuario);
+  }
+  
+  // PATCH - Actualizar parcial
+  actualizarParcial(id: number, datos: Partial<Usuario>): Observable<Usuario> {
+    return this.http.patch<Usuario>(`${this.apiUrl}/users/${id}`, datos);
+  }
+  
+  // DELETE - Eliminar
+  eliminarUsuario(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/users/${id}`);
+  }
+}
+
+export interface Usuario {
+  id: number;
+  name: string;
+  email: string;
+  username: string;
+}</pre></div>
+
+                <h3>Headers y parámetros HTTP:</h3>
+                <div class="code-block"><pre>// Headers personalizados
+getUsuariosConHeaders(): Observable<Usuario[]> {
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer mi-token-jwt'
+  });
+  
+  return this.http.get<Usuario[]>(`${this.apiUrl}/users`, { headers });
+}
+
+// Query parameters (?page=1&limit=10)
+getUsuariosPaginados(page: number, limit: number): Observable<Usuario[]> {
+  const params = new HttpParams()
+    .set('_page', page.toString())
+    .set('_limit', limit.toString());
+  
+  return this.http.get<Usuario[]>(`${this.apiUrl}/users`, { params });
+  // URL resultante: /users?_page=1&_limit=10
+}
+
+// Respuesta completa (incluye headers, status, etc.)
+getUsuariosCompleto(): Observable<HttpResponse<Usuario[]>> {
+  return this.http.get<Usuario[]>(`${this.apiUrl}/users`, {
+    observe: 'response'  // Retorna HttpResponse completo
+  });
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="crud">
+                <h2><i class="fas fa-database"></i> Operaciones CRUD Completas</h2>
+                <p>Ejemplo completo de un <strong>servicio CRUD</strong> con HttpClient y cómo consumirlo desde un componente.</p>
+
+                <h3>Servicio de productos completo:</h3>
+                <div class="code-block"><pre>// producto.service.ts
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
+
+export interface Producto {
+  id?: number;
+  nombre: string;
+  precio: number;
+  stock: number;
+  descripcion?: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductoService {
+  private apiUrl = 'http://localhost:3000/api/productos';
+  
+  constructor(private http: HttpClient) { }
+  
+  // GET - Todos los productos
+  getProductos(): Observable<Producto[]> {
+    return this.http.get<Producto[]>(this.apiUrl).pipe(
+      retry(3),  // Reintentar 3 veces si falla
+      catchError(this.manejarError)
+    );
+  }
+  
+  // GET - Producto por ID
+  getProducto(id: number): Observable<Producto> {
+    return this.http.get<Producto>(`${this.apiUrl}/${id}`).pipe(
+      catchError(this.manejarError)
+    );
+  }
+  
+  // POST - Crear producto
+  crearProducto(producto: Producto): Observable<Producto> {
+    return this.http.post<Producto>(this.apiUrl, producto).pipe(
+      catchError(this.manejarError)
+    );
+  }
+  
+  // PUT - Actualizar producto completo
+  actualizarProducto(id: number, producto: Producto): Observable<Producto> {
+    return this.http.put<Producto>(`${this.apiUrl}/${id}`, producto).pipe(
+      catchError(this.manejarError)
+    );
+  }
+  
+  // DELETE - Eliminar producto
+  eliminarProducto(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+      catchError(this.manejarError)
+    );
+  }
+  
+  // Manejo de errores centralizado
+  private manejarError(error: HttpErrorResponse): Observable<never> {
+    let mensajeError = 'Ocurrió un error desconocido';
+    
+    if (error.error instanceof ErrorEvent) {
+      // Error del cliente o red
+      mensajeError = `Error: ${error.error.message}`;
+    } else {
+      // Error del backend
+      mensajeError = `Código ${error.status}: ${error.message}`;
+    }
+    
+    console.error(mensajeError);
+    return throwError(() => new Error(mensajeError));
+  }
+}</pre></div>
+
+                <h3>Componente que consume el servicio CRUD:</h3>
+                <div class="code-block"><pre>// productos.component.ts
+import { Component, OnInit } from '@angular/core';
+import { ProductoService, Producto } from '../services/producto.service';
+
+@Component({
+  selector: 'app-productos',
+  templateUrl: './productos.component.html'
+})
+export class ProductosComponent implements OnInit {
+  productos: Producto[] = [];
+  loading: boolean = false;
+  error: string = '';
+  
+  constructor(private productoService: ProductoService) { }
+  
+  ngOnInit(): void {
+    this.cargarProductos();
+  }
+  
+  // READ - Cargar productos
+  cargarProductos(): void {
+    this.loading = true;
+    this.error = '';
+    
+    this.productoService.getProductos().subscribe({
+      next: (data) => {
+        this.productos = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = err.message;
+        this.loading = false;
+      }
+    });
+  }
+  
+  // CREATE - Agregar producto
+  agregarProducto(): void {
+    const nuevoProducto: Producto = {
+      nombre: 'Laptop HP',
+      precio: 1200,
+      stock: 15,
+      descripcion: 'Laptop 16GB RAM'
+    };
+    
+    this.productoService.crearProducto(nuevoProducto).subscribe({
+      next: (producto) => {
+        this.productos.push(producto);
+        console.log('Producto creado:', producto);
+      },
+      error: (err) => console.error('Error al crear:', err)
+    });
+  }
+  
+  // UPDATE - Actualizar producto
+  actualizarProducto(id: number): void {
+    const productoActualizado: Producto = {
+      nombre: 'Laptop HP Actualizada',
+      precio: 1100,
+      stock: 20
+    };
+    
+    this.productoService.actualizarProducto(id, productoActualizado).subscribe({
+      next: (producto) => {
+        const index = this.productos.findIndex(p => p.id === id);
+        if (index !== -1) {
+          this.productos[index] = producto;
+        }
+        console.log('Producto actualizado:', producto);
+      },
+      error: (err) => console.error('Error al actualizar:', err)
+    });
+  }
+  
+  // DELETE - Eliminar producto
+  eliminarProducto(id: number): void {
+    if (confirm('¿Eliminar este producto?')) {
+      this.productoService.eliminarProducto(id).subscribe({
+        next: () => {
+          this.productos = this.productos.filter(p => p.id !== id);
+          console.log('Producto eliminado');
+        },
+        error: (err) => console.error('Error al eliminar:', err)
+      });
+    }
+  }
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="observables">
+                <h2><i class="fas fa-stream"></i> RxJS y Observables</h2>
+                <p><strong>Observables</strong> representan flujos de datos asíncronos. RxJS proporciona operadores poderosos para transformar, filtrar y combinar estos flujos.</p>
+
+                <h3>Suscripción básica a Observable:</h3>
+                <div class="code-block"><pre>// Componente
+export class UsuariosComponent implements OnInit, OnDestroy {
+  usuarios: Usuario[] = [];
+  private subscription?: Subscription;
+  
+  constructor(private apiService: ApiService) { }
+  
+  ngOnInit(): void {
+    // Suscribirse al Observable
+    this.subscription = this.apiService.getUsuarios().subscribe({
+      next: (data) => {
+        this.usuarios = data;
+        console.log('Datos recibidos:', data);
+      },
+      error: (err) => {
+        console.error('Error:', err);
+      },
+      complete: () => {
+        console.log('Observable completado');
+      }
+    });
+  }
+  
+  ngOnDestroy(): void {
+    // SIEMPRE limpiar suscripciones
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+}</pre></div>
+
+                <h3>Operadores RxJS más comunes:</h3>
+                <div class="code-block"><pre>import { map, filter, catchError, tap, switchMap, debounceTime } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+// map - Transformar datos
+getUsuariosNombres(): Observable<string[]> {
+  return this.http.get<Usuario[]>(`${this.apiUrl}/users`).pipe(
+    map(usuarios => usuarios.map(u => u.name))
+  );
+  // Retorna solo los nombres: ['Ana', 'Luis', 'María']
+}
+
+// filter - Filtrar datos
+getUsuariosActivos(): Observable<Usuario[]> {
+  return this.http.get<Usuario[]>(`${this.apiUrl}/users`).pipe(
+    map(usuarios => usuarios.filter(u => u.activo === true))
+  );
+}
+
+// tap - Ejecutar side-effects sin modificar datos
+getUsuarios(): Observable<Usuario[]> {
+  return this.http.get<Usuario[]>(`${this.apiUrl}/users`).pipe(
+    tap(usuarios => console.log('Usuarios obtenidos:', usuarios.length)),
+    tap(usuarios => this.logService.log('Petición exitosa'))
+  );
+}
+
+// catchError - Manejar errores
+getUsuariosSeguro(): Observable<Usuario[]> {
+  return this.http.get<Usuario[]>(`${this.apiUrl}/users`).pipe(
+    catchError(error => {
+      console.error('Error:', error);
+      return of([]);  // Retornar array vacío como fallback
+    })
+  );
+}
+
+// switchMap - Encadenar peticiones
+getUsuarioConPosts(userId: number): Observable<Post[]> {
+  return this.http.get<Usuario>(`${this.apiUrl}/users/${userId}`).pipe(
+    switchMap(usuario => {
+      // Hacer segunda petición con datos de la primera
+      return this.http.get<Post[]>(`${this.apiUrl}/posts?userId=${usuario.id}`);
+    })
+  );
+}</pre></div>
+
+                <h3>Async pipe (evita suscripciones manuales):</h3>
+                <div class="code-block"><pre>// Componente
+export class UsuariosComponent {
+  // No suscribirse, solo exponer el Observable
+  usuarios$: Observable<Usuario[]>;
+  
+  constructor(private apiService: ApiService) {
+    this.usuarios$ = this.apiService.getUsuarios();
+  }
+  
+  // NO necesitas ngOnDestroy, el async pipe desuscribe automáticamente
+}
+
+// Template
+&lt;div *ngIf="usuarios$ | async as usuarios"&gt;
+  &lt;div *ngFor="let usuario of usuarios"&gt;
+    {{ usuario.name }}
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- async pipe se SUSCRIBE y DESUSCRIBE automáticamente --&gt;</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Ventajas del async pipe:</strong>
+                    <ul>
+                        <li>✓ Se suscribe automáticamente al Observable</li>
+                        <li>✓ Se desuscribe automáticamente al destruir el componente</li>
+                        <li>✓ Evita memory leaks</li>
+                        <li>✓ Menos código en el componente</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="interceptores">
+                <h2><i class="fas fa-filter"></i> Interceptores HTTP</h2>
+                <p>Los <strong>interceptores</strong> permiten interceptar y modificar peticiones HTTP antes de enviarlas o respuestas antes de recibirlas. Útiles para agregar headers, tokens, logging, etc.</p>
+
+                <h3>Crear interceptor para autenticación:</h3>
+                <div class="code-block"><pre>// auth.interceptor.ts
+import { Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+  
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    // Obtener token del localStorage
+    const token = localStorage.getItem('auth-token');
+    
+    // Si hay token, clonamos la petición y agregamos el header
+    if (token) {
+      const clonedReq = req.clone({
+        headers: req.headers.set('Authorization', `Bearer ${token}`)
+      });
+      return next.handle(clonedReq);
+    }
+    
+    // Si no hay token, continuar con la petición original
+    return next.handle(req);
+  }
+}</pre></div>
+
+                <h3>Registrar interceptor:</h3>
+                <div class="code-block"><pre>// app.module.ts
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+
+@NgModule({
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true  // Permite múltiples interceptores
+    }
+  ]
+})
+export class AppModule { }</pre></div>
+
+                <h3>Interceptor para manejo de errores global:</h3>
+                <div class="code-block"><pre>// error.interceptor.ts
+import { Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
+@Injectable()
+export class ErrorInterceptor implements HttpInterceptor {
+  
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return next.handle(req).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        
+        if (error.error instanceof ErrorEvent) {
+          // Error del cliente
+          errorMessage = `Error: ${error.error.message}`;
+        } else {
+          // Error del servidor
+          errorMessage = `Código: ${error.status}\nMensaje: ${error.message}`;
+          
+          // Manejar casos específicos
+          switch (error.status) {
+            case 401:
+              console.error('No autorizado - Redirigir a login');
+              break;
+            case 403:
+              console.error('Acceso prohibido');
+              break;
+            case 404:
+              console.error('Recurso no encontrado');
+              break;
+            case 500:
+              console.error('Error del servidor');
+              break;
+          }
+        }
+        
+        console.error(errorMessage);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+}</pre></div>
+
+                <h3>Interceptor para logging:</h3>
+                <div class="code-block"><pre>// logging.interceptor.ts
+import { Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+@Injectable()
+export class LoggingInterceptor implements HttpInterceptor {
+  
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const started = Date.now();
+    console.log(`🌐 Petición HTTP: ${req.method} ${req.url}`);
+    
+    return next.handle(req).pipe(
+      tap(event => {
+        if (event instanceof HttpResponse) {
+          const elapsed = Date.now() - started;
+          console.log(`✅ Respuesta: ${req.url} - ${event.status} (${elapsed}ms)`);
+        }
+      })
+    );
+  }
+}</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Orden de los interceptores:</strong>
+                    <p>Los interceptores se ejecutan en el ORDEN en que se registran en el array de providers. El primero registrado es el primero en interceptar la petición.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

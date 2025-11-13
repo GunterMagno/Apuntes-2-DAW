@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Middleware en Express - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Express</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-cogs"></i> Middleware</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#que-es" class="active">¿Qué es Middleware?</a></li>
+                <li><a href="#funcionamiento">Funcionamiento</a></li>
+                <li><a href="#tipos">Tipos de Middleware</a></li>
+                <li><a href="#personalizados">Middleware Personalizados</a></li>
+                <li><a href="#orden">Orden de Ejecución</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--accent-primary);"><i class="fas fa-cogs"></i></div>
+                <h1 class="detail-title">3. Middleware en Express</h1>
+                <p class="detail-subtitle">Funciones que procesan peticiones</p>
+            </div>
+
+            <div class="content-section" id="que-es">
+                <h2><i class="fas fa-question-circle"></i> ¿Qué es Middleware?</h2>
+                <p><strong>Middleware</strong> son funciones que se ejecutan durante el ciclo de vida de una petición HTTP, entre que llega la petición y se envía la respuesta.</p>
+
+                <div class="info-box">
+                    <p><strong>Un middleware puede:</strong></p>
+                    <ul>
+                        <li>Ejecutar cualquier código</li>
+                        <li>Modificar <code>req</code> (request) y <code>res</code> (response)</li>
+                        <li>Finalizar el ciclo petición-respuesta</li>
+                        <li>Llamar al siguiente middleware con <code>next()</code></li>
+                    </ul>
+                </div>
+
+                <h3>Analogía:</h3>
+                <p>Imagina que una petición HTTP es como un paquete que pasa por una línea de ensamblaje. Cada middleware es una estación de trabajo que inspecciona o modifica el paquete antes de pasarlo a la siguiente estación.</p>
+
+                <div class="code-block"><pre>Petición → Middleware 1 → Middleware 2 → Middleware 3 → Respuesta
+           (Logger)       (Auth)          (Validación)     (Controlador)</pre></div>
+            </div>
+
+            <div class="content-section" id="funcionamiento">
+                <h2><i class="fas fa-code"></i> Funcionamiento</h2>
+                
+                <h3>Estructura básica:</h3>
+                <div class="code-block"><pre>// Firma de una función middleware
+function middleware(req, res, next) {
+  // req  = objeto de petición
+  // res  = objeto de respuesta
+  // next = función para pasar al siguiente middleware
+  
+  // Hacer algo...
+  console.log('Middleware ejecutado');
+  
+  // IMPORTANTE: llamar a next() para continuar
+  next();
+}</pre></div>
+
+                <h3>Ejemplo práctico - Logger:</h3>
+                <div class="code-block"><pre>const express = require('express');
+const app = express();
+
+// Middleware de logging
+app.use((req, res, next) => {
+  const fecha = new Date().toISOString();
+  console.log(`[${fecha}] ${req.method} ${req.url}`);
+  next(); // ¡No olvides esto!
+});
+
+app.get('/', (req, res) => {
+  res.send('Hola');
+});
+
+app.listen(3000);
+
+// Console output:
+// [2024-01-15T10:30:00.000Z] GET /
+// [2024-01-15T10:30:05.000Z] GET /about</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Importante:</strong> Si no llamas a <code>next()</code>, la petición quedará "colgada" y nunca llegará una respuesta al cliente.
+                </div>
+
+                <h3>Finalizar sin next():</h3>
+                <div class="code-block"><pre>app.use((req, res, next) => {
+  if (req.headers.authorization !== 'secret') {
+    // Finalizar aquí, no llamar next()
+    return res.status(401).send('No autorizado');
+  }
+  next(); // Solo si está autorizado
+});</pre></div>
+            </div>
+
+            <div class="content-section" id="tipos">
+                <h2><i class="fas fa-list"></i> Tipos de Middleware</h2>
+
+                <h3>1. Middleware de Aplicación</h3>
+                <p>Se aplican a todas las rutas o a rutas específicas.</p>
+                <div class="code-block"><pre>// A TODAS las rutas
+app.use((req, res, next) => {
+  console.log('Ejecutado en todas las rutas');
+  next();
+});
+
+// Solo a rutas que empiecen con /api
+app.use('/api', (req, res, next) => {
+  console.log('Solo en /api/*');
+  next();
+});
+
+// Solo para una ruta específica
+app.use('/users', verificarAuth, (req, res) => {
+  res.send('Usuarios');
+});</pre></div>
+
+                <h3>2. Middleware incorporado (Built-in)</h3>
+                <p>Express incluye varios middleware por defecto:</p>
+
+                <h4>express.json() - Parsear JSON:</h4>
+                <div class="code-block"><pre>// Permite leer req.body cuando envían JSON
+app.use(express.json());
+
+app.post('/api/users', (req, res) => {
+  const { nombre, email } = req.body;
+  res.json({ recibido: { nombre, email } });
+});</pre></div>
+
+                <h4>express.urlencoded() - Parsear formularios:</h4>
+                <div class="code-block"><pre>// Para formularios HTML (application/x-www-form-urlencoded)
+app.use(express.urlencoded({ extended: true }));
+
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  // ...
+});</pre></div>
+
+                <h4>express.static() - Archivos estáticos:</h4>
+                <div class="code-block"><pre>// Servir archivos CSS, JS, imágenes, etc.
+app.use(express.static('public'));
+
+// Ahora puedes acceder a:
+// public/css/style.css  →  http://localhost:3000/css/style.css
+// public/js/app.js      →  http://localhost:3000/js/app.js
+// public/img/logo.png   →  http://localhost:3000/img/logo.png
+
+// Con prefijo virtual
+app.use('/static', express.static('public'));
+// http://localhost:3000/static/css/style.css</pre></div>
+
+                <h3>3. Middleware de Terceros</h3>
+                <p>Paquetes npm que actúan como middleware:</p>
+
+                <h4>CORS - Permitir peticiones cross-origin:</h4>
+                <div class="code-block"><pre>const cors = require('cors');
+
+// Permitir TODAS las peticiones de otros dominios
+app.use(cors());
+
+// Configuración específica
+app.use(cors({
+  origin: 'https://mi-frontend.com',
+  methods: ['GET', 'POST'],
+  credentials: true
+}));</pre></div>
+
+                <h4>Morgan - Logger avanzado:</h4>
+                <div class="code-block"><pre>const morgan = require('morgan');
+
+// Logs en consola
+app.use(morgan('dev'));
+// GET /api/users 200 15.555 ms - 524
+
+// Diferentes formatos
+app.use(morgan('tiny'));    // Mínimo
+app.use(morgan('combined')); // Apache-style</pre></div>
+
+                <h4>Helmet - Seguridad:</h4>
+                <div class="code-block"><pre>const helmet = require('helmet');
+
+// Añade headers de seguridad
+app.use(helmet());
+
+// Protege contra XSS, clickjacking, etc.</pre></div>
+
+                <h4>Cookie Parser:</h4>
+                <div class="code-block"><pre>const cookieParser = require('cookie-parser');
+
+app.use(cookieParser());
+
+app.get('/', (req, res) => {
+  console.log('Cookies:', req.cookies);
+  res.cookie('usuario', 'Ana', { maxAge: 900000 });
+  res.send('Cookie establecida');
+});</pre></div>
+
+                <h3>4. Middleware de Router</h3>
+                <div class="code-block"><pre>const router = express.Router();
+
+// Middleware solo para este router
+router.use((req, res, next) => {
+  console.log('Solo en este router');
+  next();
+});
+
+router.get('/users', (req, res) => {
+  res.send('Usuarios');
+});
+
+app.use('/api', router);</pre></div>
+
+                <h3>5. Middleware de Manejo de Errores</h3>
+                <p>Tienen 4 parámetros (err, req, res, next):</p>
+                <div class="code-block"><pre>// Siempre al FINAL de todos los middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    error: 'Algo salió mal!',
+    mensaje: err.message
+  });
+});</pre></div>
+            </div>
+
+            <div class="content-section" id="personalizados">
+                <h2><i class="fas fa-wrench"></i> Crear Middleware Personalizados</h2>
+
+                <h3>Middleware de Autenticación:</h3>
+                <div class="code-block"><pre>// middleware/auth.js
+const verificarAuth = (req, res, next) => {
+  const token = req.headers.authorization;
+  
+  if (!token) {
+    return res.status(401).json({ error: 'Token requerido' });
+  }
+  
+  if (token === 'mi-token-secreto') {
+    req.usuario = { id: 1, nombre: 'Ana' }; // Agregar info al request
+    next(); // Usuario autenticado, continuar
+  } else {
+    res.status(403).json({ error: 'Token inválido' });
+  }
+};
+
+// Usar el middleware
+app.get('/perfil', verificarAuth, (req, res) => {
+  // req.usuario está disponible aquí
+  res.json({ usuario: req.usuario });
+});
+
+module.exports = verificarAuth;</pre></div>
+
+                <h3>Middleware de Validación:</h3>
+                <div class="code-block"><pre>const validarUsuario = (req, res, next) => {
+  const { nombre, email } = req.body;
+  
+  if (!nombre || nombre.length < 3) {
+    return res.status(400).json({ 
+      error: 'Nombre debe tener al menos 3 caracteres' 
+    });
+  }
+  
+  if (!email || !email.includes('@')) {
+    return res.status(400).json({ 
+      error: 'Email inválido' 
+    });
+  }
+  
+  next(); // Validación pasada
+};
+
+app.post('/usuarios', validarUsuario, (req, res) => {
+  // Datos ya validados
+  res.json({ mensaje: 'Usuario creado' });
+});</pre></div>
+
+                <h3>Middleware de Logging avanzado:</h3>
+                <div class="code-block"><pre>const logger = (req, res, next) => {
+  const inicio = Date.now();
+  
+  // Cuando termine la respuesta
+  res.on('finish', () => {
+    const duracion = Date.now() - inicio;
+    console.log(
+      `[${new Date().toISOString()}] ` +
+      `${req.method} ${req.url} ` +
+      `${res.statusCode} - ${duracion}ms`
+    );
+  });
+  
+  next();
+};
+
+app.use(logger);
+
+// Output:
+// [2024-01-15T10:30:00.000Z] GET /api/users 200 - 45ms
+// [2024-01-15T10:30:05.000Z] POST /api/users 201 - 120ms</pre></div>
+
+                <h3>Middleware con parámetros:</h3>
+                <div class="code-block"><pre>// Factory function que retorna middleware
+const verificarRol = (rolRequerido) => {
+  return (req, res, next) => {
+    if (req.usuario.rol !== rolRequerido) {
+      return res.status(403).json({ 
+        error: `Requiere rol: ${rolRequerido}` 
+      });
+    }
+    next();
+  };
+};
+
+// Uso
+app.get('/admin', verificarRol('admin'), (req, res) => {
+  res.send('Panel de administración');
+});
+
+app.get('/moderator', verificarRol('moderator'), (req, res) => {
+  res.send('Panel de moderación');
+});</pre></div>
+            </div>
+
+            <div class="content-section" id="orden">
+                <h2><i class="fas fa-sort-amount-down"></i> Orden de Ejecución</h2>
+                <p>El orden en que defines los middleware es <strong>crucial</strong>. Se ejecutan en el orden que aparecen en el código.</p>
+
+                <h3>Ejemplo correcto:</h3>
+                <div class="code-block"><pre>const express = require('express');
+const app = express();
+
+// 1. Logger (primero para capturar todo)
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
+// 2. Parsear JSON (antes de rutas que lo necesiten)
+app.use(express.json());
+
+// 3. CORS
+app.use(cors());
+
+// 4. Rutas
+app.get('/api/users', (req, res) => {
+  res.json([]);
+});
+
+// 5. Manejo de errores (SIEMPRE AL FINAL)
+app.use((err, req, res, next) => {
+  res.status(500).json({ error: err.message });
+});</pre></div>
+
+                <h3>Ejemplo incorrecto:</h3>
+                <div class="code-block"><pre>app.get('/api/users', (req, res) => {
+  const data = req.body; // ❌ undefined
+  res.json(data);
+});
+
+// ❌ Demasiado tarde, la ruta ya se definió
+app.use(express.json());</pre></div>
+
+                <h3>Cadena de middleware:</h3>
+                <div class="code-block"><pre>// Múltiples middleware para una ruta
+app.post('/api/admin/users',
+  verificarAuth,        // 1. ¿Está autenticado?
+  verificarRol('admin'), // 2. ¿Es admin?
+  validarUsuario,       // 3. ¿Datos válidos?
+  (req, res) => {       // 4. Procesar
+    res.json({ mensaje: 'Usuario creado' });
+  }
+);</pre></div>
+
+                <h3>Estructura típica de una aplicación:</h3>
+                <div class="code-block"><pre>const express = require('express');
+const app = express();
+
+// 1. SEGURIDAD
+app.use(helmet());
+
+// 2. LOGGING
+app.use(morgan('dev'));
+
+// 3. CORS
+app.use(cors());
+
+// 4. PARSEO
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// 5. ARCHIVOS ESTÁTICOS
+app.use(express.static('public'));
+
+// 6. RUTAS
+app.use('/api/users', usersRouter);
+app.use('/api/products', productsRouter);
+
+// 7. MANEJO DE RUTA NO ENCONTRADA
+app.use((req, res) => {
+  res.status(404).json({ error: 'Ruta no encontrada' });
+});
+
+// 8. MANEJO DE ERRORES (último)
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Error del servidor' });
+});
+
+app.listen(3000);</pre></div>
+
+                <div class="info-box">
+                    <p><strong>💡 Regla de oro:</strong> Middleware general → Middleware específico → Rutas → Manejo de errores</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let currentSection = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + currentSection) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

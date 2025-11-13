@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>MongoDB - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="../../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <div class="topics-page">
+        <div class="topics-header">
+            <div class="topics-icon" style="color: var(--mongodb-color);">
+                <i class="fas fa-database"></i>
+            </div>
+            <h1 class="topics-title">MongoDB</h1>
+            <p class="topics-subtitle">Base de datos NoSQL orientada a documentos</p>
+        </div>
+
+        <div class="topics-grid">
+            <a href="introduccion.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--mongodb-color);">1</div>
+                <h3 class="topic-title">Introducción a MongoDB</h3>
+                <p class="topic-description">Qué es MongoDB, NoSQL vs SQL, documentos BSON y casos de uso principales.</p>
+            </a>
+
+            <a href="crud.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--mongodb-color);">2</div>
+                <h3 class="topic-title">Operaciones CRUD</h3>
+                <p class="topic-description">Create, Read, Update, Delete - insertOne, find, updateMany, deleteOne y más.</p>
+            </a>
+
+            <a href="consultas.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--mongodb-color);">3</div>
+                <h3 class="topic-title">Consultas Avanzadas</h3>
+                <p class="topic-description">Operadores de consulta, proyecciones, sort, limit, skip y agregaciones.</p>
+            </a>
+
+            <a href="agregacion.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--mongodb-color);">4</div>
+                <h3 class="topic-title">Pipeline de Agregación</h3>
+                <p class="topic-description">$match, $group, $project, $lookup y transformación de datos con aggregate.</p>
+            </a>
+
+            <a href="mongoose.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--mongodb-color);">5</div>
+                <h3 class="topic-title">Mongoose</h3>
+                <p class="topic-description">ODM para Node.js, schemas, modelos, validaciones y middleware.</p>
+            </a>
+
+            <a href="indices.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--mongodb-color);">6</div>
+                <h3 class="topic-title">Índices y Rendimiento</h3>
+                <p class="topic-description">Crear índices, tipos de índices, optimización de consultas y análisis de rendimiento.</p>
+            </a>
+        </div>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

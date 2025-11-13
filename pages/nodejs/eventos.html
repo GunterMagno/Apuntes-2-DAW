@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Eventos y Streams - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Node.js</a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-node-js"></i> Eventos y Streams</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#eventos" class="active">Event Emitters</a></li>
+                <li><a href="#crear">Crear Eventos</a></li>
+                <li><a href="#streams">Streams</a></li>
+                <li><a href="#readable">Readable Streams</a></li>
+                <li><a href="#pipes">Pipes</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--node-color);"><i class="fab fa-node-js"></i></div>
+                <h1 class="detail-title">6. Eventos y Streams</h1>
+                <p class="detail-subtitle">Programación basada en eventos</p>
+            </div>
+
+            <div class="content-section" id="eventos">
+                <h2><i class="fas fa-bolt"></i> Event Emitters</h2>
+                <p>Node.js está basado en <strong>eventos</strong>. Muchos objetos emiten eventos a los que puedes suscribirte.</p>
+                <div class="code-block"><pre>const EventEmitter = require('events');
+
+const emitter = new EventEmitter();
+
+// Escuchar evento
+emitter.on('saludo', (nombre) => {
+    console.log(`Hola ${nombre}`);
+});
+
+// Emitir evento
+emitter.emit('saludo', 'Ana');  // Output: Hola Ana</pre></div>
+            </div>
+
+            <div class="content-section" id="crear">
+                <h2><i class="fas fa-plus-circle"></i> Crear Eventos Personalizados</h2>
+                <div class="code-block"><pre>const EventEmitter = require('events');
+
+class MiEmisor extends EventEmitter {}
+
+const emisor = new MiEmisor();
+
+// Suscribirse múltiples veces
+emisor.on('data', (msg) => {
+    console.log('Listener 1:', msg);
+});
+
+emisor.on('data', (msg) => {
+    console.log('Listener 2:', msg);
+});
+
+// Una sola vez
+emisor.once('conexion', () => {
+    console.log('Conectado (solo se ejecuta una vez)');
+});
+
+emisor.emit('data', 'Hola');
+emisor.emit('conexion');
+emisor.emit('conexion');  // No hace nada</pre></div>
+            </div>
+
+            <div class="content-section" id="streams">
+                <h2><i class="fas fa-water"></i> Streams</h2>
+                <p>Los <strong>streams</strong> permiten procesar datos en fragmentos sin cargar todo en memoria. Útil para archivos grandes.</p>
+                <p><strong>Tipos de streams:</strong></p>
+                <ul>
+                    <li><strong>Readable:</strong> Leer datos (ej: fs.createReadStream)</li>
+                    <li><strong>Writable:</strong> Escribir datos (ej: fs.createWriteStream)</li>
+                    <li><strong>Duplex:</strong> Leer y escribir</li>
+                    <li><strong>Transform:</strong> Modificar datos mientras fluyen</li>
+                </ul>
+            </div>
+
+            <div class="content-section" id="readable">
+                <h2><i class="fas fa-file-alt"></i> Readable y Writable Streams</h2>
+                <div class="code-block"><pre>const fs = require('fs');
+
+// Leer archivo en chunks
+const readStream = fs.createReadStream('archivo-grande.txt', 'utf8');
+
+readStream.on('data', (chunk) => {
+    console.log('Nuevo chunk:', chunk);
+});
+
+readStream.on('end', () => {
+    console.log('Lectura completada');
+});
+
+// Escribir en stream
+const writeStream = fs.createWriteStream('salida.txt');
+writeStream.write('Primera línea\n');
+writeStream.write('Segunda línea\n');
+writeStream.end();</pre></div>
+            </div>
+
+            <div class="content-section" id="pipes">
+                <h2><i class="fas fa-exchange-alt"></i> Pipes</h2>
+                <p>Conectar un stream readable con un writable.</p>
+                <div class="code-block"><pre>const fs = require('fs');
+
+// Copiar archivo usando streams
+const readStream = fs.createReadStream('origen.txt');
+const writeStream = fs.createWriteStream('destino.txt');
+
+readStream.pipe(writeStream);
+
+writeStream.on('finish', () => {
+    console.log('Archivo copiado');
+});
+
+// Comprimir archivo
+const zlib = require('zlib');
+const gzip = zlib.createGzip();
+
+fs.createReadStream('archivo.txt')
+    .pipe(gzip)
+    .pipe(fs.createWriteStream('archivo.txt.gz'));</pre></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

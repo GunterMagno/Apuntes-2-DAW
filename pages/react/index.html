@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>React - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="../../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <div class="topics-page">
+        <div class="topics-header">
+            <div class="topics-icon" style="color: var(--react-color);">
+                <i class="fab fa-react"></i>
+            </div>
+            <h1 class="topics-title">React</h1>
+            <p class="topics-subtitle">Librería JavaScript para interfaces de usuario interactivas</p>
+        </div>
+
+        <div class="topics-grid">
+            <a href="introduccion.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--react-color);">1</div>
+                <h3 class="topic-title">Introducción a React</h3>
+                <p class="topic-description">Qué es React, Virtual DOM, JSX y configuración del entorno de desarrollo.</p>
+            </a>
+
+            <a href="componentes.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--react-color);">2</div>
+                <h3 class="topic-title">Componentes</h3>
+                <p class="topic-description">Componentes funcionales y de clase, props, composición y reutilización de componentes.</p>
+            </a>
+
+            <a href="hooks.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--react-color);">3</div>
+                <h3 class="topic-title">Hooks</h3>
+                <p class="topic-description">useState, useEffect, useContext, useRef y hooks personalizados para gestión de estado.</p>
+            </a>
+
+            <a href="routing.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--react-color);">4</div>
+                <h3 class="topic-title">React Router</h3>
+                <p class="topic-description">Navegación entre páginas, rutas dinámicas, parámetros y navegación programática.</p>
+            </a>
+
+            <a href="estado.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--react-color);">5</div>
+                <h3 class="topic-title">Gestión de Estado</h3>
+                <p class="topic-description">Manejo de estado en componentes, props drilling, Context API y gestión avanzada de estado.</p>
+            </a>
+
+            <a href="apis.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--react-color);">6</div>
+                <h3 class="topic-title">Consumo de APIs</h3>
+                <p class="topic-description">Fetch, Axios, llamadas asíncronas, manejo de errores y gestión de datos remotos.</p>
+            </a>
+        </div>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

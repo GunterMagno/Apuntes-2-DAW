@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Java - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="../../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <!-- Página de Temas -->
+    <div class="topics-page">
+        <div class="topics-header">
+            <div class="topics-icon" style="color: var(--java-color);">
+                <i class="fab fa-java"></i>
+            </div>
+            <h1 class="topics-title">Java</h1>
+            <p class="topics-subtitle">Lenguaje de programación orientado a objetos multiplataforma</p>
+        </div>
+
+        <div class="topics-grid">
+            <a href="introduccion.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--java-color);">1</div>
+                <h3 class="topic-title">Introducción a Java</h3>
+                <p class="topic-description">Qué es Java, cómo funciona la JVM, compilación e interpretación, y características principales del lenguaje.</p>
+            </a>
+
+            <a href="sintaxis-basica.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--java-color);">2</div>
+                <h3 class="topic-title">Sintaxis Básica</h3>
+                <p class="topic-description">Tipos de datos, variables, operadores, estructuras de control (if, switch, for, while) y convenciones de código.</p>
+            </a>
+
+            <a href="poo.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--java-color);">3</div>
+                <h3 class="topic-title">Programación Orientada a Objetos</h3>
+                <p class="topic-description">Clases, objetos, encapsulación, herencia, polimorfismo y abstracción. Los 4 pilares de la POO.</p>
+            </a>
+
+            <a href="colecciones.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--java-color);">4</div>
+                <h3 class="topic-title">Colecciones y Genéricos</h3>
+                <p class="topic-description">ArrayList, HashMap, Set, iteradores, y uso de genéricos para colecciones type-safe.</p>
+            </a>
+
+            <a href="excepciones.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--java-color);">5</div>
+                <h3 class="topic-title">Manejo de Excepciones</h3>
+                <p class="topic-description">Try-catch, tipos de excepciones, creación de excepciones personalizadas y mejores prácticas.</p>
+            </a>
+
+            <a href="streams.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--java-color);">6</div>
+                <h3 class="topic-title">Streams y Programación Funcional</h3>
+                <p class="topic-description">API de Streams, lambdas, operaciones intermedias y terminales, map, filter, reduce.</p>
+            </a>
+        </div>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

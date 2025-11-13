@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Excepciones en Java - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Java</a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-java"></i> Excepciones</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#intro" class="active">¿Qué son las Excepciones?</a></li>
+                <li><a href="#try-catch">Try-Catch</a></li>
+                <li><a href="#tipos">Tipos de Excepciones</a></li>
+                <li><a href="#throws">Throws y Throw</a></li>
+                <li><a href="#personalizadas">Excepciones Personalizadas</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--java-color);"><i class="fab fa-java"></i></div>
+                <h1 class="detail-title">5. Manejo de Excepciones</h1>
+                <p class="detail-subtitle">Gestión de errores en Java</p>
+            </div>
+
+            <div class="content-section" id="intro">
+                <h2><i class="fas fa-exclamation-triangle"></i> ¿Qué son las Excepciones?</h2>
+                <p>
+                    Una <strong>excepción</strong> es un evento que ocurre durante la ejecución de un programa y 
+                    <strong>interrumpe el flujo normal</strong> del código. Por ejemplo: dividir por cero, acceder 
+                    a un archivo que no existe, o intentar usar un índice fuera de rango en un array.
+                </p>
+                <p><strong>Sin manejo de excepciones:</strong> El programa se detiene abruptamente.</p>
+                <p><strong>Con manejo de excepciones:</strong> Puedes capturar el error, mostrar un mensaje apropiado, 
+                y continuar la ejecución del programa.</p>
+            </div>
+
+            <div class="content-section" id="try-catch">
+                <h2><i class="fas fa-shield-alt"></i> Try-Catch</h2>
+                <p>El bloque <code>try-catch</code> permite intentar ejecutar código que podría fallar:</p>
+                <div class="code-block"><pre>try {
+    int resultado = 10 / 0;  // División por cero
+    System.out.println(resultado);
+} catch (ArithmeticException e) {
+    System.out.println("Error: No se puede dividir por cero");
+}
+System.out.println("El programa continúa...");</pre></div>
+
+                <h3>Try-Catch-Finally</h3>
+                <p>El bloque <code>finally</code> siempre se ejecuta, haya o no excepción:</p>
+                <div class="code-block"><pre>try {
+    // Código que puede fallar
+    int[] numeros = {1, 2, 3};
+    System.out.println(numeros[5]);
+} catch (ArrayIndexOutOfBoundsException e) {
+    System.out.println("Índice fuera de rango");
+} finally {
+    System.out.println("Esto siempre se ejecuta");
+}</pre></div>
+
+                <h3>Múltiples Catch</h3>
+                <div class="code-block"><pre>try {
+    String texto = null;
+    System.out.println(texto.length());
+} catch (NullPointerException e) {
+    System.out.println("El texto es null");
+} catch (Exception e) {
+    System.out.println("Otro error: " + e.getMessage());
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="tipos">
+                <h2><i class="fas fa-sitemap"></i> Tipos de Excepciones</h2>
+                <p><strong>Checked Exceptions:</strong> Debes manejarlas obligatoriamente (ej: IOException)</p>
+                <p><strong>Unchecked Exceptions:</strong> Opcionales de manejar (ej: NullPointerException)</p>
+                <ul>
+                    <li><strong>NullPointerException:</strong> Intentar usar un objeto que es null</li>
+                    <li><strong>ArrayIndexOutOfBoundsException:</strong> Índice fuera del array</li>
+                    <li><strong>ArithmeticException:</strong> Error aritmético (división por cero)</li>
+                    <li><strong>NumberFormatException:</strong> Convertir String inválido a número</li>
+                    <li><strong>FileNotFoundException:</strong> Archivo no encontrado</li>
+                </ul>
+            </div>
+
+            <div class="content-section" id="throws">
+                <h2><i class="fas fa-paper-plane"></i> Throws y Throw</h2>
+                <p><strong>throws:</strong> Declara que un método puede lanzar una excepción</p>
+                <div class="code-block"><pre>public void leerArchivo() throws IOException {
+    // Código que puede lanzar IOException
+}</pre></div>
+                <p><strong>throw:</strong> Lanza manualmente una excepción</p>
+                <div class="code-block"><pre>public void setEdad(int edad) {
+    if (edad < 0) {
+        throw new IllegalArgumentException("La edad no puede ser negativa");
+    }
+    this.edad = edad;
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="personalizadas">
+                <h2><i class="fas fa-plus-circle"></i> Excepciones Personalizadas</h2>
+                <div class="code-block"><pre>public class SaldoInsuficienteException extends Exception {
+    public SaldoInsuficienteException(String mensaje) {
+        super(mensaje);
+    }
+}
+
+// Uso
+public void retirar(double cantidad) throws SaldoInsuficienteException {
+    if (cantidad > saldo) {
+        throw new SaldoInsuficienteException("Saldo insuficiente");
+    }
+    saldo -= cantidad;
+}</pre></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

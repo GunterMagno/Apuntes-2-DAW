@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>React Router</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-react"></i> Routing</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#introduccion" class="active">¿Qué es React Router?</a></li>
+                <li><a href="#instalacion">Instalación</a></li>
+                <li><a href="#rutas">Rutas Básicas</a></li>
+                <li><a href="#navegacion">Navegación</a></li>
+                <li><a href="#parametros">Parámetros de Ruta</a></li>
+                <li><a href="#anidadas">Rutas Anidadas</a></li>
+                <li><a href="#avanzado">Funciones Avanzadas</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color:var(--react-color)"><i class="fab fa-react"></i></div>
+                <h1>5. React Router</h1>
+                <p class="detail-subtitle">Navegación en aplicaciones SPA (Single Page Application)</p>
+            </div>
+
+            <div class="content-section" id="introduccion">
+                <h2><i class="fas fa-map-signs"></i> ¿Qué es React Router?</h2>
+                <p><strong>React Router</strong> es la librería estándar para manejar navegación y routing en React. Permite crear Single Page Applications (SPA) con múltiples "páginas" sin recargar el navegador.</p>
+
+                <div class="info-box">
+                    <p><strong>¿Por qué usar React Router?</strong></p>
+                    <ul>
+                        <li><strong>URLs amigables:</strong> /productos/123 en lugar de /#productos</li>
+                        <li><strong>Navegación sin recargar:</strong> Experiencia fluida y rápida</li>
+                        <li><strong>Historial del navegador:</strong> Botones adelante/atrás funcionan</li>
+                        <li><strong>Rutas dinámicas:</strong> /users/:id, /posts/:slug</li>
+                        <li><strong>Rutas protegidas:</strong> Requieren autenticación</li>
+                    </ul>
+                </div>
+
+                <h3>Conceptos clave:</h3>
+                <div class="code-block"><pre>Router      → Contenedor principal (BrowserRouter, HashRouter)
+Routes      → Contenedor de rutas
+Route       → Define una ruta y su componente
+Link        → Navegación sin recargar (como &lt;a&gt; pero SPA)
+Navigate    → Redirección programática
+useNavigate → Hook para navegar programáticamente
+useParams   → Hook para obtener parámetros de URL
+Outlet      → Renderiza rutas hijas (rutas anidadas)</pre></div>
+            </div>
+
+            <div class="content-section" id="instalacion">
+                <h2><i class="fas fa-download"></i> Instalación y Setup</h2>
+                
+                <h3>Instalar React Router:</h3>
+                <div class="code-block"><pre>npm install react-router-dom
+
+# O con yarn
+yarn add react-router-dom</pre></div>
+
+                <h3>Configuración básica:</h3>
+                <div class="code-block"><pre>// index.js o main.jsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  &lt;BrowserRouter&gt;
+    &lt;App /&gt;
+  &lt;/BrowserRouter&gt;
+);</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ BrowserRouter vs HashRouter:</strong>
+                    <ul>
+                        <li><strong>BrowserRouter:</strong> URLs limpias (/about). Requiere configuración del servidor.</li>
+                        <li><strong>HashRouter:</strong> URLs con # (/#/about). Funciona sin config del servidor.</li>
+                    </ul>
+                    <p>Recomendado: <strong>BrowserRouter</strong> para producción.</p>
+                </div>
+            </div>
+
+            <div class="content-section" id="rutas">
+                <h2><i class="fas fa-route"></i> Rutas Básicas</h2>
+
+                <h3>Estructura básica de rutas:</h3>
+                <div class="code-block"><pre>// App.js
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import NotFound from './pages/NotFound';
+
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;Navbar /&gt;
+      
+      &lt;Routes&gt;
+        &lt;Route path="/" element={&lt;Home /&gt;} /&gt;
+        &lt;Route path="/about" element={&lt;About /&gt;} /&gt;
+        &lt;Route path="/contact" element={&lt;Contact /&gt;} /&gt;
+        &lt;Route path="*" element={&lt;NotFound /&gt;} /&gt;  {/* 404 */}
+      &lt;/Routes&gt;
+      
+      &lt;Footer /&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default App;</pre></div>
+
+                <h3>Componentes de páginas:</h3>
+                <div class="code-block"><pre>// pages/Home.js
+function Home() {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Página de Inicio&lt;/h1&gt;
+      &lt;p&gt;Bienvenido a mi aplicación React&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default Home;
+
+// pages/About.js
+function About() {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Acerca de&lt;/h1&gt;
+      &lt;p&gt;Información sobre la empresa...&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default About;
+
+// pages/NotFound.js
+function NotFound() {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;404 - Página no encontrada&lt;/h1&gt;
+      &lt;p&gt;La página que buscas no existe&lt;/p&gt;
+      &lt;Link to="/"&gt;Volver al inicio&lt;/Link&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <h3>Rutas con index (ruta por defecto):</h3>
+                <div class="code-block"><pre>&lt;Routes&gt;
+  &lt;Route path="/" element={&lt;Layout /&gt;}&gt;
+    &lt;Route index element={&lt;Home /&gt;} /&gt;  {/* Se muestra en "/" */}
+    &lt;Route path="about" element={&lt;About /&gt;} /&gt;
+  &lt;/Route&gt;
+&lt;/Routes&gt;</pre></div>
+            </div>
+
+            <div class="content-section" id="navegacion">
+                <h2><i class="fas fa-mouse-pointer"></i> Navegación</h2>
+
+                <h3>Link - Navegación declarativa:</h3>
+                <div class="code-block"><pre>import { Link } from 'react-router-dom';
+
+function Navbar() {
+  return (
+    &lt;nav&gt;
+      &lt;Link to="/"&gt;Inicio&lt;/Link&gt;
+      &lt;Link to="/about"&gt;Acerca de&lt;/Link&gt;
+      &lt;Link to="/contact"&gt;Contacto&lt;/Link&gt;
+      &lt;Link to="/products"&gt;Productos&lt;/Link&gt;
+    &lt;/nav&gt;
+  );
+}</pre></div>
+
+                <h3>NavLink - Link con estado activo:</h3>
+                <div class="code-block"><pre>import { NavLink } from 'react-router-dom';
+
+function Navbar() {
+  return (
+    &lt;nav&gt;
+      &lt;NavLink 
+        to="/"
+        className={({ isActive }) => isActive ? 'active' : ''}
+      &gt;
+        Inicio
+      &lt;/NavLink&gt;
+      
+      &lt;NavLink 
+        to="/about"
+        style={({ isActive }) => ({
+          color: isActive ? 'red' : 'black',
+          fontWeight: isActive ? 'bold' : 'normal'
+        })}
+      &gt;
+        Acerca de
+      &lt;/NavLink&gt;
+    &lt;/nav&gt;
+  );
+}
+
+// CSS
+.active {
+  color: #007bff;
+  font-weight: bold;
+  border-bottom: 2px solid #007bff;
+}</pre></div>
+
+                <h3>useNavigate - Navegación programática:</h3>
+                <div class="code-block"><pre>import { useNavigate } from 'react-router-dom';
+
+function LoginForm() {
+  const navigate = useNavigate();
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Login logic...
+    const success = await login(email, password);
+    
+    if (success) {
+      navigate('/dashboard');  // Redirigir al dashboard
+      // navigate('/dashboard', { replace: true });  // Sin historial
+    }
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      {/* Inputs... */}
+      &lt;button type="submit"&gt;Login&lt;/button&gt;
+      &lt;button type="button" onClick={() => navigate(-1)}&gt;
+        Volver atrás
+      &lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre></div>
+
+                <h3>Navigate - Redirección declarativa:</h3>
+                <div class="code-block"><pre>import { Navigate } from 'react-router-dom';
+
+function ProtectedRoute({ children }) {
+  const { user } = useAuth();
+  
+  if (!user) {
+    // Redirigir a login si no está autenticado
+    return &lt;Navigate to="/login" replace /&gt;;
+  }
+  
+  return children;
+}
+
+// Uso
+&lt;Route 
+  path="/dashboard" 
+  element={
+    &lt;ProtectedRoute&gt;
+      &lt;Dashboard /&gt;
+    &lt;/ProtectedRoute&gt;
+  } 
+/&gt;</pre></div>
+            </div>
+
+            <div class="content-section" id="parametros">
+                <h2><i class="fas fa-sliders-h"></i> Parámetros de Ruta</h2>
+
+                <h3>useParams - Parámetros dinámicos:</h3>
+                <div class="code-block"><pre>import { useParams } from 'react-router-dom';
+
+// Definir ruta con parámetro
+&lt;Route path="/user/:id" element={&lt;UserDetail /&gt;} /&gt;
+&lt;Route path="/product/:id" element={&lt;ProductDetail /&gt;} /&gt;
+&lt;Route path="/blog/:slug" element={&lt;BlogPost /&gt;} /&gt;
+
+// Componente que usa el parámetro
+function UserDetail() {
+  const { id } = useParams();
+  const [user, setUser] = useState(null);
+  
+  useEffect(() => {
+    fetch(`https://api.example.com/users/${id}`)
+      .then(res => res.json())
+      .then(data => setUser(data));
+  }, [id]);
+  
+  if (!user) return &lt;p&gt;Cargando...&lt;/p&gt;;
+  
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;{user.name}&lt;/h1&gt;
+      &lt;p&gt;ID: {id}&lt;/p&gt;
+      &lt;p&gt;Email: {user.email}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Navegación
+&lt;Link to="/user/1"&gt;Ver usuario 1&lt;/Link&gt;
+&lt;Link to="/user/42"&gt;Ver usuario 42&lt;/Link&gt;</pre></div>
+
+                <h3>Múltiples parámetros:</h3>
+                <div class="code-block"><pre>// Ruta
+&lt;Route path="/category/:categoryId/product/:productId" element={&lt;Product /&gt;} /&gt;
+
+// Componente
+function Product() {
+  const { categoryId, productId } = useParams();
+  
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Categoría: {categoryId}&lt;/p&gt;
+      &lt;p&gt;Producto: {productId}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Navegación
+&lt;Link to="/category/electronics/product/laptop-123"&gt;
+  Ver Laptop
+&lt;/Link&gt;</pre></div>
+
+                <h3>useSearchParams - Query Strings:</h3>
+                <div class="code-block"><pre>import { useSearchParams } from 'react-router-dom';
+
+function ProductList() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  // Leer params: /products?category=electronics&sort=price
+  const category = searchParams.get('category');
+  const sort = searchParams.get('sort');
+  
+  const handleFilter = (newCategory) => {
+    setSearchParams({ category: newCategory, sort });
+  };
+  
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Categoría: {category || 'Todas'}&lt;/p&gt;
+      &lt;p&gt;Ordenar: {sort || 'Ninguno'}&lt;/p&gt;
+      
+      &lt;button onClick={() => handleFilter('electronics')}&gt;
+        Electrónica
+      &lt;/button&gt;
+      &lt;button onClick={() => handleFilter('clothing')}&gt;
+        Ropa
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <h3>useLocation - Información completa de la ubicación:</h3>
+                <div class="code-block"><pre>import { useLocation } from 'react-router-dom';
+
+function CurrentPath() {
+  const location = useLocation();
+  
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Pathname: {location.pathname}&lt;/p&gt;
+      &lt;p&gt;Search: {location.search}&lt;/p&gt;
+      &lt;p&gt;Hash: {location.hash}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Pasar estado en navegación
+const navigate = useNavigate();
+navigate('/dashboard', { state: { from: 'login' } });
+
+// Leer estado
+const location = useLocation();
+const from = location.state?.from;</pre></div>
+            </div>
+
+            <div class="content-section" id="anidadas">
+                <h2><i class="fas fa-sitemap"></i> Rutas Anidadas (Nested Routes)</h2>
+                <p>Las <strong>rutas anidadas</strong> permiten crear layouts compartidos y estructuras jerárquicas.</p>
+
+                <h3>Ejemplo con Layout:</h3>
+                <div class="code-block"><pre>// App.js
+import { Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import About from './pages/About';
+import Products from './pages/Products';
+import ProductDetail from './pages/ProductDetail';
+
+function App() {
+  return (
+    &lt;Routes&gt;
+      &lt;Route path="/" element={&lt;Layout /&gt;}&gt;
+        &lt;Route index element={&lt;Home /&gt;} /&gt;
+        &lt;Route path="about" element={&lt;About /&gt;} /&gt;
+        
+        &lt;Route path="products"&gt;
+          &lt;Route index element={&lt;Products /&gt;} /&gt;
+          &lt;Route path=":id" element={&lt;ProductDetail /&gt;} /&gt;
+        &lt;/Route&gt;
+      &lt;/Route&gt;
+    &lt;/Routes&gt;
+  );
+}</pre></div>
+
+                <h3>Componente Layout con Outlet:</h3>
+                <div class="code-block"><pre>// components/Layout.js
+import { Outlet, Link } from 'react-router-dom';
+
+function Layout() {
+  return (
+    &lt;div&gt;
+      &lt;header&gt;
+        &lt;nav&gt;
+          &lt;Link to="/"&gt;Inicio&lt;/Link&gt;
+          &lt;Link to="/about"&gt;Acerca de&lt;/Link&gt;
+          &lt;Link to="/products"&gt;Productos&lt;/Link&gt;
+        &lt;/nav&gt;
+      &lt;/header&gt;
+      
+      &lt;main&gt;
+        &lt;Outlet /&gt;  {/* Aquí se renderizan las rutas hijas */}
+      &lt;/main&gt;
+      
+      &lt;footer&gt;
+        &lt;p&gt;© 2024 Mi Empresa&lt;/p&gt;
+      &lt;/footer&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <h3>Ejemplo completo: Dashboard con sidebar:</h3>
+                <div class="code-block"><pre>// App.js
+&lt;Routes&gt;
+  &lt;Route path="/" element={&lt;PublicLayout /&gt;}&gt;
+    &lt;Route index element={&lt;Home /&gt;} /&gt;
+    &lt;Route path="login" element={&lt;Login /&gt;} /&gt;
+  &lt;/Route&gt;
+  
+  &lt;Route path="/dashboard" element={&lt;DashboardLayout /&gt;}&gt;
+    &lt;Route index element={&lt;DashboardHome /&gt;} /&gt;
+    &lt;Route path="profile" element={&lt;Profile /&gt;} /&gt;
+    &lt;Route path="settings" element={&lt;Settings /&gt;} /&gt;
+    &lt;Route path="users" element={&lt;UserList /&gt;} /&gt;
+    &lt;Route path="users/:id" element={&lt;UserDetail /&gt;} /&gt;
+  &lt;/Route&gt;
+&lt;/Routes&gt;
+
+// DashboardLayout.js
+function DashboardLayout() {
+  return (
+    &lt;div className="dashboard"&gt;
+      &lt;aside className="sidebar"&gt;
+        &lt;NavLink to="/dashboard"&gt;Inicio&lt;/NavLink&gt;
+        &lt;NavLink to="/dashboard/profile"&gt;Perfil&lt;/NavLink&gt;
+        &lt;NavLink to="/dashboard/settings"&gt;Configuración&lt;/NavLink&gt;
+        &lt;NavLink to="/dashboard/users"&gt;Usuarios&lt;/NavLink&gt;
+      &lt;/aside&gt;
+      
+      &lt;main className="content"&gt;
+        &lt;Outlet /&gt;
+      &lt;/main&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="avanzado">
+                <h2><i class="fas fa-rocket"></i> Funciones Avanzadas</h2>
+
+                <h3>Rutas protegidas (autenticación):</h3>
+                <div class="code-block"><pre>// components/ProtectedRoute.js
+import { Navigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+
+function ProtectedRoute({ children, requiredRole }) {
+  const { user, loading } = useAuth();
+  const location = useLocation();
+  
+  if (loading) {
+    return &lt;div&gt;Cargando...&lt;/div&gt;;
+  }
+  
+  if (!user) {
+    // Guardar la ubicación para redirigir después del login
+    return &lt;Navigate to="/login" state={{ from: location }} replace /&gt;;
+  }
+  
+  if (requiredRole && user.role !== requiredRole) {
+    return &lt;Navigate to="/unauthorized" replace /&gt;;
+  }
+  
+  return children;
+}
+
+// Uso
+&lt;Route 
+  path="/dashboard" 
+  element={
+    &lt;ProtectedRoute&gt;
+      &lt;Dashboard /&gt;
+    &lt;/ProtectedRoute&gt;
+  }
+/&gt;
+
+&lt;Route 
+  path="/admin" 
+  element={
+    &lt;ProtectedRoute requiredRole="admin"&gt;
+      &lt;AdminPanel /&gt;
+    &lt;/ProtectedRoute&gt;
+  }
+/&gt;</pre></div>
+
+                <h3>Lazy Loading (Code Splitting):</h3>
+                <div class="code-block"><pre>import { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+
+// Carga perezosa de componentes
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+
+function App() {
+  return (
+    &lt;Suspense fallback={&lt;div&gt;Cargando página...&lt;/div&gt;}&gt;
+      &lt;Routes&gt;
+        &lt;Route path="/" element={&lt;Home /&gt;} /&gt;
+        &lt;Route path="/about" element={&lt;About /&gt;} /&gt;
+        &lt;Route path="/dashboard" element={&lt;Dashboard /&gt;} /&gt;
+      &lt;/Routes&gt;
+    &lt;/Suspense&gt;
+  );
+}</pre></div>
+
+                <h3>Scroll to Top al cambiar ruta:</h3>
+                <div class="code-block"><pre>import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+}
+
+// Uso en App.js
+function App() {
+  return (
+    &lt;BrowserRouter&gt;
+      &lt;ScrollToTop /&gt;
+      &lt;Routes&gt;
+        {/* rutas... */}
+      &lt;/Routes&gt;
+    &lt;/BrowserRouter&gt;
+  );
+}</pre></div>
+
+                <h3>Breadcrumbs (migas de pan):</h3>
+                <div class="code-block"><pre>import { useLocation, Link } from 'react-router-dom';
+
+function Breadcrumbs() {
+  const location = useLocation();
+  
+  const paths = location.pathname.split('/').filter(x => x);
+  
+  return (
+    &lt;nav&gt;
+      &lt;Link to="/"&gt;Inicio&lt;/Link&gt;
+      {paths.map((path, index) => {
+        const to = `/${paths.slice(0, index + 1).join('/')}`;
+        const isLast = index === paths.length - 1;
+        
+        return (
+          &lt;span key={to}&gt;
+            {' / '}
+            {isLast ? (
+              &lt;span&gt;{path}&lt;/span&gt;
+            ) : (
+              &lt;Link to={to}&gt;{path}&lt;/Link&gt;
+            )}
+          &lt;/span&gt;
+        );
+      })}
+    &lt;/nav&gt;
+  );
+}
+
+// Uso: /products/electronics/laptop
+// Resultado: Inicio / products / electronics / laptop</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Configuración del servidor para BrowserRouter:</strong>
+                    <p>Para que funcione en producción, el servidor debe redirigir todas las rutas a index.html:</p>
+                    <div class="code-block"><pre>// Nginx
+location / {
+  try_files $uri /index.html;
+}
+
+// Apache (.htaccess)
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]
+
+// Vite (vite.config.js)
+// Automático con 'npm run build'
+
+// Create React App
+// Automático</pre></div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Errores comunes:</strong>
+                    <ul>
+                        <li>❌ Usar &lt;a&gt; en lugar de &lt;Link&gt; (recarga la página)</li>
+                        <li>❌ Olvidar &lt;Outlet /&gt; en rutas anidadas</li>
+                        <li>❌ Rutas sin key en arrays dinámicos</li>
+                        <li>❌ No usar replace en redirecciones (crea loops en historial)</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

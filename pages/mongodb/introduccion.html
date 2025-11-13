@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Introducción a MongoDB - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a MongoDB</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-database"></i> Introducción</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#que-es" class="active">¿Qué es MongoDB?</a></li>
+                <li><a href="#nosql">NoSQL vs SQL</a></li>
+                <li><a href="#documentos">Documentos y BSON</a></li>
+                <li><a href="#colecciones">Colecciones y Bases de Datos</a></li>
+                <li><a href="#ventajas">Ventajas de MongoDB</a></li>
+                <li><a href="#casos">Casos de Uso</a></li>
+                <li><a href="#instalacion">Instalación y Configuración</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--mongodb-color);"><i class="fas fa-database"></i></div>
+                <h1 class="detail-title">1. Introducción a MongoDB</h1>
+                <p class="detail-subtitle">Base de datos NoSQL orientada a documentos</p>
+            </div>
+            <div class="content-section" id="que-es">
+                <h2><i class="fas fa-question-circle"></i> ¿Qué es MongoDB?</h2>
+                <p><strong>MongoDB</strong> es una base de datos <strong>NoSQL orientada a documentos</strong> de código abierto, diseñada para aplicaciones modernas que requieren flexibilidad, escalabilidad y alto rendimiento. A diferencia de las bases de datos relacionales tradicionales (SQL) que organizan los datos en tablas con filas y columnas, MongoDB almacena los datos en <strong>documentos similares a JSON</strong> agrupados en <strong>colecciones</strong>.</p>
+                
+                <p>El nombre "MongoDB" proviene de "humongous" (enorme), reflejando su capacidad para manejar grandes volúmenes de datos. Fue creada por MongoDB Inc. (anteriormente 10gen) en 2007 y lanzada públicamente en 2009, convirtiéndose rápidamente en una de las bases de datos NoSQL más populares del mundo.</p>
+
+                <h3>¿Por qué MongoDB es diferente?</h3>
+                <p>En una base de datos relacional tradicional como MySQL o PostgreSQL, si quisieras almacenar información de un usuario, crearías tablas relacionadas:</p>
+                <div class="code-block"><pre>-- SQL Tradicional (múltiples tablas)
+Tabla USUARIOS:
++----+------------+-------+
+| id | nombre     | edad  |
++----+------------+-------+
+| 1  | Ana García | 25    |
++----+------------+-------+
+
+Tabla DIRECCIONES:
++----+------------+----------------+--------+
+| id | usuario_id | calle          | ciudad |
++----+------------+----------------+--------+
+| 1  | 1          | Gran Vía 123   | Madrid |
++----+------------+----------------+--------+
+
+Tabla HOBBIES:
++----+------------+-------------+
+| id | usuario_id | hobby       |
++----+------------+-------------+
+| 1  | 1          | lectura     |
+| 2  | 1          | natación    |
+| 3  | 1          | fotografía  |
++----+------------+-------------+</pre></div>
+
+                <p>En MongoDB, toda esta información se almacena en <strong>un único documento</strong>, lo que simplifica las consultas y mejora el rendimiento:</p>
+                <div class="code-block"><pre>// MongoDB (un solo documento)
+{
+  "_id": ObjectId("507f1f77bcf86cd799439011"),
+  "nombre": "Ana García",
+  "edad": 25,
+  "direccion": {
+    "calle": "Gran Vía 123",
+    "ciudad": "Madrid",
+    "codigoPostal": "28013"
+  },
+  "hobbies": ["lectura", "natación", "fotografía"],
+  "registrado": ISODate("2024-01-15T10:30:00Z")
+}</pre></div>
+
+                <div class="info-box">
+                    <p><strong>Características clave de MongoDB:</strong></p>
+                    <ul>
+                        <li><strong>Esquema flexible:</strong> Cada documento puede tener estructura diferente sin definir esquema previo</li>
+                        <li><strong>Orientado a documentos:</strong> Los datos se almacenan en formato BSON (Binary JSON)</li>
+                        <li><strong>Escalabilidad horizontal:</strong> Fácil distribución de datos en múltiples servidores (sharding)</li>
+                        <li><strong>Alto rendimiento:</strong> Optimizado para lecturas y escrituras rápidas</li>
+                        <li><strong>Consultas potentes:</strong> Soporta consultas complejas, agregaciones y búsqueda de texto completo</li>
+                        <li><strong>Indexación:</strong> Soporta índices en cualquier campo para acelerar consultas</li>
+                        <li><strong>Replicación:</strong> Alta disponibilidad mediante réplicas automáticas</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content-section" id="nosql">
+                <h2><i class="fas fa-exchange-alt"></i> NoSQL vs SQL: Entendiendo las Diferencias</h2>
+                <p>Para entender MongoDB, es fundamental comprender la diferencia entre bases de datos <strong>relacionales (SQL)</strong> y <strong>NoSQL</strong>. Cada enfoque tiene sus propias ventajas y casos de uso.</p>
+
+                <h3>Bases de Datos Relacionales (SQL)</h3>
+                <p>Las bases de datos relacionales como MySQL, PostgreSQL, Oracle y SQL Server han sido el estándar durante décadas. Se basan en el <strong>modelo relacional</strong> propuesto por Edgar F. Codd en 1970.</p>
+                
+                <p><strong>Características principales:</strong></p>
+                <ul>
+                    <li><strong>Estructura tabular:</strong> Los datos se organizan en tablas con filas (registros) y columnas (campos)</li>
+                    <li><strong>Esquema rígido:</strong> Debes definir la estructura de las tablas antes de insertar datos (tipos de datos, restricciones, etc.)</li>
+                    <li><strong>Relaciones:</strong> Las tablas se conectan mediante claves primarias y foráneas</li>
+                    <li><strong>ACID:</strong> Garantizan Atomicidad, Consistencia, Aislamiento y Durabilidad en las transacciones</li>
+                    <li><strong>SQL:</strong> Lenguaje estándar para consultas (Structured Query Language)</li>
+                    <li><strong>Normalización:</strong> Se divide la información en múltiples tablas para evitar redundancia</li>
+                </ul>
+
+                <p><strong>Ejemplo de modelo relacional:</strong></p>
+                <div class="code-block"><pre>-- Para almacenar usuarios con posts necesitas varias tablas:
+
+CREATE TABLE usuarios (
+  id INT PRIMARY KEY,
+  nombre VARCHAR(100),
+  email VARCHAR(100)
+);
+
+CREATE TABLE posts (
+  id INT PRIMARY KEY,
+  usuario_id INT,
+  titulo VARCHAR(200),
+  contenido TEXT,
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+
+-- Para obtener posts de un usuario necesitas JOIN:
+SELECT u.nombre, p.titulo, p.contenido
+FROM usuarios u
+INNER JOIN posts p ON u.id = p.usuario_id
+WHERE u.id = 1;</pre></div>
+
+                <h3>Bases de Datos NoSQL (MongoDB)</h3>
+                <p><strong>NoSQL</strong> significa "Not Only SQL" (No solo SQL). No es que no usen SQL, sino que van más allá del modelo relacional tradicional para ofrecer mayor flexibilidad.</p>
+
+                <p><strong>Características de MongoDB (NoSQL):</strong></p>
+                <ul>
+                    <li><strong>Estructura de documentos:</strong> Datos en formato JSON/BSON, similar a objetos JavaScript</li>
+                    <li><strong>Esquema flexible:</strong> No necesitas definir la estructura previamente. Cada documento puede tener campos diferentes</li>
+                    <li><strong>Datos embebidos:</strong> Puedes incluir datos relacionados dentro del mismo documento (sin JOINs)</li>
+                    <li><strong>Escalabilidad horizontal:</strong> Fácil distribución de datos en múltiples servidores</li>
+                    <li><strong>Sin relaciones complejas:</strong> Reduces la necesidad de JOINs costosos</li>
+                    <li><strong>BASE:</strong> Basically Available, Soft state, Eventual consistency (en lugar de ACID estricto)</li>
+                </ul>
+
+                <p><strong>Ejemplo equivalente en MongoDB:</strong></p>
+                <div class="code-block"><pre>// Un solo documento con datos embebidos:
+{
+  "_id": ObjectId("507f191e810c19729de860ea"),
+  "nombre": "Ana García",
+  "email": "ana@example.com",
+  "posts": [
+    {
+      "titulo": "Mi primer post",
+      "contenido": "Hola mundo",
+      "fecha": ISODate("2024-01-15")
+    },
+    {
+      "titulo": "Segundo post",
+      "contenido": "MongoDB es genial",
+      "fecha": ISODate("2024-01-20")
+    }
+  ]
+}
+
+// Consulta simple (sin JOINs):
+db.usuarios.findOne({ _id: ObjectId("507f191e810c19729de860ea") })</pre></div>
+
+                <h3>Comparación directa:</h3>
+                <table style="width:100%; border-collapse: collapse; margin-top: 10px;">
+                    <tr style="background:#2c3e50; color:white;">
+                        <th style="padding:10px; border:1px solid #ddd;">Aspecto</th>
+                        <th style="padding:10px; border:1px solid #ddd;">SQL (Relacional)</th>
+                        <th style="padding:10px; border:1px solid #ddd;">MongoDB (NoSQL)</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ddd;"><strong>Modelo de datos</strong></td>
+                        <td style="padding:8px; border:1px solid #ddd;">Tablas, filas, columnas</td>
+                        <td style="padding:8px; border:1px solid #ddd;">Colecciones, documentos, campos</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ddd;"><strong>Esquema</strong></td>
+                        <td style="padding:8px; border:1px solid #ddd;">Rígido (definido previamente)</td>
+                        <td style="padding:8px; border:1px solid #ddd;">Flexible (dinámico)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ddd;"><strong>Relaciones</strong></td>
+                        <td style="padding:8px; border:1px solid #ddd;">JOINs entre tablas</td>
+                        <td style="padding:8px; border:1px solid #ddd;">Documentos embebidos o referencias</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ddd;"><strong>Escalabilidad</strong></td>
+                        <td style="padding:8px; border:1px solid #ddd;">Vertical (servidor más potente)</td>
+                        <td style="padding:8px; border:1px solid #ddd;">Horizontal (más servidores)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ddd;"><strong>Transacciones</strong></td>
+                        <td style="padding:8px; border:1px solid #ddd;">ACID completo siempre</td>
+                        <td style="padding:8px; border:1px solid #ddd;">ACID desde v4.0 (multi-documento)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ddd;"><strong>Consultas</strong></td>
+                        <td style="padding:8px; border:1px solid #ddd;">SQL (lenguaje estándar)</td>
+                        <td style="padding:8px; border:1px solid #ddd;">Consultas MongoDB (sintaxis JSON)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ddd;"><strong>Mejor para</strong></td>
+                        <td style="padding:8px; border:1px solid #ddd;">Datos estructurados, relaciones complejas, transacciones críticas</td>
+                        <td style="padding:8px; border:1px solid #ddd;">Datos semi-estructurados, cambios frecuentes, escalabilidad</td>
+                    </tr>
+                </table>
+
+                <div class="warning-box">
+                    <strong>⚠️ Importante:</strong>
+                    <p>Ni SQL ni NoSQL son "mejores" en general. La elección depende de tus necesidades:</p>
+                    <ul>
+                        <li><strong>Usa SQL cuando:</strong> Necesitas relaciones complejas, transacciones ACID críticas, datos muy estructurados (banca, ERP, contabilidad)</li>
+                        <li><strong>Usa MongoDB cuando:</strong> Los datos cambian frecuentemente, necesitas escalar horizontalmente, trabajas con JSON/objetos, desarrollo ágil (apps web/móviles, catálogos, IoT)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content-section" id="documentos">
+                <h2><i class="fas fa-file-code"></i> Documentos y BSON: El Formato de Datos de MongoDB</h2>
+                <p>MongoDB almacena datos en formato <strong>BSON</strong> (Binary JSON), que es una extensión binaria de JSON diseñada específicamente para bases de datos. Comprender BSON es fundamental para trabajar eficientemente con MongoDB.</p>
+
+                <h3>¿Qué es JSON?</h3>
+                <p><strong>JSON (JavaScript Object Notation)</strong> es un formato de intercambio de datos ligero y fácil de leer. Es el estándar de facto para APIs web y aplicaciones JavaScript.</p>
+                
+                <div class="code-block"><pre>// Ejemplo de documento JSON clásico:
+{
+  "nombre": "Carlos Pérez",
+  "edad": 28,
+  "email": "carlos@example.com",
+  "activo": true,
+  "tags": ["desarrollador", "javascript", "mongodb"],
+  "direccion": {
+    "calle": "Gran Vía 123",
+    "ciudad": "Madrid",
+    "codigoPostal": "28013"
+  }
+}</pre></div>
+
+                <p><strong>Limitaciones de JSON puro:</strong></p>
+                <ul>
+                    <li>Solo soporta tipos básicos: string, number, boolean, array, object, null</li>
+                    <li>No tiene tipo Date nativo (se usa string)</li>
+                    <li>No soporta datos binarios</li>
+                    <li>No tiene tipos de datos numéricos específicos (int32, int64, decimal)</li>
+                    <li>No es eficiente para almacenamiento en disco</li>
+                </ul>
+
+                <h3>¿Qué es BSON?</h3>
+                <p><strong>BSON (Binary JSON)</strong> fue creado por MongoDB para superar las limitaciones de JSON. Es un formato binario que mantiene la legibilidad de JSON pero añade tipos de datos adicionales y eficiencia.</p>
+
+                <p><strong>Ventajas de BSON sobre JSON:</strong></p>
+                <ul>
+                    <li><strong>Tipos adicionales:</strong> Date, ObjectId, Binary Data, Decimal128, Int32, Int64, etc.</li>
+                    <li><strong>Eficiencia:</strong> Codificación binaria más rápida de parsear y menos espacio en disco</li>
+                    <li><strong>Traversable:</strong> Incluye información de longitud que permite recorrer el documento sin parsearlo completo</li>
+                    <li><strong>Optimizado:</strong> Diseñado para operaciones de bases de datos (búsquedas, actualizaciones)</li>
+                </ul>
+
+                <h3>Tipos de Datos BSON</h3>
+                <div class="code-block"><pre>// MongoDB extiende JSON con tipos adicionales:
+
+{
+  // Tipos básicos (compatibles con JSON)
+  "string": "Hola mundo",
+  "number": 42,
+  "boolean": true,
+  "null": null,
+  "array": [1, 2, 3],
+  "object": { "clave": "valor" },
+  
+  // Tipos adicionales de BSON
+  "objectId": ObjectId("507f191e810c19729de860ea"),  // ID único de 12 bytes
+  "date": ISODate("2024-01-15T10:30:00Z"),           // Fecha y hora
+  "int32": NumberInt(100),                            // Entero de 32 bits
+  "int64": NumberLong(9999999999),                    // Entero de 64 bits
+  "decimal": NumberDecimal("99.99"),                  // Decimal de alta precisión
+  "binary": BinData(0, "aGVsbG8="),                   // Datos binarios
+  "regex": /patrón/i,                                 // Expresión regular
+  "timestamp": Timestamp(1638360000, 1)               // Timestamp interno de MongoDB
+}</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 ObjectId explicado:</strong>
+                    <p>Es el tipo de dato más importante en MongoDB. Cada documento tiene un campo <code>_id</code> que es un ObjectId único.</p>
+                    <p><strong>Estructura de ObjectId (12 bytes):</strong></p>
+                    <ul>
+                        <li><strong>4 bytes:</strong> Timestamp (segundos desde Unix epoch)</li>
+                        <li><strong>5 bytes:</strong> Valor aleatorio (identifica máquina/proceso)</li>
+                        <li><strong>3 bytes:</strong> Contador incremental</li>
+                    </ul>
+                    <p>Esto garantiza que cada ObjectId sea <strong>único globalmente</strong> sin coordinación central, y además contiene información temporal (puedes saber cuándo se creó el documento).</p>
+                </div>
+
+                <h3>Estructura de Documentos BSON</h3>
+                <p>Los documentos BSON tienen una estructura jerárquica y pueden contener <strong>documentos embebidos</strong> y <strong>arrays</strong> de cualquier profundidad.</p>
+
+                <div class="code-block"><pre>// Documento complejo con datos embebidos:
+{
+  "_id": ObjectId("65a1b2c3d4e5f6789abcdef0"),
+  "usuario": "jgarcia",
+  "nombreCompleto": {
+    "nombre": "Juan",
+    "apellidos": "García López"
+  },
+  "fechaNacimiento": ISODate("1995-06-15"),
+  "intereses": ["programación", "música", "viajes"],
+  "configuracion": {
+    "idioma": "es",
+    "notificaciones": {
+      "email": true,
+      "push": false,
+      "sms": true
+    },
+    "tema": "oscuro"
+  },
+  "compras": [
+    {
+      "producto": "Libro MongoDB",
+      "precio": NumberDecimal("29.99"),
+      "fecha": ISODate("2024-01-10")
+    },
+    {
+      "producto": "Curso online",
+      "precio": NumberDecimal("49.99"),
+      "fecha": ISODate("2024-01-12")
+    }
+  ],
+  "ultimoAcceso": ISODate("2024-01-15T14:30:00Z"),
+  "activo": true
+}</pre></div>
+
+                <h3>Documentos Embebidos vs Referencias</h3>
+                <p>Una decisión clave en el diseño de MongoDB es si <strong>embeber</strong> datos relacionados o usar <strong>referencias</strong>.</p>
+
+                <p><strong>1. Datos Embebidos (Denormalización):</strong></p>
+                <div class="code-block"><pre>// Un post con comentarios embebidos
+{
+  "_id": ObjectId("..."),
+  "titulo": "Introducción a MongoDB",
+  "contenido": "MongoDB es una base de datos...",
+  "autor": {
+    "nombre": "Ana Martínez",
+    "email": "ana@example.com"
+  },
+  "comentarios": [
+    {
+      "autor": "Carlos",
+      "texto": "Excelente artículo",
+      "fecha": ISODate("2024-01-15")
+    },
+    {
+      "autor": "María",
+      "texto": "Muy útil",
+      "fecha": ISODate("2024-01-16")
+    }
+  ]
+}
+
+// Ventaja: Una sola consulta obtiene TODO
+db.posts.findOne({ _id: ObjectId("...") })</pre></div>
+
+                <p><strong>2. Referencias (Normalización):</strong></p>
+                <div class="code-block"><pre>// Post con referencias a documentos separados
+// Colección 'posts':
+{
+  "_id": ObjectId("post123"),
+  "titulo": "Introducción a MongoDB",
+  "contenido": "MongoDB es una base de datos...",
+  "autorId": ObjectId("user456")
+}
+
+// Colección 'usuarios':
+{
+  "_id": ObjectId("user456"),
+  "nombre": "Ana Martínez",
+  "email": "ana@example.com"
+}
+
+// Desventaja: Necesitas dos consultas (o $lookup)
+const post = db.posts.findOne({ _id: ObjectId("post123") });
+const autor = db.usuarios.findOne({ _id: post.autorId });</pre></div>
+
+                <div class="warning-box">
+                    <strong>🎯 Cuándo embeber vs referenciar:</strong>
+                    <ul>
+                        <li><strong>Embebe cuando:</strong>
+                            <ul>
+                                <li>Los datos están relacionados "uno a pocos" (un post con 5 comentarios)</li>
+                                <li>Los datos siempre se consultan juntos</li>
+                                <li>Los datos embebidos no cambian frecuentemente</li>
+                                <li>Los documentos embebidos no crecen indefinidamente</li>
+                            </ul>
+                        </li>
+                        <li><strong>Referencia cuando:</strong>
+                            <ul>
+                                <li>Los datos están relacionados "uno a muchos" o "muchos a muchos"</li>
+                                <li>Los datos se consultan independientemente</li>
+                                <li>Los datos cambian con frecuencia</li>
+                                <li>Riesgo de superar el límite de 16MB por documento</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <h3>Límites de Documentos BSON</h3>
+                <p>Es importante conocer las limitaciones técnicas de BSON:</p>
+                <ul>
+                    <li><strong>Tamaño máximo:</strong> 16 MB por documento (suficiente para la mayoría de casos)</li>
+                    <li><strong>Profundidad de anidamiento:</strong> Máximo 100 niveles de documentos embebidos</li>
+                    <li><strong>Nombres de campos:</strong> No pueden empezar con $ ni contener puntos (reservados para operadores y rutas)</li>
+                    <li><strong>Campo _id:</strong> Obligatorio y debe ser único en la colección (se crea automáticamente si no lo provees)</li>
+                </ul>
+            </div>
+            <div class="content-section" id="colecciones">
+                <h2><i class="fas fa-database"></i> Colecciones y Bases de Datos en MongoDB</h2>
+                <p>MongoDB organiza los datos en una jerarquía de tres niveles: <strong>Bases de Datos → Colecciones → Documentos</strong>. Entender esta organización es fundamental para diseñar tu aplicación correctamente.</p>
+
+                <h3>¿Qué es una Base de Datos?</h3>
+                <p>Una <strong>base de datos</strong> en MongoDB es un contenedor físico de colecciones. Cada base de datos tiene su propio conjunto de archivos en el sistema de archivos del servidor.</p>
+
+                <div class="code-block"><pre>// Ver todas las bases de datos
+show dbs
+
+// Crear/cambiar a una base de datos (se crea automáticamente al usarla)
+use miTienda
+
+// Ver la base de datos actual
+db
+
+// Eliminar la base de datos actual
+db.dropDatabase()</pre></div>
+
+                <p><strong>Características de las bases de datos:</strong></p>
+                <ul>
+                    <li><strong>Creación automática:</strong> No necesitas crear explícitamente una base de datos. Se crea cuando insertas el primer documento.</li>
+                    <li><strong>Nombres válidos:</strong> Deben tener entre 1 y 64 caracteres. No pueden contener /, \, ., ", *, <, >, :, |, ?, $, espacios o null.</li>
+                    <li><strong>Case-sensitive:</strong> "MiDB" y "midb" son bases de datos diferentes.</li>
+                    <li><strong>Aislamiento:</strong> Cada base de datos es independiente, con sus propios archivos y permisos.</li>
+                </ul>
+
+                <div class="info-box">
+                    <strong>💡 Bases de datos del sistema:</strong>
+                    <p>MongoDB crea automáticamente algunas bases de datos especiales:</p>
+                    <ul>
+                        <li><strong>admin:</strong> Base de datos de administración. Los usuarios con roles en "admin" tienen privilegios sobre todas las bases de datos.</li>
+                        <li><strong>config:</strong> Almacena información de configuración de sharding (distribución de datos).</li>
+                        <li><strong>local:</strong> Almacena datos de replicación. Esta base de datos nunca se replica.</li>
+                    </ul>
+                    <p>⚠️ <strong>No modifiques estas bases de datos</strong> a menos que sepas exactamente lo que haces.</p>
+                </div>
+
+                <h3>¿Qué es una Colección?</h3>
+                <p>Una <strong>colección</strong> es un grupo de documentos MongoDB, equivalente a una tabla en bases de datos relacionales. Sin embargo, a diferencia de las tablas, las colecciones no imponen un esquema.</p>
+
+                <div class="code-block"><pre>// Ver todas las colecciones de la base de datos actual
+show collections
+
+// Crear una colección explícitamente (opcional)
+db.createCollection("productos")
+
+// Crear colección con opciones
+db.createCollection("logs", {
+  capped: true,        // Colección de tamaño fijo
+  size: 5242880,       // Tamaño máximo: 5MB
+  max: 5000            // Máximo 5000 documentos
+})
+
+// Eliminar una colección
+db.productos.drop()</pre></div>
+
+                <p><strong>Características de las colecciones:</strong></p>
+                <ul>
+                    <li><strong>Esquema flexible:</strong> Los documentos en una colección pueden tener campos completamente diferentes.</li>
+                    <li><strong>Creación implícita:</strong> Se crean automáticamente cuando insertas el primer documento.</li>
+                    <li><strong>Nombres válidos:</strong> No pueden empezar con "system." (reservado). No pueden contener el carácter null.</li>
+                    <li><strong>Namespaces:</strong> El nombre completo es "baseDeDatos.coleccion" (ej: "miTienda.productos").</li>
+                </ul>
+
+                <h3>Esquema Flexible: Ventajas y Consideraciones</h3>
+                <p>La <strong>flexibilidad de esquema</strong> es una de las características más potentes de MongoDB, pero debe usarse con cuidado.</p>
+
+                <div class="code-block"><pre>// Estos tres documentos pueden coexistir en la misma colección:
+
+// Producto simple
+{
+  "_id": ObjectId("..."),
+  "nombre": "Teclado",
+  "precio": 29.99
+}
+
+// Producto con más detalles
+{
+  "_id": ObjectId("..."),
+  "nombre": "Monitor 27\"",
+  "precio": 299.99,
+  "marca": "Samsung",
+  "especificaciones": {
+    "resolucion": "1920x1080",
+    "panelType": "IPS"
+  }
+}
+
+// Producto con estructura completamente diferente
+{
+  "_id": ObjectId("..."),
+  "titulo": "Libro MongoDB",
+  "autor": "John Doe",
+  "precio": 34.99,
+  "paginas": 450,
+  "isbn": "978-1234567890"
+}</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Buenas prácticas con esquemas flexibles:</strong>
+                    <ul>
+                        <li><strong>Mantén consistencia:</strong> Aunque MongoDB no impone un esquema, es buena práctica mantener documentos similares con estructura similar.</li>
+                        <li><strong>Valida en tu aplicación:</strong> Usa validación de esquemas a nivel de aplicación (con Mongoose en Node.js, por ejemplo).</li>
+                        <li><strong>Documenta tu esquema:</strong> Aunque no sea obligatorio, documenta qué campos se esperan en cada colección.</li>
+                        <li><strong>Usa Schema Validation:</strong> MongoDB permite definir reglas de validación opcionales para las colecciones.</li>
+                    </ul>
+                </div>
+
+                <h3>Validación de Esquemas (Schema Validation)</h3>
+                <p>Desde MongoDB 3.2, puedes definir reglas de validación para tus colecciones usando <strong>JSON Schema</strong>.</p>
+
+                <div class="code-block"><pre>// Crear colección con validación de esquema
+db.createCollection("usuarios", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["nombre", "email", "edad"],
+      properties: {
+        nombre: {
+          bsonType: "string",
+          description: "El nombre es obligatorio y debe ser una cadena"
+        },
+        email: {
+          bsonType: "string",
+          pattern: "^.+@.+$",
+          description: "Email obligatorio con formato válido"
+        },
+        edad: {
+          bsonType: "int",
+          minimum: 18,
+          maximum: 120,
+          description: "Edad entre 18 y 120"
+        },
+        telefono: {
+          bsonType: "string",
+          description: "Teléfono opcional"
+        }
+      }
+    }
+  },
+  validationAction: "error",  // "error" rechaza, "warn" solo avisa
+  validationLevel: "strict"    // "strict" valida todos, "moderate" solo actualizaciones válidas
+})
+
+// Intentar insertar documento inválido (fallará)
+db.usuarios.insertOne({ nombre: "Ana", edad: 15 })  // Error: edad < 18
+
+// Insertar documento válido (funciona)
+db.usuarios.insertOne({
+  nombre: "Carlos Pérez",
+  email: "carlos@example.com",
+  edad: 28,
+  telefono: "+34 600 123 456"
+})</pre></div>
+
+                <h3>Colecciones Capped</h3>
+                <p>Las <strong>colecciones capped</strong> son colecciones de tamaño fijo que sobrescriben automáticamente los documentos más antiguos cuando se llena el espacio.</p>
+
+                <div class="code-block"><pre>// Crear colección capped para logs
+db.createCollection("activityLogs", {
+  capped: true,
+  size: 10485760,     // 10 MB
+  max: 10000          // Máximo 10,000 documentos
+})
+
+// Los nuevos documentos sobrescriben los más antiguos automáticamente
+db.activityLogs.insertOne({
+  usuario: "juan",
+  accion: "login",
+  fecha: new Date()
+})</pre></div>
+
+                <p><strong>Usos de colecciones capped:</strong></p>
+                <ul>
+                    <li><strong>Logs y auditoría:</strong> Mantén solo los logs recientes sin preocuparte por el espacio.</li>
+                    <li><strong>Caché de datos:</strong> Almacena datos temporales que se renuevan constantemente.</li>
+                    <li><strong>Streams de eventos:</strong> Procesamiento de eventos en tiempo real (con tailable cursors).</li>
+                </ul>
+
+                <div class="info-box">
+                    <strong>💡 Organización recomendada:</strong>
+                    <p>Una buena práctica es organizar tus datos en bases de datos según el contexto de la aplicación:</p>
+                    <ul>
+                        <li><strong>Entorno:</strong> "miApp_development", "miApp_production", "miApp_test"</li>
+                        <li><strong>Por módulo:</strong> "auth" (autenticación), "ecommerce" (tienda), "analytics" (análisis)</li>
+                        <li><strong>Por cliente:</strong> Si tienes aplicación multi-tenant, cada cliente puede tener su propia base de datos</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content-section" id="ventajas">
+                <h2><i class="fas fa-trophy"></i> Ventajas y Características de MongoDB</h2>
+                <p>MongoDB ofrece numerosas ventajas que lo han convertido en una de las bases de datos más populares del mundo. Veamos en detalle por qué tantas empresas lo eligen.</p>
+
+                <h3>1. Escalabilidad Horizontal (Sharding)</h3>
+                <p>Una de las ventajas más importantes de MongoDB es su capacidad de <strong>escalar horizontalmente</strong> de forma nativa.</p>
+
+                <p><strong>¿Qué es el sharding?</strong> Es la distribución automática de datos a través de múltiples servidores. En lugar de comprar un servidor más potente (escalado vertical), añades más servidores (escalado horizontal).</p>
+
+                <div class="code-block"><pre>// Ejemplo conceptual de sharding:
+
+// En lugar de un servidor con 1TB:
+Servidor Único: [Todo el tráfico y todos los datos]
+
+// MongoDB distribuye automáticamente:
+Shard 1: [Usuarios A-H] → 250GB
+Shard 2: [Usuarios I-P] → 250GB
+Shard 3: [Usuarios Q-Z] → 250GB
+Shard 4: [Datos históricos] → 250GB
+
+// Ventajas:
+✓ Cada servidor maneja menos carga
+✓ Redundancia y alta disponibilidad
+✓ Puedes añadir shards sin downtime
+✓ Más económico que un servidor gigante</pre></div>
+
+                <p><strong>Ventajas del sharding en MongoDB:</strong></p>
+                <ul>
+                    <li><strong>Automático:</strong> MongoDB maneja la distribución de datos sin intervención manual</li>
+                    <li><strong>Transparente:</strong> Tu aplicación no necesita saber que los datos están distribuidos</li>
+                    <li><strong>Elástico:</strong> Añade o quita shards según tu carga lo requiera</li>
+                    <li><strong>Balanceo:</strong> MongoDB redistribuye datos automáticamente para mantener balance</li>
+                </ul>
+
+                <h3>2. Replicación y Alta Disponibilidad</h3>
+                <p>MongoDB usa <strong>Replica Sets</strong> para garantizar que tus datos estén siempre disponibles, incluso si un servidor falla.</p>
+
+                <div class="code-block"><pre>// Replica Set típico:
+
+┌─────────────┐
+│   Primary   │ ← Servidor principal (recibe escrituras)
+└──────┬──────┘
+       │ Replica datos automáticamente
+       ├──────────────┬──────────────┐
+       ▼              ▼              ▼
+┌────────────┐ ┌────────────┐ ┌────────────┐
+│ Secondary  │ │ Secondary  │ │ Secondary  │
+└────────────┘ └────────────┘ └────────────┘
+
+// Si el Primary falla:
+// 1. Los Secondary detectan la falla (heartbeat)
+// 2. Votan y eligen un nuevo Primary automáticamente
+// 3. La aplicación se reconecta automáticamente
+// Total downtime: ~10-30 segundos</pre></div>
+
+                <p><strong>Ventajas de Replica Sets:</strong></p>
+                <ul>
+                    <li><strong>Failover automático:</strong> Si el servidor principal falla, otro toma su lugar en segundos</li>
+                    <li><strong>Redundancia de datos:</strong> Tus datos están en múltiples servidores simultáneamente</li>
+                    <li><strong>Read scaling:</strong> Puedes distribuir lecturas entre los secundarios</li>
+                    <li><strong>Backups sin downtime:</strong> Haz backups desde un secundario sin afectar el primario</li>
+                </ul>
+
+                <h3>3. Rendimiento y Velocidad</h3>
+                <p>MongoDB está optimizado para operaciones de lectura y escritura de alto rendimiento.</p>
+
+                <p><strong>Optimizaciones de rendimiento:</strong></p>
+                <ul>
+                    <li><strong>Índices potentes:</strong> Soporta índices compuestos, geoespaciales, texto completo, TTL, etc.</li>
+                    <li><strong>Documentos embebidos:</strong> Reduce JOINs costosos al tener datos relacionados juntos</li>
+                    <li><strong>Memory-mapped files:</strong> Usa la memoria del sistema eficientemente</li>
+                    <li><strong>WiredTiger:</strong> Motor de almacenamiento con compresión y concurrencia a nivel de documento</li>
+                    <li><strong>Aggregation Pipeline:</strong> Procesamiento de datos potente directamente en el servidor</li>
+                </ul>
+
+                <div class="code-block"><pre>// Comparación de rendimiento (ejemplo conceptual):
+
+// SQL con JOIN (3 consultas a disco):
+SELECT u.nombre, p.titulo, c.texto
+FROM usuarios u
+JOIN posts p ON u.id = p.user_id
+JOIN comentarios c ON p.id = c.post_id
+WHERE u.id = 123
+
+// MongoDB con embedding (1 consulta):
+db.usuarios.findOne({ _id: 123 })
+// Devuelve todo: usuario + posts + comentarios embebidos
+// Resultado: ~70% más rápido en casos típicos</pre></div>
+
+                <h3>4. Flexibilidad de Esquema</h3>
+                <p>El <strong>esquema dinámico</strong> permite iterar rápidamente sin migraciones de base de datos complejas.</p>
+
+                <p><strong>Escenario real:</strong></p>
+                <div class="code-block"><pre>// Semana 1: Lanzas con modelo simple
+{
+  "nombre": "Producto A",
+  "precio": 29.99
+}
+
+// Semana 3: Necesitas añadir categorías (sin migración!)
+{
+  "nombre": "Producto B",
+  "precio": 39.99,
+  "categoria": "Electrónica"  // Nuevo campo
+}
+
+// Mes 2: Algunos productos necesitan especificaciones
+{
+  "nombre": "Producto C",
+  "precio": 299.99,
+  "categoria": "Electrónica",
+  "specs": {                     // Nuevo objeto embebido
+    "peso": "2kg",
+    "dimensiones": "30x20x10cm"
+  }
+}
+
+// En SQL necesitarías:
+// ALTER TABLE productos ADD COLUMN categoria VARCHAR(50);
+// ALTER TABLE productos ADD COLUMN peso VARCHAR(20);
+// ... migraciones complejas, posible downtime</pre></div>
+
+                <h3>5. Facilidad de Uso para Desarrolladores</h3>
+                <p>MongoDB está diseñado pensando en la experiencia del desarrollador.</p>
+
+                <p><strong>Ventajas para desarrolladores:</strong></p>
+                <ul>
+                    <li><strong>Sintaxis JSON:</strong> Si sabes JavaScript/JSON, ya sabes consultar MongoDB</li>
+                    <li><strong>ODMs potentes:</strong> Mongoose (Node.js), PyMongo (Python), etc. facilitan el trabajo</li>
+                    <li><strong>Atlas (Cloud):</strong> Base de datos como servicio, lista en minutos</li>
+                    <li><strong>Drivers oficiales:</strong> Para todos los lenguajes populares (Node.js, Python, Java, C#, Go, etc.)</li>
+                    <li><strong>MongoDB Compass:</strong> GUI gratuita para visualizar y explorar datos</li>
+                </ul>
+
+                <div class="code-block"><pre>// Comparación de sintaxis (insertar usuario):
+
+// SQL:
+INSERT INTO usuarios (nombre, email, fecha_registro)
+VALUES ('Ana García', 'ana@example.com', '2024-01-15');
+
+// MongoDB (mucho más natural para desarrolladores):
+db.usuarios.insertOne({
+  nombre: "Ana García",
+  email: "ana@example.com",
+  fechaRegistro: new Date("2024-01-15")
+})</pre></div>
+
+                <h3>6. Características Avanzadas</h3>
+                <p>MongoDB incluye funcionalidades avanzadas que normalmente requieren herramientas externas en otros sistemas.</p>
+
+                <ul>
+                    <li><strong>Aggregation Framework:</strong> Pipeline potente para análisis de datos, similar a SQL GROUP BY pero mucho más flexible</li>
+                    <li><strong>Búsqueda de texto completo:</strong> Índices de texto con soporte para múltiples idiomas</li>
+                    <li><strong>Índices geoespaciales:</strong> Consultas de proximidad ("encuentra cafeterías a menos de 5km")</li>
+                    <li><strong>GridFS:</strong> Almacena archivos grandes (>16MB) divididos automáticamente en chunks</li>
+                    <li><strong>Change Streams:</strong> Escucha cambios en tiempo real (ideal para aplicaciones reactivas)</li>
+                    <li><strong>Transacciones ACID:</strong> Desde v4.0, soporta transacciones multi-documento</li>
+                    <li><strong>Time Series Collections:</strong> Optimizado para datos de series temporales (IoT, métricas)</li>
+                </ul>
+
+                <div class="info-box">
+                    <strong>💡 MongoDB Atlas (Cloud):</strong>
+                    <p>MongoDB ofrece un servicio cloud totalmente gestionado que elimina la complejidad de administración:</p>
+                    <ul>
+                        <li><strong>Backups automáticos:</strong> Snapshots continuos con recuperación point-in-time</li>
+                        <li><strong>Monitoreo:</strong> Dashboards en tiempo real de rendimiento y uso</li>
+                        <li><strong>Alertas:</strong> Notificaciones automáticas de problemas</li>
+                        <li><strong>Auto-scaling:</strong> Escala recursos automáticamente según demanda</li>
+                        <li><strong>Multi-cloud:</strong> Despliega en AWS, Azure o Google Cloud</li>
+                        <li><strong>Tier gratuito:</strong> 512MB gratis para aprender y prototipos</li>
+                    </ul>
+                </div>
+
+                <h3>7. Ecosistema y Comunidad</h3>
+                <p>MongoDB tiene un ecosistema maduro y una comunidad activa:</p>
+                <ul>
+                    <li><strong>Documentación excelente:</strong> Guías, tutoriales, referencia API completa</li>
+                    <li><strong>MongoDB University:</strong> Cursos gratuitos con certificaciones</li>
+                    <li><strong>Comunidad activa:</strong> Stack Overflow, foros, meetups locales</li>
+                    <li><strong>Empresas grandes lo usan:</strong> Adobe, EA, eBay, Forbes, Cisco, SAP, etc.</li>
+                    <li><strong>Herramientas de terceros:</strong> ORMs, herramientas de migración, GUIs, etc.</li>
+                </ul>
+            </div>
+
+# Conectar a base de datos
+use miBaseDatos
+
+# Ver bases de datos
+show dbs
+
+
+            <div class="content-section" id="casos">
+                <h2><i class="fas fa-lightbulb"></i> Casos de Uso Ideales para MongoDB</h2>
+                <p>MongoDB no es una solución universal, pero brilla en ciertos escenarios. Veamos cuándo es la mejor elección y ejemplos del mundo real.</p>
+
+                <h3>1. Aplicaciones Web y Móviles Modernas</h3>
+                <p><strong>Por qué MongoDB:</strong> Las aplicaciones web modernas trabajan con JSON de forma nativa. MongoDB almacena datos en BSON (Binary JSON), eliminando la fricción de convertir entre objetos y tablas.</p>
+
+                <div class="code-block"><pre>// Frontend (React/Vue/Angular) envía JSON:
+const usuario = {
+  nombre: "Laura Sánchez",
+  email: "laura@example.com",
+  preferencias: {
+    tema: "oscuro",
+    idioma: "es",
+    notificaciones: ["email", "push"]
+  }
+}
+
+// Backend (Node.js) guarda directamente sin transformación:
+await db.usuarios.insertOne(usuario)
+
+// Ventaja: Zero impedance mismatch
+// No necesitas ORM complejo ni mapear objetos ↔ tablas</pre></div>
+
+                <p><strong>Ejemplos reales:</strong></p>
+                <ul>
+                    <li><strong>Perfiles de usuario:</strong> Almacena datos de usuario con preferencias, configuraciones y actividad</li>
+                    <li><strong>Sesiones:</strong> Gestión de sesiones de usuario con datos variables</li>
+                    <li><strong>Carritos de compra:</strong> E-commerce con productos de estructura variable</li>
+                    <li><strong>Feeds sociales:</strong> Posts, comentarios, likes, compartidos embebidos</li>
+                </ul>
+
+                <h3>2. Catálogos de Productos (E-commerce)</h3>
+                <p><strong>Por qué MongoDB:</strong> En e-commerce, los productos tienen atributos completamente diferentes. Un libro tiene ISBN y páginas, un smartphone tiene pantalla y batería, una camiseta tiene talla y color.</p>
+
+                <div class="code-block"><pre>// Libro
+{
+  "_id": ObjectId("..."),
+  "tipo": "libro",
+  "titulo": "Clean Code",
+  "autor": "Robert C. Martin",
+  "isbn": "978-0132350884",
+  "paginas": 464,
+  "precio": 34.99
+}
+
+// Smartphone
+{
+  "_id": ObjectId("..."),
+  "tipo": "electronica",
+  "nombre": "iPhone 15 Pro",
+  "marca": "Apple",
+  "pantalla": "6.1 pulgadas OLED",
+  "bateria": "3274 mAh",
+  "camara": "48MP + 12MP + 12MP",
+  "precio": 1199.99
+}
+
+// En SQL necesitarías:
+// - Tabla productos con columnas comunes
+// - Tabla atributos con clave-valor
+// - O una tabla por tipo de producto (pesadilla de mantenimiento)</pre></div>
+
+                <h3>3. Gestión de Contenidos (CMS) y Análisis</h3>
+                <p><strong>Por qué MongoDB:</strong> Flexibilidad para diferentes tipos de contenido y capacidad de análisis con Aggregation Framework.</p>
+
+                <div class="code-block"><pre>// Artículo con estructura flexible
+{
+  "titulo": "Introducción a MongoDB",
+  "contenido": [
+    { "tipo": "texto", "valor": "MongoDB es..." },
+    { "tipo": "imagen", "url": "/img/logo.png" },
+    { "tipo": "codigo", "lenguaje": "js", "valor": "db.find()" }
+  ],
+  "tags": ["mongodb", "nosql"],
+  "estadisticas": {
+    "visitas": 1523,
+    "likes": 89
+  }
+}</pre></div>
+
+                <p><strong>Empresas que usan MongoDB:</strong> Forbes, The Guardian, eBay, Cisco, Adobe</p>
+
+                <div class="warning-box">
+                    <strong>⚠️ Cuándo NO usar MongoDB:</strong>
+                    <ul>
+                        <li><strong>Transacciones complejas multi-tabla:</strong> Aplicaciones bancarias (mejor PostgreSQL/MySQL)</li>
+                        <li><strong>Relaciones muy complejas:</strong> Redes sociales con grafos (mejor Neo4j)</li>
+                        <li><strong>Reportes SQL complejos:</strong> Si tu equipo depende de SQL estándar</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="instalacion">
+                <h2><i class="fas fa-download"></i> Instalación y Configuración</h2>
+                <p>Existen varias formas de empezar con MongoDB. Veamos las opciones más comunes.</p>
+
+                <h3>Opción 1: MongoDB Atlas (Cloud - Recomendado)</h3>
+                <p><strong>MongoDB Atlas</strong> es la forma más rápida de empezar. Servicio cloud totalmente gestionado con tier gratuito de 512MB.</p>
+
+                <div class="code-block"><pre>1. Ir a https://www.mongodb.com/cloud/atlas/register
+2. Crear cuenta gratuita
+3. Crear cluster (M0 Free Tier)
+4. Crear usuario de base de datos
+5. Añadir IP a whitelist (0.0.0.0/0 para desarrollo)
+6. Obtener connection string:
+   mongodb+srv://usuario:password@cluster0.xxxxx.mongodb.net/</pre></div>
+
+                <h3>Opción 2: Instalación Local</h3>
+                
+                <h4>Windows</h4>
+                <div class="code-block"><pre># 1. Descargar desde:
+https://www.mongodb.com/try/download/community
+
+# 2. Ejecutar instalador MSI
+
+# 3. Crear carpeta de datos:
+mkdir C:\data\db
+
+# 4. Iniciar servidor:
+mongod --dbpath C:\data\db
+
+# 5. Abrir MongoDB Shell:
+mongosh</pre></div>
+
+                <h4>macOS</h4>
+                <div class="code-block"><pre># Instalar con Homebrew:
+brew tap mongodb/brew
+brew install mongodb-community@7.0
+
+# Iniciar servicio:
+brew services start mongodb-community@7.0
+
+# Abrir shell:
+mongosh</pre></div>
+
+                <h4>Linux (Ubuntu/Debian)</h4>
+                <div class="code-block"><pre># Importar clave GPG:
+wget -qO - https://www.mongodb.org/static/pgp/server-7.0.asc | sudo apt-key add -
+
+# Crear archivo de sources:
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -sc)/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+
+# Actualizar e instalar:
+sudo apt-get update
+sudo apt-get install -y mongodb-org
+
+# Iniciar servicio:
+sudo systemctl start mongod
+sudo systemctl enable mongod
+
+# Abrir shell:
+mongosh</pre></div>
+
+                <h3>Verificar Instalación</h3>
+                <div class="code-block"><pre># Abrir mongosh:
+mongosh
+
+# Probar comandos básicos:
+show dbs
+use testDB
+db.test.insertOne({ mensaje: "Hola MongoDB" })
+db.test.find()
+
+# Si ves los datos, ¡funciona!</pre></div>
+
+                <h3>MongoDB Compass (GUI)</h3>
+                <p><strong>MongoDB Compass</strong> es la interfaz gráfica oficial. Facilita explorar datos sin comandos.</p>
+
+                <div class="code-block"><pre># Descargar desde:
+https://www.mongodb.com/try/download/compass
+
+# Conexión local:
+mongodb://localhost:27017
+
+# Conexión Atlas:
+mongodb+srv://usuario:password@cluster0.xxxxx.mongodb.net/</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Configuración recomendada:</strong>
+                    <ul>
+                        <li><strong>Para aprender:</strong> MongoDB Atlas (gratis, sin instalación)</li>
+                        <li><strong>Para desarrollo local:</strong> MongoDB Community + Compass</li>
+                        <li><strong>Para producción:</strong> Atlas (gestionado) o Replica Set</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Seguridad básica:</strong>
+                    <ul>
+                        <li>Nunca dejes MongoDB sin autenticación en producción</li>
+                        <li>Habilita autenticación: <code>mongod --auth</code></li>
+                        <li>En Atlas: whitelist solo IPs necesarias</li>
+                        <li>Usa SSL/TLS para conexiones remotas</li>
+                    </ul>
+                </div>
+
+                <h3>Primeros Pasos</h3>
+                <div class="code-block"><pre># Conectar
+mongosh
+
+# Crear base de datos y colección
+use miPrimeraDB
+db.usuarios.insertMany([
+  { nombre: "Ana García", edad: 28, ciudad: "Madrid" },
+  { nombre: "Carlos López", edad: 35, ciudad: "Barcelona" }
+])
+
+# Consultar
+db.usuarios.find()
+
+# Consultar con filtro
+db.usuarios.find({ ciudad: "Madrid" })
+
+# Actualizar
+db.usuarios.updateOne(
+  { nombre: "Ana García" },
+  { $set: { edad: 29 } }
+)
+
+# Eliminar
+db.usuarios.deleteOne({ nombre: "Carlos López" })
+
+# Crear índice
+db.usuarios.createIndex({ nombre: 1 })
+
+# Ver colecciones
+show collections</pre></div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen Node.js - Wiki 2º DAW</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-md) 0;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .command-table th {
+            background-color: var(--node-color);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .command-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .command-table tr:last-child td {
+            border-bottom: none;
+        }
+        .command-table tr:hover {
+            background-color: rgba(104, 160, 99, 0.05);
+        }
+        .command-table code {
+            background-color: rgba(104, 160, 99, 0.15);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+        </div>
+    </nav>
+
+    <div class="topics-page">
+        <div class="topics-header">
+            <div class="topics-icon" style="color: var(--node-color);">
+                <i class="fab fa-node-js"></i>
+            </div>
+            <h1 class="topics-title">Resumen Node.js</h1>
+            <p class="topics-subtitle">Comandos NPM y módulos esenciales</p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-terminal"></i> Comandos NPM/Node</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Parámetros/Flags</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>npm init</code></td>
+                        <td><code>-y</code> (salta preguntas)</td>
+                        <td>Crea package.json</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm install</code></td>
+                        <td><code>paquete</code> o vacío</td>
+                        <td>Instala paquete o todas las dependencias</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm install</code></td>
+                        <td><code>paquete --save-dev</code> / <code>-D</code></td>
+                        <td>Instala como dependencia de desarrollo</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm install</code></td>
+                        <td><code>paquete -g</code></td>
+                        <td>Instala paquete globalmente</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm uninstall</code></td>
+                        <td><code>paquete</code></td>
+                        <td>Desinstala un paquete</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm update</code></td>
+                        <td><code>paquete</code> o vacío</td>
+                        <td>Actualiza paquete(s)</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm run</code></td>
+                        <td><code>script</code></td>
+                        <td>Ejecuta script definido en package.json</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm start</code></td>
+                        <td>-</td>
+                        <td>Ejecuta script "start"</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm test</code></td>
+                        <td>-</td>
+                        <td>Ejecuta script "test"</td>
+                    </tr>
+                    <tr>
+                        <td><code>node</code></td>
+                        <td><code>archivo.js</code></td>
+                        <td>Ejecuta archivo JavaScript</td>
+                    </tr>
+                    <tr>
+                        <td><code>node -v</code></td>
+                        <td>-</td>
+                        <td>Muestra versión de Node.js</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm list</code></td>
+                        <td><code>-g</code> (globales)</td>
+                        <td>Lista paquetes instalados</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-cube"></i> Módulos Core de Node.js</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Módulo</th>
+                        <th>Importación</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>fs</code></td>
+                        <td><code>const fs = require('fs')</code></td>
+                        <td>Manejo de archivos (File System)</td>
+                    </tr>
+                    <tr>
+                        <td><code>path</code></td>
+                        <td><code>const path = require('path')</code></td>
+                        <td>Manipulación de rutas de archivos</td>
+                    </tr>
+                    <tr>
+                        <td><code>http</code></td>
+                        <td><code>const http = require('http')</code></td>
+                        <td>Crear servidores HTTP</td>
+                    </tr>
+                    <tr>
+                        <td><code>https</code></td>
+                        <td><code>const https = require('https')</code></td>
+                        <td>Crear servidores HTTPS</td>
+                    </tr>
+                    <tr>
+                        <td><code>events</code></td>
+                        <td><code>const EventEmitter = require('events')</code></td>
+                        <td>Sistema de eventos</td>
+                    </tr>
+                    <tr>
+                        <td><code>os</code></td>
+                        <td><code>const os = require('os')</code></td>
+                        <td>Información del sistema operativo</td>
+                    </tr>
+                    <tr>
+                        <td><code>crypto</code></td>
+                        <td><code>const crypto = require('crypto')</code></td>
+                        <td>Funciones criptográficas</td>
+                    </tr>
+                    <tr>
+                        <td><code>url</code></td>
+                        <td><code>const url = require('url')</code></td>
+                        <td>Parseo y manipulación de URLs</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-file-code"></i> Métodos del módulo FS</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Parámetros</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>fs.readFile()</code></td>
+                        <td><code>path, encoding, callback</code></td>
+                        <td>Lee archivo de forma asíncrona</td>
+                    </tr>
+                    <tr>
+                        <td><code>fs.readFileSync()</code></td>
+                        <td><code>path, encoding</code></td>
+                        <td>Lee archivo de forma síncrona</td>
+                    </tr>
+                    <tr>
+                        <td><code>fs.writeFile()</code></td>
+                        <td><code>path, data, callback</code></td>
+                        <td>Escribe archivo (sobrescribe)</td>
+                    </tr>
+                    <tr>
+                        <td><code>fs.appendFile()</code></td>
+                        <td><code>path, data, callback</code></td>
+                        <td>Añade contenido al final del archivo</td>
+                    </tr>
+                    <tr>
+                        <td><code>fs.unlink()</code></td>
+                        <td><code>path, callback</code></td>
+                        <td>Elimina archivo</td>
+                    </tr>
+                    <tr>
+                        <td><code>fs.mkdir()</code></td>
+                        <td><code>path, callback</code></td>
+                        <td>Crea directorio</td>
+                    </tr>
+                    <tr>
+                        <td><code>fs.readdir()</code></td>
+                        <td><code>path, callback</code></td>
+                        <td>Lee contenido de directorio</td>
+                    </tr>
+                    <tr>
+                        <td><code>fs.existsSync()</code></td>
+                        <td><code>path</code></td>
+                        <td>Verifica si existe archivo/directorio</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-clock"></i> Async/Await & Promises</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Promise</code></td>
+                        <td><code>new Promise((resolve, reject) => {})</code></td>
+                        <td>Objeto para operaciones asíncronas</td>
+                    </tr>
+                    <tr>
+                        <td><code>.then()</code></td>
+                        <td><code>promise.then(data => {})</code></td>
+                        <td>Ejecuta cuando Promise se resuelve</td>
+                    </tr>
+                    <tr>
+                        <td><code>.catch()</code></td>
+                        <td><code>promise.catch(err => {})</code></td>
+                        <td>Maneja errores de Promise</td>
+                    </tr>
+                    <tr>
+                        <td><code>async</code></td>
+                        <td><code>async function nombre() {}</code></td>
+                        <td>Declara función asíncrona</td>
+                    </tr>
+                    <tr>
+                        <td><code>await</code></td>
+                        <td><code>const data = await promise</code></td>
+                        <td>Espera resolución de Promise</td>
+                    </tr>
+                    <tr>
+                        <td><code>Promise.all()</code></td>
+                        <td><code>Promise.all([p1, p2])</code></td>
+                        <td>Espera múltiples Promises en paralelo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Wiki 2º DAW - Tu repositorio de conocimiento en desarrollo web</p>
+    </footer>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

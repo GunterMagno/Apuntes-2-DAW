@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Introducción a React</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-react"></i> Introducción</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#que-es" class="active">¿Qué es React?</a></li>
+                <li><a href="#jsx">JSX</a></li>
+                <li><a href="#create-react-app">Create React App</a></li>
+                <li><a href="#estructura">Estructura</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color:var(--react-color)"><i class="fab fa-react"></i></div>
+                <h1>1. Introducción a React</h1>
+                <p class="detail-subtitle">Biblioteca para interfaces de usuario</p>
+            </div>
+            <div class="content-section" id="que-es">
+                <h2><i class="fas fa-question-circle"></i> ¿Qué es React?</h2>
+                <p><strong>React</strong> es una biblioteca de JavaScript para construir interfaces de usuario, desarrollada y mantenida por Facebook (Meta). Es la biblioteca frontend más popular del mundo.</p>
+
+                <div class="info-box">
+                    <p><strong>Características principales:</strong></p>
+                    <ul>
+                        <li><strong>Basada en componentes:</strong> La UI se divide en piezas reutilizables e independientes</li>
+                        <li><strong>Virtual DOM:</strong> Actualizaciones eficientes del DOM real</li>
+                        <li><strong>Declarativa:</strong> Describes CÓMO debe verse la UI, React se encarga del CÓMO</li>
+                        <li><strong>Unidireccional:</strong> Los datos fluyen en una sola dirección (top-down)</li>
+                        <li><strong>Learn once, write anywhere:</strong> React Native para móviles, React VR...</li>
+                    </ul>
+                </div>
+
+                <h3>¿Por qué React?</h3>
+                <ul>
+                    <li><strong>Popularidad:</strong> Amplia comunidad, muchos recursos y librerías</li>
+                    <li><strong>Rendimiento:</strong> Virtual DOM optimiza actualizaciones</li>
+                    <li><strong>Reutilización:</strong> Componentes se pueden usar en múltiples lugares</li>
+                    <li><strong>Ecosistema:</strong> React Router, Redux, Next.js, Gatsby...</li>
+                    <li><strong>Demanda laboral:</strong> Una de las habilidades más solicitadas</li>
+                </ul>
+
+                <h3>React vs otros frameworks:</h3>
+                <div class="code-block"><pre>React:     Biblioteca (solo la vista), muy flexible
+Vue:       Framework progresivo, más fácil de aprender
+Angular:   Framework completo, más opinado y robusto
+Svelte:    Compilador, menos código, sin virtual DOM</pre></div>
+            </div>
+
+            <div class="content-section" id="jsx">
+                <h2><i class="fas fa-code"></i> JSX - JavaScript XML</h2>
+                <p><strong>JSX</strong> es una extensión de sintaxis que permite escribir HTML dentro de JavaScript. Parece HTML pero es JavaScript.</p>
+
+                <h3>Sintaxis básica:</h3>
+                <div class="code-block"><pre>// JSX básico
+const element = &lt;h1&gt;Hola, mundo!&lt;/h1&gt;;
+
+// Con variables (expresiones entre {})
+const name = 'Ana García';
+const greeting = &lt;h1&gt;Hola, {name}!&lt;/h1&gt;;
+
+// Con expresiones JavaScript
+const edad = 25;
+const mayorEdad = &lt;p&gt;{edad &gt;= 18 ? 'Mayor de edad' : 'Menor de edad'}&lt;/p&gt;;
+
+// Con funciones
+const obtenerSaludo = (nombre) =&gt; `Bienvenido, ${nombre}`;
+const mensaje = &lt;h2&gt;{obtenerSaludo('Luis')}&lt;/h2&gt;;</pre></div>
+
+                <h3>Reglas de JSX:</h3>
+                <div class="warning-box">
+                    <p><strong>Importante:</strong></p>
+                    <ul>
+                        <li>JSX debe tener un solo elemento raíz (usar Fragment &lt;&gt; si necesario)</li>
+                        <li>Usa <code>className</code> en lugar de <code>class</code></li>
+                        <li>Usa <code>htmlFor</code> en lugar de <code>for</code></li>
+                        <li>Los tags deben cerrarse: <code>&lt;img /&gt;</code>, <code>&lt;br /&gt;</code></li>
+                        <li>camelCase para atributos: <code>onClick</code>, <code>onChange</code></li>
+                    </ul>
+                </div>
+
+                <h3>Ejemplos prácticos:</h3>
+                <div class="code-block"><pre>// ✓ Correcto: un solo elemento raíz
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Título&lt;/h1&gt;
+      &lt;p&gt;Párrafo&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+// ✓ Correcto: usando Fragment
+function App() {
+  return (
+    &lt;&gt;
+      &lt;h1&gt;Título&lt;/h1&gt;
+      &lt;p&gt;Párrafo&lt;/p&gt;
+    &lt;/&gt;
+  );
+}
+
+// ✗ Incorrecto: múltiples elementos raíz
+function App() {
+  return (
+    &lt;h1&gt;Título&lt;/h1&gt;
+    &lt;p&gt;Párrafo&lt;/p&gt;  // ❌ Error!
+  );
+}
+
+// Atributos en JSX
+function Perfil() {
+  return (
+    &lt;div className="perfil"&gt;  {/* className, no class */}
+      &lt;img src="/avatar.jpg" alt="Avatar" /&gt;  {/* Cerrar tag */}
+      &lt;label htmlFor="nombre"&gt;Nombre:&lt;/label&gt;  {/* htmlFor, no for */}
+      &lt;input id="nombre" type="text" /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Estilos inline (objeto JavaScript)
+const estilos = {
+  color: 'blue',
+  fontSize: '20px',  // camelCase
+  backgroundColor: '#f0f0f0'
+};
+
+const elemento = &lt;div style={estilos}&gt;Texto azul&lt;/div&gt;;
+
+// O directamente
+const elemento2 = &lt;div style={{ color: 'red', padding: '10px' }}&gt;Texto rojo&lt;/div&gt;;</pre></div>
+
+                <h3>Renderizar listas:</h3>
+                <div class="code-block"><pre>const usuarios = ['Ana', 'Luis', 'María'];
+
+function ListaUsuarios() {
+  return (
+    &lt;ul&gt;
+      {usuarios.map((usuario, index) =&gt; (
+        &lt;li key={index}&gt;{usuario}&lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="create-react-app">
+                <h2><i class="fas fa-rocket"></i> Create React App</h2>
+                <p><strong>Create React App (CRA)</strong> es la herramienta oficial para crear proyectos React sin configuración.</p>
+
+                <h3>Crear un proyecto:</h3>
+                <div class="code-block"><pre># Usando npx (recomendado)
+npx create-react-app mi-app
+
+# O con npm
+npm create-react-app mi-app
+
+# O con yarn
+yarn create react-app mi-app
+
+# Con TypeScript
+npx create-react-app mi-app --template typescript</pre></div>
+
+                <h3>Iniciar el servidor de desarrollo:</h3>
+                <div class="code-block"><pre>cd mi-app
+npm start
+
+# Se abre automáticamente en http://localhost:3000
+# Con hot-reload: los cambios se reflejan automáticamente</pre></div>
+
+                <h3>Comandos disponibles:</h3>
+                <div class="code-block"><pre>npm start    # Inicia servidor de desarrollo
+npm test     # Ejecuta tests
+npm run build   # Crea build de producción optimizado
+npm run eject   # Expone configuración (irreversible!)</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ No hagas eject</strong> a menos que realmente necesites personalizar webpack. Es irreversible.
+                </div>
+            </div>
+
+            <div class="content-section" id="estructura">
+                <h2><i class="fas fa-folder-tree"></i> Estructura del Proyecto</h2>
+
+                <h3>Estructura creada por CRA:</h3>
+                <div class="code-block"><pre>mi-app/
+├── node_modules/       # Dependencias (no tocar)
+├── public/             # Archivos estáticos
+│   ├── index.html      # HTML principal
+│   ├── favicon.ico
+│   └── manifest.json
+├── src/                # Código fuente
+│   ├── App.js          # Componente principal
+│   ├── App.css         # Estilos de App
+│   ├── index.js        # Punto de entrada
+│   ├── index.css       # Estilos globales
+│   └── logo.svg
+├── .gitignore
+├── package.json        # Dependencias y scripts
+├── package-lock.json
+└── README.md</pre></div>
+
+                <h3>Archivo principal: src/index.js</h3>
+                <div class="code-block"><pre>import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  &lt;React.StrictMode&gt;
+    &lt;App /&gt;
+  &lt;/React.StrictMode&gt;
+);</pre></div>
+
+                <h3>Componente App.js:</h3>
+                <div class="code-block"><pre>import './App.css';
+
+function App() {
+  return (
+    &lt;div className="App"&gt;
+      &lt;h1&gt;Hola React!&lt;/h1&gt;
+      &lt;p&gt;Mi primera aplicación React&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default App;</pre></div>
+
+                <h3>public/index.html:</h3>
+                <div class="code-block"><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+    &lt;title&gt;Mi App React&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="root"&gt;&lt;/div&gt;
+    &lt;!-- React renderiza aquí --&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre></div>
+
+                <h3>Estructura recomendada a medida que creces:</h3>
+                <div class="code-block"><pre>src/
+├── components/         # Componentes reutilizables
+│   ├── Header.js
+│   ├── Footer.js
+│   └── Button.js
+├── pages/              # Páginas/Vistas
+│   ├── Home.js
+│   ├── About.js
+│   └── Contact.js
+├── services/           # Llamadas API
+│   └── api.js
+├── hooks/              # Custom hooks
+│   └── useAuth.js
+├── context/            # Context API
+│   └── AuthContext.js
+├── utils/              # Funciones helpers
+│   └── helpers.js
+├── assets/             # Imágenes, fuentes
+│   └── images/
+├── App.js
+└── index.js</pre></div>
+
+                <h3>Primer componente personalizado:</h3>
+                <div class="code-block"><pre>// src/components/Saludo.js
+function Saludo({ nombre }) {
+  return &lt;h1&gt;Hola, {nombre}!&lt;/h1&gt;;
+}
+
+export default Saludo;
+
+// src/App.js
+import Saludo from './components/Saludo';
+
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;Saludo nombre="Ana" /&gt;
+      &lt;Saludo nombre="Luis" /&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <div class="info-box">
+                    <p><strong>💡 Convenciones de React:</strong></p>
+                    <ul>
+                        <li>Nombres de componentes en PascalCase: <code>MiComponente</code></li>
+                        <li>Nombres de archivos igual que componente: <code>MiComponente.js</code></li>
+                        <li>Un componente por archivo (generalmente)</li>
+                        <li>Carpeta <code>components/</code> en minúsculas</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let cur='';sections.forEach(s=>{if(window.pageYOffset>=s.offsetTop-100)cur=s.id});navLinks.forEach(l=>{l.classList.remove('active');if(l.getAttribute('href')==='#'+cur)l.classList.add('active')});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

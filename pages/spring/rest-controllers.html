@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>REST Controllers - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Spring Boot</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-leaf"></i> REST</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#controller" class="active">@RestController</a></li>
+                <li><a href="#mappings">Mappings</a></li>
+                <li><a href="#request">Request/Response</a></li>
+                <li><a href="#status">Códigos HTTP</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--spring-color);"><i class="fas fa-leaf"></i></div>
+                <h1 class="detail-title">3. REST Controllers</h1>
+                <p class="detail-subtitle">Crear APIs REST con Spring</p>
+            </div>
+            <div class="content-section" id="controller">
+                <h2><i class="fas fa-server"></i> @RestController</h2>
+                <div class="code-block"><pre>@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    
+    @Autowired
+    private UserService userService;
+    
+}</pre></div>
+            </div>
+            <div class="content-section" id="mappings">
+                <h2><i class="fas fa-route"></i> Mappings HTTP</h2>
+                <div class="code-block"><pre>@GetMapping
+public List<User> getAll() {
+    return userService.findAll();
+}
+
+@GetMapping("/{id}")
+public User getById(@PathVariable Long id) {
+    return userService.findById(id);
+}
+
+@PostMapping
+public User create(@RequestBody User user) {
+    return userService.save(user);
+}
+
+@PutMapping("/{id}")
+public User update(@PathVariable Long id, @RequestBody User user) {
+    return userService.update(id, user);
+}
+
+@DeleteMapping("/{id}")
+public void delete(@PathVariable Long id) {
+    userService.delete(id);
+}</pre></div>
+            </div>
+            <div class="content-section" id="request">
+                <h2><i class="fas fa-exchange-alt"></i> Request y Response</h2>
+                <div class="code-block"><pre>// @PathVariable - parámetro de ruta
+@GetMapping("/{id}")
+public User get(@PathVariable Long id) { }
+
+// @RequestParam - query string
+@GetMapping("/search")
+public List<User> search(@RequestParam String name) { }
+
+// @RequestBody - cuerpo JSON
+@PostMapping
+public User create(@RequestBody User user) { }
+
+// ResponseEntity - control completo
+@GetMapping("/{id}")
+public ResponseEntity<User> get(@PathVariable Long id) {
+    User user = userService.findById(id);
+    return ResponseEntity.ok(user);
+}</pre></div>
+            </div>
+            <div class="content-section" id="status">
+                <h2><i class="fas fa-signal"></i> Códigos de Estado HTTP</h2>
+                <div class="code-block"><pre>@PostMapping
+public ResponseEntity<User> create(@RequestBody User user) {
+    User saved = userService.save(user);
+    return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+}
+
+@GetMapping("/{id}")
+public ResponseEntity<User> get(@PathVariable Long id) {
+    return userService.findById(id)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
+}</pre></div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

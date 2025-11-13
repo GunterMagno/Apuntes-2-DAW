@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen Java - Wiki 2º DAW</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-md) 0;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .command-table th {
+            background-color: var(--accent-primary);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .command-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .command-table tr:last-child td {
+            border-bottom: none;
+        }
+        .command-table tr:hover {
+            background-color: rgba(99, 102, 241, 0.08);
+        }
+        .command-table code {
+            background-color: rgba(99, 102, 241, 0.35); color: #e8eaed;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+        </div>
+    </nav>
+
+    <div class="topics-page">
+        <div class="topics-header">
+            <div class="topics-icon" style="color: var(--java-color);">
+                <i class="fab fa-java"></i>
+            </div>
+            <h1 class="topics-title">Resumen Java</h1>
+            <p class="topics-subtitle">Comandos y conceptos esenciales</p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-terminal"></i> Comandos Java (CLI)</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Parámetros</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>javac</code></td>
+                        <td><code>archivo.java</code></td>
+                        <td>Compila archivos .java a bytecode (.class)</td>
+                    </tr>
+                    <tr>
+                        <td><code>java</code></td>
+                        <td><code>NombreClase</code></td>
+                        <td>Ejecuta una clase compilada con método main</td>
+                    </tr>
+                    <tr>
+                        <td><code>java -version</code></td>
+                        <td>-</td>
+                        <td>Muestra la versión de Java instalada</td>
+                    </tr>
+                    <tr>
+                        <td><code>javac -d</code></td>
+                        <td><code>directorio archivo.java</code></td>
+                        <td>Compila y guarda .class en directorio especificado</td>
+                    </tr>
+                    <tr>
+                        <td><code>java -cp</code></td>
+                        <td><code>classpath NombreClase</code></td>
+                        <td>Ejecuta con un classpath específico</td>
+                    </tr>
+                    <tr>
+                        <td><code>jar -cvf</code></td>
+                        <td><code>archivo.jar archivos</code></td>
+                        <td>Crea un archivo JAR</td>
+                    </tr>
+                    <tr>
+                        <td><code>jar -xvf</code></td>
+                        <td><code>archivo.jar</code></td>
+                        <td>Extrae contenido de un JAR</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-code"></i> Conceptos Clave</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Sintaxis/Ejemplo</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Clase</strong></td>
+                        <td><code>public class MiClase { }</code></td>
+                        <td>Plantilla para crear objetos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Método main</strong></td>
+                        <td><code>public static void main(String[] args)</code></td>
+                        <td>Punto de entrada de la aplicación</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Constructor</strong></td>
+                        <td><code>public MiClase() { }</code></td>
+                        <td>Inicializa objetos de la clase</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Herencia</strong></td>
+                        <td><code>class Hijo extends Padre</code></td>
+                        <td>Una clase hereda de otra</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Interface</strong></td>
+                        <td><code>interface MiInterface { }</code></td>
+                        <td>Contrato de métodos a implementar</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ArrayList</strong></td>
+                        <td><code>ArrayList&lt;String&gt; lista = new ArrayList&lt;&gt;();</code></td>
+                        <td>Lista dinámica de elementos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>HashMap</strong></td>
+                        <td><code>HashMap&lt;K, V&gt; map = new HashMap&lt;&gt;();</code></td>
+                        <td>Estructura clave-valor</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Try-Catch</strong></td>
+                        <td><code>try { } catch (Exception e) { }</code></td>
+                        <td>Manejo de excepciones</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stream</strong></td>
+                        <td><code>lista.stream().filter().collect()</code></td>
+                        <td>Procesamiento funcional de colecciones</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-list"></i> Métodos Comunes de Colecciones</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Parámetros</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>.add()</code></td>
+                        <td><code>elemento</code></td>
+                        <td>Añade un elemento a la colección</td>
+                    </tr>
+                    <tr>
+                        <td><code>.remove()</code></td>
+                        <td><code>elemento/índice</code></td>
+                        <td>Elimina un elemento</td>
+                    </tr>
+                    <tr>
+                        <td><code>.get()</code></td>
+                        <td><code>índice</code></td>
+                        <td>Obtiene elemento por índice</td>
+                    </tr>
+                    <tr>
+                        <td><code>.size()</code></td>
+                        <td>-</td>
+                        <td>Retorna el tamaño de la colección</td>
+                    </tr>
+                    <tr>
+                        <td><code>.clear()</code></td>
+                        <td>-</td>
+                        <td>Vacía la colección</td>
+                    </tr>
+                    <tr>
+                        <td><code>.contains()</code></td>
+                        <td><code>elemento</code></td>
+                        <td>Verifica si contiene el elemento</td>
+                    </tr>
+                    <tr>
+                        <td><code>.isEmpty()</code></td>
+                        <td>-</td>
+                        <td>Verifica si está vacía</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Wiki 2º DAW - Tu repositorio de conocimiento en desarrollo web</p>
+    </footer>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

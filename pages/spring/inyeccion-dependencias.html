@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Inyección de Dependencias - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Spring Boot</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-leaf"></i> IoC y DI</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#ioc" class="active">IoC Container</a></li>
+                <li><a href="#autowired">@Autowired</a></li>
+                <li><a href="#anotaciones">Anotaciones de Bean</a></li>
+                <li><a href="#ciclo">Ciclo de Vida</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--spring-color);"><i class="fas fa-leaf"></i></div>
+                <h1 class="detail-title">2. Inyección de Dependencias</h1>
+                <p class="detail-subtitle">IoC y gestión de beans</p>
+            </div>
+            <div class="content-section" id="ioc">
+                <h2><i class="fas fa-box"></i> IoC Container</h2>
+                <p>El <strong>Contenedor IoC</strong> (Inversion of Control) gestiona la creación y el ciclo de vida de los objetos (beans).</p>
+            </div>
+            <div class="content-section" id="autowired">
+                <h2><i class="fas fa-plug"></i> @Autowired</h2>
+                <p>Inyecta automáticamente dependencias.</p>
+                <div class="code-block"><pre>@Service
+public class UserService {
+    @Autowired
+    private UserRepository userRepository;
+    
+    // O por constructor (recomendado)
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+}</pre></div>
+            </div>
+            <div class="content-section" id="anotaciones">
+                <h2><i class="fas fa-tags"></i> Anotaciones de Bean</h2>
+                <div class="code-block"><pre>@Component  // Componente genérico
+public class MiComponente { }
+
+@Service  // Lógica de negocio
+public class UserService { }
+
+@Repository  // Acceso a datos
+public class UserRepository { }
+
+@Controller  // Controlador MVC
+public class UserController { }
+
+@RestController  // Controlador REST
+public class UserRestController { }</pre></div>
+            </div>
+            <div class="content-section" id="ciclo">
+                <h2><i class="fas fa-sync-alt"></i> Ciclo de Vida de Beans</h2>
+                <div class="code-block"><pre>@Component
+public class MiBean {
+    @PostConstruct
+    public void init() {
+        System.out.println("Bean inicializado");
+    }
+    
+    @PreDestroy
+    public void cleanup() {
+        System.out.println("Bean destruido");
+    }
+}</pre></div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

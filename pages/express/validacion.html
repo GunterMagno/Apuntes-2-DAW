@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Validación en Express - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Express</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-check-circle"></i> Validación</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#importancia" class="active">Importancia</a></li>
+                <li><a href="#manual">Validación Manual</a></li>
+                <li><a href="#express-validator">express-validator</a></li>
+                <li><a href="#sanitizacion">Sanitización</a></li>
+                <li><a href="#errores">Manejo de Errores</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--accent-primary);"><i class="fas fa-check-circle"></i></div>
+                <h1 class="detail-title">5. Validación de Datos</h1>
+                <p class="detail-subtitle">Asegurar integridad de datos</p>
+            </div>
+
+            <div class="content-section" id="importancia">
+                <h2><i class="fas fa-shield-alt"></i> ¿Por qué validar datos?</h2>
+                <p>La <strong>validación</strong> es crucial para:</p>
+                <ul>
+                    <li><strong>Seguridad:</strong> Prevenir inyecciones SQL, XSS, etc.</li>
+                    <li><strong>Integridad:</strong> Asegurar que los datos cumplan requisitos</li>
+                    <li><strong>Experiencia de usuario:</strong> Feedback claro sobre errores</li>
+                    <li><strong>Consistencia:</strong> Mantener formato uniforme en la BD</li>
+                </ul>
+
+                <div class="warning-box">
+                    <strong>⚠️ Regla de oro:</strong> NUNCA confíes en datos del cliente. Siempre valida en el servidor.
+                </div>
+
+                <h3>Tipos de validación:</h3>
+                <ul>
+                    <li><strong>Presencia:</strong> ¿El campo existe y no está vacío?</li>
+                    <li><strong>Tipo:</strong> ¿Es string, número, email, fecha...?</li>
+                    <li><strong>Formato:</strong> ¿Cumple un patrón (regex)?</li>
+                    <li><strong>Rango:</strong> ¿Está dentro de límites (edad 18-100)?</li>
+                    <li><strong>Personalizada:</strong> Reglas de negocio específicas</li>
+                </ul>
+            </div>
+
+            <div class="content-section" id="manual">
+                <h2><i class="fas fa-hand-paper"></i> Validación Manual</h2>
+                <p>Validar datos manualmente con JavaScript puro:</p>
+
+                <h3>Ejemplo básico:</h3>
+                <div class="code-block"><pre>app.post('/api/users', (req, res) => {
+  const { nombre, email, edad } = req.body;
+  const errores = [];
+  
+  // Validar nombre
+  if (!nombre) {
+    errores.push('Nombre es requerido');
+  } else if (nombre.length < 3) {
+    errores.push('Nombre debe tener al menos 3 caracteres');
+  } else if (nombre.length > 50) {
+    errores.push('Nombre no puede exceder 50 caracteres');
+  }
+  
+  // Validar email
+  if (!email) {
+    errores.push('Email es requerido');
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errores.push('Email inválido');
+  }
+  
+  // Validar edad
+  if (!edad) {
+    errores.push('Edad es requerida');
+  } else if (typeof edad !== 'number') {
+    errores.push('Edad debe ser un número');
+  } else if (edad < 18 || edad > 100) {
+    errores.push('Edad debe estar entre 18 y 100');
+  }
+  
+  // Si hay errores, retornar 400
+  if (errores.length > 0) {
+    return res.status(400).json({ errores });
+  }
+  
+  // Si pasa validación, procesar
+  res.status(201).json({ 
+    mensaje: 'Usuario creado', 
+    usuario: { nombre, email, edad } 
+  });
+});</pre></div>
+
+                <h3>Función reutilizable:</h3>
+                <div class="code-block"><pre>// utils/validadores.js
+const validadores = {
+  esRequerido: (valor, campo) => {
+    if (!valor) return `${campo} es requerido`;
+    return null;
+  },
+  
+  esEmail: (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regex.test(email)) return 'Email inválido';
+    return null;
+  },
+  
+  longitudMinima: (valor, min, campo) => {
+    if (valor.length < min) {
+      return `${campo} debe tener al menos ${min} caracteres`;
+    }
+    return null;
+  },
+  
+  enRango: (valor, min, max, campo) => {
+    if (valor < min || valor > max) {
+      return `${campo} debe estar entre ${min} y ${max}`;
+    }
+    return null;
+  }
+};
+
+// Uso
+app.post('/api/users', (req, res) => {
+  const { nombre, email, edad } = req.body;
+  const errores = [
+    validadores.esRequerido(nombre, 'Nombre'),
+    validadores.longitudMinima(nombre, 3, 'Nombre'),
+    validadores.esRequerido(email, 'Email'),
+    validadores.esEmail(email),
+    validadores.enRango(edad, 18, 100, 'Edad')
+  ].filter(Boolean); // Remover null
+  
+  if (errores.length > 0) {
+    return res.status(400).json({ errores });
+  }
+  
+  res.status(201).json({ mensaje: 'Usuario creado' });
+});
+
+module.exports = validadores;</pre></div>
+            </div>
+
+            <div class="content-section" id="express-validator">
+                <h2><i class="fas fa-check-double"></i> express-validator</h2>
+                <p><strong>express-validator</strong> es la librería más popular para validación en Express. Se basa en <code>validator.js</code>.</p>
+
+                <h3>Instalación:</h3>
+                <div class="code-block"><pre>npm install express-validator</pre></div>
+
+                <h3>Uso básico:</h3>
+                <div class="code-block"><pre>const { body, validationResult } = require('express-validator');
+
+// Definir validaciones
+app.post('/api/users',
+  // Array de validaciones
+  [
+    body('nombre')
+      .notEmpty().withMessage('Nombre es requerido')
+      .isLength({ min: 3 }).withMessage('Nombre mínimo 3 caracteres')
+      .isLength({ max: 50 }).withMessage('Nombre máximo 50 caracteres'),
+    
+    body('email')
+      .notEmpty().withMessage('Email es requerido')
+      .isEmail().withMessage('Email inválido')
+      .normalizeEmail(), // Convertir a minúsculas, quitar puntos en Gmail
+    
+    body('edad')
+      .notEmpty().withMessage('Edad es requerida')
+      .isInt({ min: 18, max: 100 }).withMessage('Edad debe ser entre 18 y 100')
+  ],
+  // Manejador
+  (req, res) => {
+    // Verificar errores
+    const errors = validationResult(req);
+    
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errores: errors.array() });
+    }
+    
+    // Si pasa validación
+    const { nombre, email, edad } = req.body;
+    res.status(201).json({ 
+      mensaje: 'Usuario creado', 
+      usuario: { nombre, email, edad } 
+    });
+  }
+);</pre></div>
+
+                <h3>Validadores más comunes:</h3>
+                <div class="code-block"><pre>// Strings
+.notEmpty()                    // No vacío
+.isLength({ min: 3, max: 50 }) // Longitud
+.isAlpha()                     // Solo letras
+.isAlphanumeric()              // Letras y números
+.trim()                        // Quitar espacios
+
+// Email y URLs
+.isEmail()                     // Email válido
+.isURL()                       // URL válida
+
+// Números
+.isInt()                       // Entero
+.isFloat()                     // Decimal
+.isInt({ min: 0, max: 100 })   // Rango
+
+// Fechas
+.isDate()                      // Fecha válida
+.isISO8601()                   // Formato ISO (2024-01-15)
+
+// Booleanos
+.isBoolean()                   // true o false
+
+// Patrones
+.matches(/^[A-Z]/)             // Regex personalizado
+
+// Otros
+.isIn(['admin', 'user'])       // Debe estar en array
+.isJWT()                       // Token JWT válido
+.isMobilePhone('es-ES')        // Teléfono España</pre></div>
+
+                <h3>Validación condicional:</h3>
+                <div class="code-block"><pre>body('password')
+  .if(body('email').exists()) // Solo si email existe
+  .notEmpty().withMessage('Password requerido'),
+
+body('confirmPassword')
+  .custom((value, { req }) => {
+    if (value !== req.body.password) {
+      throw new Error('Las contraseñas no coinciden');
+    }
+    return true;
+  });</pre></div>
+
+                <h3>Validación personalizada:</h3>
+                <div class="code-block"><pre>body('email')
+  .custom(async (email) => {
+    // Verificar si email ya existe en BD
+    const usuarioExistente = await User.findOne({ email });
+    if (usuarioExistente) {
+      throw new Error('Email ya registrado');
+    }
+    return true;
+  }),
+
+body('edad')
+  .custom((edad, { req }) => {
+    if (edad < 18 && req.body.rol === 'admin') {
+      throw new Error('Admin debe ser mayor de edad');
+    }
+    return true;
+  });</pre></div>
+
+                <h3>Middleware reutilizable:</h3>
+                <div class="code-block"><pre>// middleware/validaciones.js
+const { body, validationResult } = require('express-validator');
+
+// Middleware para manejar errores
+const manejarErrores = (req, res, next) => {
+  const errores = validationResult(req);
+  if (!errores.isEmpty()) {
+    return res.status(400).json({ errores: errores.array() });
+  }
+  next();
+};
+
+// Validaciones predefinidas
+const validarUsuario = [
+  body('nombre').notEmpty().isLength({ min: 3, max: 50 }),
+  body('email').isEmail().normalizeEmail(),
+  body('edad').optional().isInt({ min: 18, max: 100 }),
+  manejarErrores
+];
+
+const validarLogin = [
+  body('email').isEmail(),
+  body('password').notEmpty().isLength({ min: 6 }),
+  manejarErrores
+];
+
+module.exports = { validarUsuario, validarLogin };
+
+// Uso
+const { validarUsuario } = require('./middleware/validaciones');
+
+app.post('/api/users', validarUsuario, (req, res) => {
+  // Los datos ya están validados
+  res.json({ mensaje: 'Usuario creado' });
+});</pre></div>
+            </div>
+
+            <div class="content-section" id="sanitizacion">
+                <h2><i class="fas fa-broom"></i> Sanitización de Datos</h2>
+                <p>La <strong>sanitización</strong> limpia y normaliza los datos antes de usarlos.</p>
+
+                <h3>Sanitizadores comunes:</h3>
+                <div class="code-block"><pre>body('nombre')
+  .trim()              // Quitar espacios al inicio/fin
+  .escape()            // Escapar caracteres HTML (<, >, &, ', ")
+  .toLowerCase()       // Convertir a minúsculas
+  .toUpperCase()       // Convertir a mayúsculas
+
+body('email')
+  .normalizeEmail()    // usuario@GMAIL.com → usuario@gmail.com
+  .trim()
+
+body('edad')
+  .toInt()             // Convertir a entero
+
+body('precio')
+  .toFloat()           // Convertir a decimal
+
+body('activo')
+  .toBoolean()         // Convertir a boolean</pre></div>
+
+                <h3>Ejemplo completo:</h3>
+                <div class="code-block"><pre>app.post('/api/products',
+  [
+    // Validar y sanitizar
+    body('nombre')
+      .trim()
+      .notEmpty().withMessage('Nombre requerido')
+      .isLength({ min: 3, max: 100 })
+      .escape(), // Prevenir XSS
+    
+    body('descripcion')
+      .optional()
+      .trim()
+      .isLength({ max: 500 })
+      .escape(),
+    
+    body('precio')
+      .notEmpty().withMessage('Precio requerido')
+      .isFloat({ min: 0 }).withMessage('Precio debe ser positivo')
+      .toFloat(), // Convertir a número
+    
+    body('disponible')
+      .optional()
+      .toBoolean(), // "true" → true, "1" → true
+    
+    body('categoria')
+      .trim()
+      .isIn(['electronica', 'ropa', 'hogar'])
+      .withMessage('Categoría inválida')
+  ],
+  (req, res) => {
+    const errores = validationResult(req);
+    if (!errores.isEmpty()) {
+      return res.status(400).json({ errores: errores.array() });
+    }
+    
+    // Datos validados y sanitizados
+    res.status(201).json({ 
+      mensaje: 'Producto creado',
+      producto: req.body 
+    });
+  }
+);</pre></div>
+            </div>
+
+            <div class="content-section" id="errores">
+                <h2><i class="fas fa-exclamation-triangle"></i> Manejo de Errores de Validación</h2>
+
+                <h3>Formato de errores personalizado:</h3>
+                <div class="code-block"><pre>const { validationResult } = require('express-validator');
+
+// Función helper
+const formatearErrores = (errores) => {
+  return errores.array().reduce((acc, error) => {
+    acc[error.path] = error.msg;
+    return acc;
+  }, {});
+};
+
+app.post('/api/users', [...validaciones], (req, res) => {
+  const errores = validationResult(req);
+  
+  if (!errores.isEmpty()) {
+    return res.status(400).json({
+      error: 'Validación fallida',
+      campos: formatearErrores(errores)
+    });
+  }
+  
+  res.json({ mensaje: 'Éxito' });
+});
+
+// Respuesta de error:
+{
+  "error": "Validación fallida",
+  "campos": {
+    "nombre": "Nombre debe tener al menos 3 caracteres",
+    "email": "Email inválido",
+    "edad": "Edad debe estar entre 18 y 100"
+  }
+}</pre></div>
+
+                <h3>Middleware global de errores:</h3>
+                <div class="code-block"><pre>// middleware/errorHandler.js
+const errorHandler = (err, req, res, next) => {
+  // Error de validación
+  if (err.name === 'ValidationError') {
+    return res.status(400).json({
+      error: 'Error de validación',
+      detalles: err.errors
+    });
+  }
+  
+  // Error de base de datos
+  if (err.code === 11000) {
+    return res.status(409).json({
+      error: 'Registro duplicado'
+    });
+  }
+  
+  // Error genérico
+  console.error(err);
+  res.status(500).json({
+    error: 'Error interno del servidor'
+  });
+};
+
+// Usar al final de app.js
+app.use(errorHandler);</pre></div>
+
+                <h3>Mejores prácticas:</h3>
+                <div class="info-box">
+                    <ul>
+                        <li>Validar SIEMPRE en el servidor (nunca solo en cliente)</li>
+                        <li>Proporcionar mensajes de error claros y específicos</li>
+                        <li>Sanitizar datos para prevenir XSS</li>
+                        <li>Usar validación en cadena para múltiples reglas</li>
+                        <li>Centralizar validaciones en middleware reutilizable</li>
+                        <li>Registrar intentos de validación fallidos (seguridad)</li>
+                        <li>No revelar información sensible en errores</li>
+                    </ul>
+                </div>
+
+                <h3>Ejemplo completo de API con validación:</h3>
+                <div class="code-block"><pre>const express = require('express');
+const { body, validationResult } = require('express-validator');
+const app = express();
+
+app.use(express.json());
+
+// Middleware de validación
+const validarYManejarErrores = (req, res, next) => {
+  const errores = validationResult(req);
+  if (!errores.isEmpty()) {
+    return res.status(400).json({ 
+      error: 'Validación fallida',
+      errores: errores.array() 
+    });
+  }
+  next();
+};
+
+// Crear usuario
+app.post('/api/users',
+  [
+    body('nombre').trim().notEmpty().isLength({ min: 3, max: 50 }),
+    body('email').isEmail().normalizeEmail(),
+    body('password').isLength({ min: 6 }),
+    body('edad').optional().isInt({ min: 18, max: 100 }).toInt(),
+    validarYManejarErrores
+  ],
+  (req, res) => {
+    res.status(201).json({ 
+      mensaje: 'Usuario creado',
+      usuario: req.body 
+    });
+  }
+);
+
+// Actualizar usuario
+app.put('/api/users/:id',
+  [
+    body('nombre').optional().trim().isLength({ min: 3, max: 50 }),
+    body('email').optional().isEmail().normalizeEmail(),
+    validarYManejarErrores
+  ],
+  (req, res) => {
+    res.json({ mensaje: 'Usuario actualizado' });
+  }
+);
+
+app.listen(3000, () => console.log('Servidor corriendo'));</pre></div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let currentSection = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + currentSection) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

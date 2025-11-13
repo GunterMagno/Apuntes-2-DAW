@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Routing en Express - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Express</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-route"></i> Routing</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#basico" class="active">Rutas Básicas</a></li>
+                <li><a href="#metodos">Métodos HTTP</a></li>
+                <li><a href="#parametros">Parámetros</a></li>
+                <li><a href="#query">Query Strings</a></li>
+                <li><a href="#router">Express Router</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--accent-primary);"><i class="fas fa-route"></i></div>
+                <h1 class="detail-title">2. Routing en Express</h1>
+                <p class="detail-subtitle">Sistema de rutas y endpoints</p>
+            </div>
+
+            <div class="content-section" id="basico">
+                <h2><i class="fas fa-map-signs"></i> Rutas Básicas</h2>
+                <p>El <strong>routing</strong> determina cómo una aplicación responde a una petición del cliente en un endpoint específico (una URI + un método HTTP).</p>
+
+                <h3>Estructura de una ruta:</h3>
+                <div class="code-block"><pre>// app.METODO(RUTA, FUNCION_MANEJADORA)
+
+app.get('/', (req, res) => {
+  res.send('Página principal');
+});
+
+app.get('/about', (req, res) => {
+  res.send('Acerca de nosotros');
+});
+
+app.get('/contact', (req, res) => {
+  res.send('Contacto');
+});</pre></div>
+
+                <div class="info-box">
+                    <p><strong>Componentes de una ruta:</strong></p>
+                    <ul>
+                        <li><strong>app:</strong> Instancia de Express</li>
+                        <li><strong>METODO:</strong> Método HTTP (get, post, put, delete...)</li>
+                        <li><strong>RUTA:</strong> Path en el servidor (/, /about, /api/users...)</li>
+                        <li><strong>FUNCION:</strong> Callback ejecutada cuando la ruta coincide</li>
+                    </ul>
+                </div>
+
+                <h3>Múltiples manejadores:</h3>
+                <div class="code-block"><pre>// Puedes tener varios callbacks para una ruta
+app.get('/user', 
+  (req, res, next) => {
+    console.log('Verificando usuario...');
+    next(); // Pasa al siguiente manejador
+  },
+  (req, res) => {
+    res.send('Usuario verificado');
+  }
+);</pre></div>
+            </div>
+
+            <div class="content-section" id="metodos">
+                <h2><i class="fas fa-exchange-alt"></i> Métodos HTTP</h2>
+                <p>Express soporta todos los métodos HTTP estándar. Los más comunes para APIs REST son:</p>
+
+                <h3>GET - Obtener datos:</h3>
+                <div class="code-block"><pre>// GET /api/users - Obtener todos los usuarios
+app.get('/api/users', (req, res) => {
+  const users = [
+    { id: 1, nombre: 'Ana' },
+    { id: 2, nombre: 'Luis' }
+  ];
+  res.json(users);
+});
+
+// GET /api/users/1 - Obtener un usuario específico
+app.get('/api/users/:id', (req, res) => {
+  const user = { id: req.params.id, nombre: 'Ana' };
+  res.json(user);
+});</pre></div>
+
+                <h3>POST - Crear datos:</h3>
+                <div class="code-block"><pre>// POST /api/users - Crear un nuevo usuario
+app.post('/api/users', (req, res) => {
+  const nuevoUsuario = {
+    id: Date.now(),
+    nombre: req.body.nombre,
+    email: req.body.email
+  };
+  // Aquí guardarías en la base de datos
+  res.status(201).json(nuevoUsuario);
+});</pre></div>
+
+                <h3>PUT - Actualizar datos (completo):</h3>
+                <div class="code-block"><pre>// PUT /api/users/1 - Actualizar un usuario completo
+app.put('/api/users/:id', (req, res) => {
+  const usuarioActualizado = {
+    id: req.params.id,
+    nombre: req.body.nombre,
+    email: req.body.email
+  };
+  res.json(usuarioActualizado);
+});</pre></div>
+
+                <h3>PATCH - Actualizar datos (parcial):</h3>
+                <div class="code-block"><pre>// PATCH /api/users/1 - Actualizar solo algunos campos
+app.patch('/api/users/:id', (req, res) => {
+  // Solo actualiza los campos enviados
+  const cambios = req.body; // {nombre: 'Nuevo nombre'}
+  res.json({ mensaje: 'Usuario actualizado', cambios });
+});</pre></div>
+
+                <h3>DELETE - Eliminar datos:</h3>
+                <div class="code-block"><pre>// DELETE /api/users/1 - Eliminar un usuario
+app.delete('/api/users/:id', (req, res) => {
+  const id = req.params.id;
+  // Aquí eliminarías de la base de datos
+  res.json({ mensaje: `Usuario ${id} eliminado` });
+});</pre></div>
+
+                <h3>Todos los métodos (útil para debugging):</h3>
+                <div class="code-block"><pre>// Responde a CUALQUIER método HTTP
+app.all('/test', (req, res) => {
+  res.send(`Método usado: ${req.method}`);
+});</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Importante:</strong> Para que <code>req.body</code> funcione con POST/PUT/PATCH, debes usar el middleware <code>express.json()</code>:
+                    <pre>app.use(express.json());</pre>
+                </div>
+            </div>
+
+            <div class="content-section" id="parametros">
+                <h2><i class="fas fa-hashtag"></i> Parámetros de Ruta</h2>
+                <p>Los <strong>parámetros de ruta</strong> son segmentos dinámicos en la URL que capturan valores.</p>
+
+                <h3>Parámetro simple:</h3>
+                <div class="code-block"><pre>// Ruta: /users/123
+app.get('/users/:id', (req, res) => {
+  const userId = req.params.id; // "123"
+  res.json({ userId, mensaje: `Usuario ${userId}` });
+});</pre></div>
+
+                <h3>Múltiples parámetros:</h3>
+                <div class="code-block"><pre>// Ruta: /posts/2024/05/mi-articulo
+app.get('/posts/:year/:month/:slug', (req, res) => {
+  const { year, month, slug } = req.params;
+  res.json({ year, month, slug });
+  // Output: {year: "2024", month: "05", slug: "mi-articulo"}
+});</pre></div>
+
+                <h3>Parámetros opcionales:</h3>
+                <div class="code-block"><pre>// El ? hace el parámetro opcional
+app.get('/users/:id/:action?', (req, res) => {
+  const { id, action } = req.params;
+  if (action) {
+    res.send(`Usuario ${id}, acción: ${action}`);
+  } else {
+    res.send(`Usuario ${id}, sin acción`);
+  }
+});
+
+// Funciona con:
+// /users/123/edit
+// /users/123</pre></div>
+
+                <h3>Patrones con expresiones regulares:</h3>
+                <div class="code-block"><pre>// Solo acepta números
+app.get('/product/:id(\\d+)', (req, res) => {
+  res.send(`Producto ID numérico: ${req.params.id}`);
+});
+
+// /product/123 ✓
+// /product/abc ✗</pre></div>
+            </div>
+
+            <div class="content-section" id="query">
+                <h2><i class="fas fa-question"></i> Query Strings</h2>
+                <p>Los <strong>query strings</strong> son parámetros opcionales que van después de <code>?</code> en la URL.</p>
+
+                <h3>Acceder a query strings:</h3>
+                <div class="code-block"><pre>// URL: /search?q=javascript&category=programming&limit=10
+
+app.get('/search', (req, res) => {
+  const { q, category, limit } = req.query;
+  
+  res.json({
+    busqueda: q,           // "javascript"
+    categoria: category,   // "programming"
+    limite: limit          // "10"
+  });
+});</pre></div>
+
+                <h3>Query strings con valores por defecto:</h3>
+                <div class="code-block"><pre>app.get('/api/products', (req, res) => {
+  // Valores por defecto si no se envían
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const sort = req.query.sort || 'nombre';
+  
+  res.json({
+    pagina: page,
+    porPagina: limit,
+    ordenarPor: sort,
+    datos: []  // Aquí irían los productos
+  });
+});
+
+// /api/products → {pagina: 1, porPagina: 10, ordenarPor: "nombre"}
+// /api/products?page=2&limit=20 → {pagina: 2, porPagina: 20...}</pre></div>
+
+                <h3>Combinando parámetros y query:</h3>
+                <div class="code-block"><pre>// URL: /users/123/posts?status=published&sort=date
+
+app.get('/users/:userId/posts', (req, res) => {
+  const userId = req.params.userId;
+  const { status, sort } = req.query;
+  
+  res.json({
+    usuario: userId,
+    filtroEstado: status,
+    ordenar: sort
+  });
+});</pre></div>
+            </div>
+
+            <div class="content-section" id="router">
+                <h2><i class="fas fa-sitemap"></i> Express Router</h2>
+                <p><strong>Express Router</strong> permite modularizar tus rutas en archivos separados, manteniendo el código organizado.</p>
+
+                <h3>Crear un router (routes/users.js):</h3>
+                <div class="code-block"><pre>const express = require('express');
+const router = express.Router();
+
+// Base: /api/users
+
+router.get('/', (req, res) => {
+  res.json({ mensaje: 'Lista de usuarios' });
+});
+
+router.get('/:id', (req, res) => {
+  res.json({ mensaje: `Usuario ${req.params.id}` });
+});
+
+router.post('/', (req, res) => {
+  res.json({ mensaje: 'Usuario creado' });
+});
+
+router.delete('/:id', (req, res) => {
+  res.json({ mensaje: `Usuario ${req.params.id} eliminado` });
+});
+
+module.exports = router;</pre></div>
+
+                <h3>Usar el router en app.js:</h3>
+                <div class="code-block"><pre>const express = require('express');
+const app = express();
+
+// Importar routers
+const usersRouter = require('./routes/users');
+const productsRouter = require('./routes/products');
+
+// Usar routers con prefijo
+app.use('/api/users', usersRouter);
+app.use('/api/products', productsRouter);
+
+app.listen(3000);</pre></div>
+
+                <p>Ahora las rutas quedan:</p>
+                <ul>
+                    <li><code>GET /api/users</code> → Lista de usuarios</li>
+                    <li><code>GET /api/users/:id</code> → Usuario específico</li>
+                    <li><code>POST /api/users</code> → Crear usuario</li>
+                    <li><code>DELETE /api/users/:id</code> → Eliminar usuario</li>
+                </ul>
+
+                <h3>Estructura de proyecto con routers:</h3>
+                <div class="code-block"><pre>mi-api/
+├── routes/
+│   ├── users.js
+│   ├── products.js
+│   └── auth.js
+├── app.js
+└── package.json</pre></div>
+
+                <div class="info-box">
+                    <p><strong>💡 Ventajas de usar Router:</strong></p>
+                    <ul>
+                        <li>Código modular y organizado</li>
+                        <li>Fácil mantenimiento</li>
+                        <li>Reutilización de código</li>
+                        <li>Separación de responsabilidades</li>
+                    </ul>
+                </div>
+
+                <h3>Router con middleware específico:</h3>
+                <div class="code-block"><pre>const router = express.Router();
+
+// Middleware solo para este router
+router.use((req, res, next) => {
+  console.log(`Petición a users: ${req.method} ${req.url}`);
+  next();
+});
+
+// Middleware solo para rutas específicas
+router.use('/:id', verificarId);
+
+router.get('/:id', (req, res) => {
+  // verificarId se ejecutó antes
+  res.json({ id: req.params.id });
+});</pre></div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let currentSection = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + currentSection) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

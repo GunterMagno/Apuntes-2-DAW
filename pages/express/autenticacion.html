@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Autenticación en Express - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Express</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-lock"></i> Autenticación</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#conceptos" class="active">Conceptos</a></li>
+                <li><a href="#bcrypt">Bcrypt (Hashing)</a></li>
+                <li><a href="#jwt">JWT (Tokens)</a></li>
+                <li><a href="#implementacion">Implementación</a></li>
+                <li><a href="#proteger">Proteger Rutas</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--accent-primary);"><i class="fas fa-lock"></i></div>
+                <h1 class="detail-title">6. Autenticación y Autorización</h1>
+                <p class="detail-subtitle">Seguridad en aplicaciones Express</p>
+            </div>
+
+            <div class="content-section" id="conceptos">
+                <h2><i class="fas fa-key"></i> Conceptos Básicos</h2>
+
+                <h3>Autenticación vs Autorización</h3>
+                <div class="info-box">
+                    <p><strong>Autenticación:</strong> Verificar QUIÉN eres (login con usuario/contraseña)</p>
+                    <p><strong>Autorización:</strong> Verificar QUÉ puedes hacer (permisos, roles)</p>
+                </div>
+
+                <div class="code-block"><pre>// Autenticación: ¿Eres Juan?
+POST /api/login { email: "juan@example.com", password: "123456" }
+→ Sí, aquí está tu token
+
+// Autorización: ¿Juan puede eliminar usuarios?
+DELETE /api/users/5 + Token de Juan
+→ No, Juan es "user", necesitas ser "admin"</pre></div>
+
+                <h3>Métodos de autenticación:</h3>
+                <ul>
+                    <li><strong>Sesiones:</strong> Guardar estado en el servidor (cookies)</li>
+                    <li><strong>JWT (JSON Web Tokens):</strong> Token firmado que el cliente envía (sin estado)</li>
+                    <li><strong>OAuth:</strong> Autenticación con terceros (Google, Facebook...)</li>
+                    <li><strong>API Keys:</strong> Clave estática para servicios</li>
+                </ul>
+
+                <div class="warning-box">
+                    <strong>⚠️ Nunca guardes contraseñas en texto plano!</strong> Siempre usa hashing (bcrypt, argon2...).
+                </div>
+            </div>
+
+            <div class="content-section" id="bcrypt">
+                <h2><i class="fas fa-hashtag"></i> Bcrypt - Hashing de Contraseñas</h2>
+                <p><strong>Bcrypt</strong> es un algoritmo de hashing diseñado para contraseñas. Es lento a propósito para dificultar ataques de fuerza bruta.</p>
+
+                <h3>Instalación:</h3>
+                <div class="code-block"><pre>npm install bcryptjs</pre></div>
+
+                <h3>Hashear una contraseña (registro):</h3>
+                <div class="code-block"><pre>const bcrypt = require('bcryptjs');
+
+// Al crear un usuario
+app.post('/api/register', async (req, res) => {
+  const { email, password } = req.body;
+  
+  try {
+    // 1. Generar salt (factor de complejidad: 10)
+    const salt = await bcrypt.genSalt(10);
+    
+    // 2. Hashear contraseña
+    const hashedPassword = await bcrypt.hash(password, salt);
+    
+    // 3. Guardar en BD (nunca la contraseña original!)
+    const usuario = {
+      email,
+      password: hashedPassword // $2a$10$xY...
+    };
+    
+    // Guardar usuario en BD
+    // await User.create(usuario);
+    
+    res.status(201).json({ 
+      mensaje: 'Usuario registrado',
+      email: usuario.email 
+    });
+    
+  } catch (error) {
+    res.status(500).json({ error: 'Error al registrar' });
+  }
+});</pre></div>
+
+                <h3>Verificar contraseña (login):</h3>
+                <div class="code-block"><pre>app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  
+  try {
+    // 1. Buscar usuario por email
+    // const usuario = await User.findOne({ email });
+    const usuario = {
+      email: 'ana@example.com',
+      password: '$2a$10$hashedPasswordFromDB...'
+    };
+    
+    if (!usuario) {
+      return res.status(401).json({ 
+        error: 'Credenciales inválidas' 
+      });
+    }
+    
+    // 2. Comparar contraseñas
+    const coincide = await bcrypt.compare(password, usuario.password);
+    
+    if (!coincide) {
+      return res.status(401).json({ 
+        error: 'Credenciales inválidas' 
+      });
+    }
+    
+    // 3. Contraseña correcta, generar token (ver JWT)
+    res.json({ 
+      mensaje: 'Login exitoso',
+      usuario: { email: usuario.email }
+    });
+    
+  } catch (error) {
+    res.status(500).json({ error: 'Error en login' });
+  }
+});</pre></div>
+
+                <h3>¿Por qué bcrypt?</h3>
+                <ul>
+                    <li><strong>Salt automático:</strong> Cada hash es único incluso con la misma contraseña</li>
+                    <li><strong>Lento a propósito:</strong> Dificulta ataques de fuerza bruta</li>
+                    <li><strong>Adaptativo:</strong> Puedes aumentar rounds si las computadoras se vuelven más rápidas</li>
+                </ul>
+
+                <div class="code-block"><pre>// Mismo password, hashes diferentes
+const hash1 = await bcrypt.hash('123456', 10);
+const hash2 = await bcrypt.hash('123456', 10);
+
+console.log(hash1); // $2a$10$abc...
+console.log(hash2); // $2a$10$xyz... (diferente!)
+
+// Pero ambos coinciden:
+await bcrypt.compare('123456', hash1); // true
+await bcrypt.compare('123456', hash2); // true</pre></div>
+            </div>
+
+            <div class="content-section" id="jwt">
+                <h2><i class="fas fa-id-card"></i> JWT - JSON Web Tokens</h2>
+                <p><strong>JWT</strong> es un estándar para crear tokens que contienen información (claims) y están firmados.</p>
+
+                <h3>Instalación:</h3>
+                <div class="code-block"><pre>npm install jsonwebtoken</pre></div>
+
+                <h3>Estructura de un JWT:</h3>
+                <div class="code-block"><pre>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiYW5hQGV4YW1wbGUuY29tIiwiaWF0IjoxNjE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+Header.Payload.Signature
+
+// Decodificado:
+{
+  "header": { "alg": "HS256", "typ": "JWT" },
+  "payload": { 
+    "userId": 1, 
+    "email": "ana@example.com",
+    "iat": 1616239022  // issued at
+  },
+  "signature": "firma criptográfica"
+}</pre></div>
+
+                <h3>Generar JWT (login exitoso):</h3>
+                <div class="code-block"><pre>const jwt = require('jsonwebtoken');
+
+// Clave secreta (guardar en variable de entorno!)
+const JWT_SECRET = process.env.JWT_SECRET || 'tu-clave-super-secreta';
+
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  
+  // 1. Verificar credenciales (ver bcrypt)
+  const usuario = { id: 1, email: 'ana@example.com', rol: 'admin' };
+  
+  // 2. Generar JWT
+  const token = jwt.sign(
+    // Payload (datos a incluir)
+    { 
+      userId: usuario.id, 
+      email: usuario.email,
+      rol: usuario.rol 
+    },
+    // Clave secreta
+    JWT_SECRET,
+    // Opciones
+    { expiresIn: '24h' } // Token expira en 24 horas
+  );
+  
+  // 3. Enviar token al cliente
+  res.json({
+    mensaje: 'Login exitoso',
+    token,
+    usuario: { email: usuario.email, rol: usuario.rol }
+  });
+});</pre></div>
+
+                <h3>Verificar JWT (middleware):</h3>
+                <div class="code-block"><pre>// middleware/auth.js
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'tu-clave-super-secreta';
+
+const verificarToken = (req, res, next) => {
+  // 1. Obtener token del header
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader) {
+    return res.status(401).json({ 
+      error: 'Token no proporcionado' 
+    });
+  }
+  
+  // Header: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  const token = authHeader.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ 
+      error: 'Formato de token inválido' 
+    });
+  }
+  
+  try {
+    // 2. Verificar y decodificar token
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    // 3. Agregar info del usuario a req
+    req.usuario = decoded;
+    
+    // 4. Continuar
+    next();
+    
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expirado' });
+    }
+    return res.status(401).json({ error: 'Token inválido' });
+  }
+};
+
+module.exports = verificarToken;</pre></div>
+
+                <h3>Opciones del JWT:</h3>
+                <div class="code-block"><pre>jwt.sign(payload, secret, {
+  expiresIn: '24h',        // Expiración (1h, 7d, 30d...)
+  issuer: 'mi-app',        // Quién emitió el token
+  audience: 'usuarios',    // Para quién es el token
+  algorithm: 'HS256'       // Algoritmo de firma
+});</pre></div>
+            </div>
+
+            <div class="content-section" id="implementacion">
+                <h2><i class="fas fa-code"></i> Sistema Completo de Autenticación</h2>
+
+                <h3>Registro de usuario:</h3>
+                <div class="code-block"><pre>const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = 'tu-clave-secreta';
+let usuarios = []; // En producción: base de datos
+
+// REGISTRO
+app.post('/api/register', async (req, res) => {
+  const { nombre, email, password } = req.body;
+  
+  try {
+    // 1. Validar
+    if (!nombre || !email || !password) {
+      return res.status(400).json({ 
+        error: 'Todos los campos son requeridos' 
+      });
+    }
+    
+    if (password.length < 6) {
+      return res.status(400).json({ 
+        error: 'Contraseña debe tener al menos 6 caracteres' 
+      });
+    }
+    
+    // 2. Verificar si email ya existe
+    const existente = usuarios.find(u => u.email === email);
+    if (existente) {
+      return res.status(409).json({ 
+        error: 'Email ya registrado' 
+      });
+    }
+    
+    // 3. Hashear contraseña
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // 4. Crear usuario
+    const nuevoUsuario = {
+      id: usuarios.length + 1,
+      nombre,
+      email,
+      password: hashedPassword,
+      rol: 'user',
+      createdAt: new Date()
+    };
+    
+    usuarios.push(nuevoUsuario);
+    
+    // 5. Generar token
+    const token = jwt.sign(
+      { userId: nuevoUsuario.id, email, rol: nuevoUsuario.rol },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+    
+    // 6. Responder (sin enviar password)
+    res.status(201).json({
+      mensaje: 'Usuario registrado exitosamente',
+      token,
+      usuario: {
+        id: nuevoUsuario.id,
+        nombre,
+        email,
+        rol: nuevoUsuario.rol
+      }
+    });
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al registrar usuario' });
+  }
+});</pre></div>
+
+                <h3>Login:</h3>
+                <div class="code-block"><pre>// LOGIN
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  
+  try {
+    // 1. Validar
+    if (!email || !password) {
+      return res.status(400).json({ 
+        error: 'Email y contraseña requeridos' 
+      });
+    }
+    
+    // 2. Buscar usuario
+    const usuario = usuarios.find(u => u.email === email);
+    if (!usuario) {
+      return res.status(401).json({ 
+        error: 'Credenciales inválidas' 
+      });
+    }
+    
+    // 3. Verificar contraseña
+    const coincide = await bcrypt.compare(password, usuario.password);
+    if (!coincide) {
+      return res.status(401).json({ 
+        error: 'Credenciales inválidas' 
+      });
+    }
+    
+    // 4. Generar token
+    const token = jwt.sign(
+      { userId: usuario.id, email: usuario.email, rol: usuario.rol },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+    
+    // 5. Responder
+    res.json({
+      mensaje: 'Login exitoso',
+      token,
+      usuario: {
+        id: usuario.id,
+        nombre: usuario.nombre,
+        email: usuario.email,
+        rol: usuario.rol
+      }
+    });
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error en login' });
+  }
+});</pre></div>
+            </div>
+
+            <div class="content-section" id="proteger">
+                <h2><i class="fas fa-shield-alt"></i> Proteger Rutas</h2>
+
+                <h3>Middleware de autenticación:</h3>
+                <div class="code-block"><pre>// middleware/auth.js
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = 'tu-clave-secreta';
+
+const verificarToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'No autorizado' });
+  }
+  
+  const token = authHeader.split(' ')[1];
+  
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.usuario = decoded; // { userId, email, rol }
+    next();
+  } catch (error) {
+    res.status(401).json({ error: 'Token inválido o expirado' });
+  }
+};
+
+// Middleware de autorización (roles)
+const verificarRol = (...rolesPermitidos) => {
+  return (req, res, next) => {
+    if (!req.usuario) {
+      return res.status(401).json({ error: 'No autenticado' });
+    }
+    
+    if (!rolesPermitidos.includes(req.usuario.rol)) {
+      return res.status(403).json({ 
+        error: 'No tienes permisos para esta acción' 
+      });
+    }
+    
+    next();
+  };
+};
+
+module.exports = { verificarToken, verificarRol };</pre></div>
+
+                <h3>Usar middleware en rutas:</h3>
+                <div class="code-block"><pre>const { verificarToken, verificarRol } = require('./middleware/auth');
+
+// Ruta pública (sin autenticación)
+app.get('/api/products', (req, res) => {
+  res.json({ productos: [...] });
+});
+
+// Ruta protegida (requiere login)
+app.get('/api/perfil', verificarToken, (req, res) => {
+  // req.usuario está disponible
+  res.json({ 
+    usuario: req.usuario 
+  });
+});
+
+// Ruta solo para admin
+app.delete('/api/users/:id', 
+  verificarToken,              // 1. Verificar autenticación
+  verificarRol('admin'),       // 2. Verificar rol
+  (req, res) => {
+    res.json({ mensaje: 'Usuario eliminado' });
+  }
+);
+
+// Múltiples roles permitidos
+app.post('/api/posts',
+  verificarToken,
+  verificarRol('admin', 'editor'), // Admin O editor
+  (req, res) => {
+    res.json({ mensaje: 'Post creado' });
+  }
+);</pre></div>
+
+                <h3>Cliente haciendo peticiones:</h3>
+                <div class="code-block"><pre>// JavaScript (fetch)
+
+// 1. Login para obtener token
+const loginResponse = await fetch('http://localhost:3000/api/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ 
+    email: 'ana@example.com', 
+    password: '123456' 
+  })
+});
+
+const { token } = await loginResponse.json();
+
+// 2. Guardar token
+localStorage.setItem('token', token);
+
+// 3. Usar token en peticiones protegidas
+const perfilResponse = await fetch('http://localhost:3000/api/perfil', {
+  headers: {
+    'Authorization': `Bearer ${token}`
+  }
+});
+
+const perfil = await perfilResponse.json();</pre></div>
+
+                <h3>Ejemplo completo con Express:</h3>
+                <div class="code-block"><pre>const express = require('express');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const app = express();
+app.use(express.json());
+
+const JWT_SECRET = 'tu-clave-secreta';
+const usuarios = [];
+
+// Middleware
+const verificarToken = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'No autorizado' });
+  
+  try {
+    req.usuario = jwt.verify(token, JWT_SECRET);
+    next();
+  } catch (error) {
+    res.status(401).json({ error: 'Token inválido' });
+  }
+};
+
+// Registro
+app.post('/api/register', async (req, res) => {
+  const { email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  
+  const usuario = {
+    id: usuarios.length + 1,
+    email,
+    password: hashedPassword,
+    rol: 'user'
+  };
+  
+  usuarios.push(usuario);
+  
+  const token = jwt.sign(
+    { userId: usuario.id, email, rol: usuario.rol },
+    JWT_SECRET,
+    { expiresIn: '24h' }
+  );
+  
+  res.status(201).json({ token, usuario: { id: usuario.id, email, rol: usuario.rol } });
+});
+
+// Login
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  const usuario = usuarios.find(u => u.email === email);
+  
+  if (!usuario || !(await bcrypt.compare(password, usuario.password))) {
+    return res.status(401).json({ error: 'Credenciales inválidas' });
+  }
+  
+  const token = jwt.sign(
+    { userId: usuario.id, email: usuario.email, rol: usuario.rol },
+    JWT_SECRET,
+    { expiresIn: '24h' }
+  );
+  
+  res.json({ token, usuario: { id: usuario.id, email, rol: usuario.rol } });
+});
+
+// Ruta protegida
+app.get('/api/perfil', verificarToken, (req, res) => {
+  res.json({ usuario: req.usuario });
+});
+
+app.listen(3000, () => console.log('Servidor en puerto 3000'));</pre></div>
+
+                <div class="info-box">
+                    <p><strong>💡 Mejores prácticas:</strong></p>
+                    <ul>
+                        <li>Usar HTTPS en producción</li>
+                        <li>Guardar JWT_SECRET en variables de entorno</li>
+                        <li>Tokens con expiración corta (refresh tokens para renovar)</li>
+                        <li>Nunca enviar contraseñas en respuestas</li>
+                        <li>Limitar intentos de login (rate limiting)</li>
+                        <li>Implementar logout (blacklist de tokens)</li>
+                        <li>Usar algoritmos seguros (bcrypt con rounds ≥10)</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let currentSection = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + currentSection) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

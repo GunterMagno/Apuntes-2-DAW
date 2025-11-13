@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>File System - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Node.js</a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-node-js"></i> File System</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#leer" class="active">Leer Archivos</a></li>
+                <li><a href="#escribir">Escribir Archivos</a></li>
+                <li><a href="#sincronas">Ops. Síncronas vs Asíncronas</a></li>
+                <li><a href="#promises">Promises</a></li>
+                <li><a href="#directorios">Directorios</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--node-color);"><i class="fab fa-node-js"></i></div>
+                <h1 class="detail-title">4. File System (fs)</h1>
+                <p class="detail-subtitle">Trabajar con archivos y directorios</p>
+            </div>
+
+            <div class="content-section" id="leer">
+                <h2><i class="fas fa-file-alt"></i> Leer Archivos</h2>
+                <div class="code-block"><pre>const fs = require('fs');
+
+// Leer archivo (asíncrono)
+fs.readFile('archivo.txt', 'utf8', (err, data) => {
+    if (err) {
+        console.error('Error:', err);
+        return;
+    }
+    console.log(data);
+});
+
+// Leer archivo (síncrono)
+try {
+    const data = fs.readFileSync('archivo.txt', 'utf8');
+    console.log(data);
+} catch (err) {
+    console.error('Error:', err);
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="escribir">
+                <h2><i class="fas fa-edit"></i> Escribir Archivos</h2>
+                <div class="code-block"><pre>// Escribir archivo (reemplaza contenido)
+fs.writeFile('nuevo.txt', 'Hola Mundo', (err) => {
+    if (err) throw err;
+    console.log('Archivo creado');
+});
+
+// Añadir al final del archivo
+fs.appendFile('archivo.txt', '\nNueva línea', (err) => {
+    if (err) throw err;
+    console.log('Texto añadido');
+});</pre></div>
+            </div>
+
+            <div class="content-section" id="sincronas">
+                <h2><i class="fas fa-sync-alt"></i> Síncronas vs Asíncronas</h2>
+                <p><strong>Síncronas (Sync):</strong> Bloquean el código hasta terminar</p>
+                <div class="code-block"><pre>console.log('Inicio');
+const data = fs.readFileSync('archivo.txt', 'utf8');
+console.log(data);
+console.log('Fin');  // Espera a que termine la lectura</pre></div>
+                <p><strong>Asíncronas:</strong> No bloquean el código</p>
+                <div class="code-block"><pre>console.log('Inicio');
+fs.readFile('archivo.txt', 'utf8', (err, data) => {
+    console.log(data);
+});
+console.log('Fin');  // Se ejecuta antes que el console.log de data</pre></div>
+            </div>
+
+            <div class="content-section" id="promises">
+                <h2><i class="fas fa-link"></i> fs/promises</h2>
+                <div class="code-block"><pre>const fs = require('fs/promises');
+
+// Con Promises
+fs.readFile('archivo.txt', 'utf8')
+    .then(data => console.log(data))
+    .catch(err => console.error(err));
+
+// Con async/await
+async function leerArchivo() {
+    try {
+        const data = await fs.readFile('archivo.txt', 'utf8');
+        console.log(data);
+    } catch (err) {
+        console.error(err);
+    }
+}
+leerArchivo();</pre></div>
+            </div>
+
+            <div class="content-section" id="directorios">
+                <h2><i class="fas fa-folder"></i> Trabajar con Directorios</h2>
+                <div class="code-block"><pre>const fs = require('fs');
+
+// Crear directorio
+fs.mkdir('nueva-carpeta', (err) => {
+    if (err) throw err;
+    console.log('Carpeta creada');
+});
+
+// Leer directorio
+fs.readdir('./carpeta', (err, files) => {
+    if (err) throw err;
+    console.log(files);  // Array de nombres de archivos
+});
+
+// Eliminar directorio
+fs.rmdir('carpeta', (err) => {
+    if (err) throw err;
+    console.log('Carpeta eliminada');
+});
+
+// Eliminar archivo
+fs.unlink('archivo.txt', (err) => {
+    if (err) throw err;
+    console.log('Archivo eliminado');
+});</pre></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen Angular - Wiki 2º DAW</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-md) 0;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .command-table th {
+            background-color: var(--angular-color);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .command-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .command-table tr:last-child td {
+            border-bottom: none;
+        }
+        .command-table tr:hover {
+            background-color: rgba(221, 27, 22, 0.05);
+        }
+        .command-table code {
+            background-color: rgba(221, 27, 22, 0.15);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+        </div>
+    </nav>
+
+    <div class="topics-page">
+        <div class="topics-header">
+            <div class="topics-icon" style="color: var(--angular-color);">
+                <i class="fab fa-angular"></i>
+            </div>
+            <h1 class="topics-title">Resumen Angular</h1>
+            <p class="topics-subtitle">Comandos CLI, decoradores y directivas</p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-terminal"></i> Angular CLI - Comandos Principales</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Flags Comunes</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>ng new</code></td>
+                        <td><code>nombre-proyecto</code></td>
+                        <td>Crea nuevo proyecto Angular</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng serve</code></td>
+                        <td><code>-o</code> (abrir navegador), <code>--port 4200</code></td>
+                        <td>Inicia servidor de desarrollo</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng build</code></td>
+                        <td><code>--prod</code> / <code>--configuration production</code></td>
+                        <td>Construye aplicación para producción</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng test</code></td>
+                        <td>-</td>
+                        <td>Ejecuta tests unitarios (Karma)</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng e2e</code></td>
+                        <td>-</td>
+                        <td>Ejecuta tests end-to-end</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng generate</code></td>
+                        <td>Ver tabla siguiente</td>
+                        <td>Genera elementos (componentes, servicios, etc.)</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng update</code></td>
+                        <td><code>@angular/cli @angular/core</code></td>
+                        <td>Actualiza Angular y dependencias</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng add</code></td>
+                        <td><code>paquete</code></td>
+                        <td>Añade dependencia al proyecto</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-magic"></i> ng generate - Crear Elementos</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Alias</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>ng generate component nombre</code></td>
+                        <td><code>ng g c nombre</code></td>
+                        <td>Crea componente</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng generate service nombre</code></td>
+                        <td><code>ng g s nombre</code></td>
+                        <td>Crea servicio</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng generate module nombre</code></td>
+                        <td><code>ng g m nombre</code></td>
+                        <td>Crea módulo</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng generate directive nombre</code></td>
+                        <td><code>ng g d nombre</code></td>
+                        <td>Crea directiva</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng generate pipe nombre</code></td>
+                        <td><code>ng g p nombre</code></td>
+                        <td>Crea pipe</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng generate guard nombre</code></td>
+                        <td><code>ng g g nombre</code></td>
+                        <td>Crea guard (protección de rutas)</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng generate interface nombre</code></td>
+                        <td><code>ng g i nombre</code></td>
+                        <td>Crea interfaz TypeScript</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng generate class nombre</code></td>
+                        <td><code>ng g cl nombre</code></td>
+                        <td>Crea clase TypeScript</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-at"></i> Decoradores Principales</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Decorador</th>
+                        <th>Uso</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>@Component</code></td>
+                        <td>Clase de componente</td>
+                        <td>Define un componente Angular</td>
+                    </tr>
+                    <tr>
+                        <td><code>@NgModule</code></td>
+                        <td>Clase de módulo</td>
+                        <td>Define un módulo Angular</td>
+                    </tr>
+                    <tr>
+                        <td><code>@Injectable</code></td>
+                        <td>Clase de servicio</td>
+                        <td>Marca clase como inyectable</td>
+                    </tr>
+                    <tr>
+                        <td><code>@Directive</code></td>
+                        <td>Clase de directiva</td>
+                        <td>Define una directiva</td>
+                    </tr>
+                    <tr>
+                        <td><code>@Pipe</code></td>
+                        <td>Clase de pipe</td>
+                        <td>Define un pipe personalizado</td>
+                    </tr>
+                    <tr>
+                        <td><code>@Input</code></td>
+                        <td>Propiedad de componente</td>
+                        <td>Recibe datos del padre</td>
+                    </tr>
+                    <tr>
+                        <td><code>@Output</code></td>
+                        <td>Propiedad EventEmitter</td>
+                        <td>Emite eventos al padre</td>
+                    </tr>
+                    <tr>
+                        <td><code>@ViewChild</code></td>
+                        <td>Propiedad</td>
+                        <td>Accede a hijo en template</td>
+                    </tr>
+                    <tr>
+                        <td><code>@HostListener</code></td>
+                        <td>Método</td>
+                        <td>Escucha eventos del host</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-code"></i> Directivas Estructurales</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Directiva</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>*ngIf</code></td>
+                        <td><code>&lt;div *ngIf="condicion"&gt;</code></td>
+                        <td>Renderiza si condición es verdadera</td>
+                    </tr>
+                    <tr>
+                        <td><code>*ngIf else</code></td>
+                        <td><code>&lt;div *ngIf="cond; else template"&gt;</code></td>
+                        <td>Renderiza con alternativa</td>
+                    </tr>
+                    <tr>
+                        <td><code>*ngFor</code></td>
+                        <td><code>&lt;li *ngFor="let item of items"&gt;</code></td>
+                        <td>Itera sobre array</td>
+                    </tr>
+                    <tr>
+                        <td><code>*ngFor index</code></td>
+                        <td><code>*ngFor="let item of items; let i = index"</code></td>
+                        <td>Accede al índice</td>
+                    </tr>
+                    <tr>
+                        <td><code>*ngSwitch</code></td>
+                        <td><code>&lt;div [ngSwitch]="valor"&gt;</code></td>
+                        <td>Switch/case en template</td>
+                    </tr>
+                    <tr>
+                        <td><code>*ngSwitchCase</code></td>
+                        <td><code>&lt;p *ngSwitchCase="'valor'"&gt;</code></td>
+                        <td>Caso del switch</td>
+                    </tr>
+                    <tr>
+                        <td><code>*ngSwitchDefault</code></td>
+                        <td><code>&lt;p *ngSwitchDefault&gt;</code></td>
+                        <td>Caso por defecto</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-palette"></i> Directivas de Atributo</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Directiva</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>[ngClass]</code></td>
+                        <td><code>[ngClass]="{'clase': condicion}"</code></td>
+                        <td>Añade clases CSS condicionalmente</td>
+                    </tr>
+                    <tr>
+                        <td><code>[ngStyle]</code></td>
+                        <td><code>[ngStyle]="{'color': variable}"</code></td>
+                        <td>Aplica estilos inline dinámicos</td>
+                    </tr>
+                    <tr>
+                        <td><code>[ngModel]</code></td>
+                        <td><code>[(ngModel)]="propiedad"</code></td>
+                        <td>Two-way data binding (requiere FormsModule)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-link"></i> Data Binding</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Interpolación</strong></td>
+                        <td><code>{{ variable }}</code></td>
+                        <td>Muestra datos en template</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Property Binding</strong></td>
+                        <td><code>[propiedad]="valor"</code></td>
+                        <td>Vincula propiedad de elemento</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Event Binding</strong></td>
+                        <td><code>(evento)="metodo()"</code></td>
+                        <td>Escucha eventos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Two-way Binding</strong></td>
+                        <td><code>[(ngModel)]="propiedad"</code></td>
+                        <td>Sincronización bidireccional</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Template Reference</strong></td>
+                        <td><code>#nombre</code></td>
+                        <td>Referencia a elemento en template</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-route"></i> Routing - Router</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Sintaxis/Código</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>RouterModule.forRoot()</code></td>
+                        <td><code>RouterModule.forRoot(routes)</code></td>
+                        <td>Configuración de rutas raíz</td>
+                    </tr>
+                    <tr>
+                        <td><code>Routes</code></td>
+                        <td><code>{ path: 'home', component: HomeComponent }</code></td>
+                        <td>Define ruta</td>
+                    </tr>
+                    <tr>
+                        <td><code>routerLink</code></td>
+                        <td><code>&lt;a routerLink="/home"&gt;</code></td>
+                        <td>Navegación declarativa</td>
+                    </tr>
+                    <tr>
+                        <td><code>routerLinkActive</code></td>
+                        <td><code>routerLinkActive="active"</code></td>
+                        <td>Clase CSS en ruta activa</td>
+                    </tr>
+                    <tr>
+                        <td><code>router-outlet</code></td>
+                        <td><code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code></td>
+                        <td>Punto de renderizado de rutas</td>
+                    </tr>
+                    <tr>
+                        <td><code>Router.navigate()</code></td>
+                        <td><code>this.router.navigate(['/home'])</code></td>
+                        <td>Navegación programática</td>
+                    </tr>
+                    <tr>
+                        <td><code>ActivatedRoute</code></td>
+                        <td><code>route.params.subscribe(p => p.id)</code></td>
+                        <td>Accede a parámetros de ruta</td>
+                    </tr>
+                    <tr>
+                        <td><code>Path param</code></td>
+                        <td><code>{ path: 'user/:id', ... }</code></td>
+                        <td>Parámetro en ruta</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-database"></i> Servicios y HTTP</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Ejemplo</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>HttpClient</code></td>
+                        <td><code>constructor(private http: HttpClient)</code></td>
+                        <td>Cliente HTTP de Angular</td>
+                    </tr>
+                    <tr>
+                        <td><code>http.get()</code></td>
+                        <td><code>this.http.get&lt;T&gt;(url)</code></td>
+                        <td>Petición GET</td>
+                    </tr>
+                    <tr>
+                        <td><code>http.post()</code></td>
+                        <td><code>this.http.post(url, body)</code></td>
+                        <td>Petición POST</td>
+                    </tr>
+                    <tr>
+                        <td><code>http.put()</code></td>
+                        <td><code>this.http.put(url, body)</code></td>
+                        <td>Petición PUT</td>
+                    </tr>
+                    <tr>
+                        <td><code>http.delete()</code></td>
+                        <td><code>this.http.delete(url)</code></td>
+                        <td>Petición DELETE</td>
+                    </tr>
+                    <tr>
+                        <td><code>Observable</code></td>
+                        <td><code>.subscribe(data => {})</code></td>
+                        <td>Suscripción a Observable (RxJS)</td>
+                    </tr>
+                    <tr>
+                        <td><code>pipe()</code></td>
+                        <td><code>observable.pipe(map(), filter())</code></td>
+                        <td>Operadores RxJS</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-filter"></i> Pipes Comunes</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Pipe</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>date</code></td>
+                        <td><code>{{ fecha | date:'dd/MM/yyyy' }}</code></td>
+                        <td>Formatea fechas</td>
+                    </tr>
+                    <tr>
+                        <td><code>uppercase</code></td>
+                        <td><code>{{ texto | uppercase }}</code></td>
+                        <td>Convierte a mayúsculas</td>
+                    </tr>
+                    <tr>
+                        <td><code>lowercase</code></td>
+                        <td><code>{{ texto | lowercase }}</code></td>
+                        <td>Convierte a minúsculas</td>
+                    </tr>
+                    <tr>
+                        <td><code>currency</code></td>
+                        <td><code>{{ precio | currency:'EUR' }}</code></td>
+                        <td>Formatea moneda</td>
+                    </tr>
+                    <tr>
+                        <td><code>percent</code></td>
+                        <td><code>{{ valor | percent }}</code></td>
+                        <td>Formatea porcentaje</td>
+                    </tr>
+                    <tr>
+                        <td><code>json</code></td>
+                        <td><code>{{ objeto | json }}</code></td>
+                        <td>Muestra objeto como JSON</td>
+                    </tr>
+                    <tr>
+                        <td><code>slice</code></td>
+                        <td><code>{{ array | slice:0:5 }}</code></td>
+                        <td>Corta array o string</td>
+                    </tr>
+                    <tr>
+                        <td><code>async</code></td>
+                        <td><code>{{ observable$ | async }}</code></td>
+                        <td>Suscribe a Observable automáticamente</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-wpforms"></i> Formularios</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Módulo</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Template-Driven</strong></td>
+                        <td><code>FormsModule</code></td>
+                        <td>Formularios basados en template con ngModel</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reactive Forms</strong></td>
+                        <td><code>ReactiveFormsModule</code></td>
+                        <td>Formularios reactivos (FormGroup, FormControl)</td>
+                    </tr>
+                    <tr>
+                        <td><code>FormControl</code></td>
+                        <td><code>new FormControl('valor inicial')</code></td>
+                        <td>Control individual de formulario</td>
+                    </tr>
+                    <tr>
+                        <td><code>FormGroup</code></td>
+                        <td><code>new FormGroup({campo: new FormControl()})</code></td>
+                        <td>Grupo de controles</td>
+                    </tr>
+                    <tr>
+                        <td><code>FormBuilder</code></td>
+                        <td><code>fb.group({campo: ['valor']})</code></td>
+                        <td>Constructor de formularios</td>
+                    </tr>
+                    <tr>
+                        <td><code>Validators</code></td>
+                        <td><code>Validators.required, Validators.email</code></td>
+                        <td>Validadores integrados</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Wiki 2º DAW - Tu repositorio de conocimiento en desarrollo web</p>
+    </footer>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

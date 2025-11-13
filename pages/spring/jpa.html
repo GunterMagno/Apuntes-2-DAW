@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>JPA y Bases de Datos - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Spring Boot</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-leaf"></i> JPA</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#entidades" class="active">Entidades</a></li>
+                <li><a href="#repositorios">Repositorios</a></li>
+                <li><a href="#relaciones">Relaciones</a></li>
+                <li><a href="#consultas">Consultas</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--spring-color);"><i class="fas fa-leaf"></i></div>
+                <h1 class="detail-title">4. JPA y Bases de Datos</h1>
+                <p class="detail-subtitle">Spring Data JPA</p>
+            </div>
+            <div class="content-section" id="entidades">
+                <h2><i class="fas fa-table"></i> Entidades</h2>
+                <div class="code-block"><pre>@Entity
+@Table(name = "usuarios")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false, unique = true)
+    private String email;
+    
+    @Column(nullable = false)
+    private String nombre;
+    
+    private Integer edad;
+    
+    // Getters y Setters
+}</pre></div>
+            </div>
+            <div class="content-section" id="repositorios">
+                <h2><i class="fas fa-database"></i> Repositorios</h2>
+                <div class="code-block"><pre>public interface UserRepository extends JpaRepository<User, Long> {
+    
+    // Métodos automáticos:
+    // save(), findById(), findAll(), deleteById(), etc.
+    
+    // Query methods
+    List<User> findByNombre(String nombre);
+    List<User> findByEdadGreaterThan(Integer edad);
+    Optional<User> findByEmail(String email);
+    
+}</pre></div>
+                <h3>Uso en Service</h3>
+                <div class="code-block"><pre>@Service
+public class UserService {
+    @Autowired
+    private UserRepository userRepository;
+    
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+    
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+}</pre></div>
+            </div>
+            <div class="content-section" id="relaciones">
+                <h2><i class="fas fa-link"></i> Relaciones entre Entidades</h2>
+                <h3>OneToMany</h3>
+                <div class="code-block"><pre>@Entity
+public class User {
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Post> posts;
+}
+
+@Entity
+public class Post {
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+}</pre></div>
+                <h3>ManyToMany</h3>
+                <div class="code-block"><pre>@Entity
+public class Student {
+    @ManyToMany
+    @JoinTable(
+        name = "student_course",
+        joinColumns = @JoinColumn(name = "student_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private List<Course> courses;
+}</pre></div>
+            </div>
+            <div class="content-section" id="consultas">
+                <h2><i class="fas fa-search"></i> Consultas Personalizadas</h2>
+                <div class="code-block"><pre>public interface UserRepository extends JpaRepository<User, Long> {
+    
+    @Query("SELECT u FROM User u WHERE u.edad > :edad")
+    List<User> findMayoresDe(@Param("edad") Integer edad);
+    
+    @Query(value = "SELECT * FROM usuarios WHERE nombre LIKE %:nombre%", 
+           nativeQuery = true)
+    List<User> buscarPorNombre(@Param("nombre") String nombre);
+    
+}</pre></div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

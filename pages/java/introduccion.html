@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Introducción a Java - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="./index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver a Java
+            </a>
+        </div>
+    </nav>
+
+    <!-- Contenido con Sidebar -->
+    <div class="content-with-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-java"></i> Introducción a Java</h3>
+            <ul class="sidebar-nav">
+                <li>
+                    <a href="#que-es-java" class="active">¿Qué es Java?</a>
+                </li>
+                <li>
+                    <a href="#caracteristicas">Características Principales</a>
+                </li>
+                <li>
+                    <a href="#como-funciona">¿Cómo Funciona Java?</a>
+                    <ul class="sidebar-subnav">
+                        <li><a href="#compilacion">Compilación</a></li>
+                        <li><a href="#jvm">JVM - Máquina Virtual</a></li>
+                        <li><a href="#ejecucion">Ejecución</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#primer-programa">Mi Primer Programa</a>
+                </li>
+                <li>
+                    <a href="#estructura-basica">Estructura Básica</a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--java-color);">
+                    <i class="fab fa-java"></i>
+                </div>
+                <h1 class="detail-title">1. Introducción a Java</h1>
+                <p class="detail-subtitle">Conoce los fundamentos y la arquitectura de Java</p>
+            </div>
+
+            <!-- ¿Qué es Java? -->
+            <div class="content-section" id="que-es-java">
+                <h2><i class="fas fa-info-circle"></i> ¿Qué es Java?</h2>
+                <p>
+                    <strong>Java</strong> es un lenguaje de programación de <strong>propósito general</strong> y 
+                    <strong>orientado a objetos</strong> creado por Sun Microsystems en 1995 (ahora propiedad de Oracle Corporation). 
+                    Fue diseñado con una filosofía clara: <em>"Write Once, Run Anywhere"</em> (Escribe una vez, ejecuta en cualquier lugar).
+                </p>
+                <p>
+                    Esto significa que cuando escribes código Java y lo compilas, el resultado puede ejecutarse en 
+                    <strong>cualquier sistema operativo</strong> (Windows, Linux, macOS, etc.) sin necesidad de modificar el código. 
+                    Esta portabilidad es una de las razones por las que Java es tan popular en el desarrollo empresarial y de aplicaciones móviles.
+                </p>
+                
+                <div class="info-box">
+                    <h4><i class="fas fa-lightbulb"></i> ¿Por qué aprender Java?</h4>
+                    <ul>
+                        <li><strong>Ampliamente utilizado:</strong> Java es uno de los lenguajes más usados en el mundo, especialmente en aplicaciones empresariales</li>
+                        <li><strong>Desarrollo Android:</strong> El lenguaje principal para desarrollar aplicaciones Android (junto con Kotlin)</li>
+                        <li><strong>Gran demanda laboral:</strong> Muchas empresas buscan desarrolladores Java</li>
+                        <li><strong>Ecosistema robusto:</strong> Miles de bibliotecas y frameworks disponibles (Spring, Hibernate, etc.)</li>
+                        <li><strong>Comunidad activa:</strong> Gran comunidad que ofrece soporte, tutoriales y soluciones</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Características Principales -->
+            <div class="content-section" id="caracteristicas">
+                <h2><i class="fas fa-star"></i> Características Principales</h2>
+                
+                <h3><i class="fas fa-cube"></i> 1. Orientado a Objetos</h3>
+                <p>
+                    En Java, <strong>todo gira alrededor de objetos</strong>. Un objeto es una entidad que tiene 
+                    <em>estado</em> (atributos o propiedades) y <em>comportamiento</em> (métodos o funciones). 
+                    Por ejemplo, si modelamos un "Coche" como objeto:
+                </p>
+                <ul>
+                    <li><strong>Estado:</strong> color, marca, velocidad actual</li>
+                    <li><strong>Comportamiento:</strong> acelerar(), frenar(), cambiarMarcha()</li>
+                </ul>
+                <p>
+                    Esta forma de programar nos permite organizar el código de manera más intuitiva, 
+                    modelando conceptos del mundo real.
+                </p>
+
+                <h3><i class="fas fa-globe"></i> 2. Multiplataforma</h3>
+                <p>
+                    Gracias a la <strong>JVM (Java Virtual Machine)</strong>, el código Java puede ejecutarse en 
+                    cualquier dispositivo que tenga una JVM instalada. El proceso es:
+                </p>
+                <ol>
+                    <li>Escribes el código fuente en archivos <code>.java</code></li>
+                    <li>El compilador lo convierte a <code>bytecode</code> (archivos <code>.class</code>)</li>
+                    <li>La JVM interpreta ese bytecode y lo ejecuta en tu sistema operativo</li>
+                </ol>
+                <p>
+                    El bytecode es <strong>independiente de la plataforma</strong>, por eso puedes compilar en 
+                    Windows y ejecutar en Linux sin cambios.
+                </p>
+
+                <h3><i class="fas fa-shield-alt"></i> 3. Seguro y Robusto</h3>
+                <p>
+                    Java incorpora múltiples características de seguridad:
+                </p>
+                <ul>
+                    <li><strong>Gestión automática de memoria:</strong> El Garbage Collector libera memoria automáticamente, 
+                    evitando fugas de memoria</li>
+                    <li><strong>Sin punteros explícitos:</strong> A diferencia de C/C++, no puedes manipular memoria directamente, 
+                    lo que previene muchos errores</li>
+                    <li><strong>Verificación de bytecode:</strong> Antes de ejecutar, la JVM verifica que el código sea seguro</li>
+                    <li><strong>Manejo de excepciones:</strong> Sistema robusto para gestionar errores sin que la aplicación colapse</li>
+                </ul>
+
+                <h3><i class="fas fa-project-diagram"></i> 4. Multihilo (Multithreading)</h3>
+                <p>
+                    Java tiene <strong>soporte nativo para programación concurrente</strong>, lo que permite que tu aplicación 
+                    realice múltiples tareas simultáneamente. Por ejemplo:
+                </p>
+                <ul>
+                    <li>Una aplicación puede estar descargando un archivo mientras actualiza la interfaz de usuario</li>
+                    <li>Un servidor puede atender a múltiples clientes al mismo tiempo</li>
+                </ul>
+                <p>
+                    Esto se logra mediante <strong>hilos (threads)</strong>, que son flujos de ejecución independientes dentro del mismo programa.
+                </p>
+            </div>
+
+            <!-- ¿Cómo Funciona Java? -->
+            <div class="content-section" id="como-funciona">
+                <h2><i class="fas fa-cogs"></i> ¿Cómo Funciona Java?</h2>
+                <p>
+                    Para entender Java, es importante conocer su arquitectura de dos fases: 
+                    <strong>compilación</strong> y <strong>ejecución</strong>.
+                </p>
+
+                <h3 id="compilacion"><i class="fas fa-file-code"></i> Fase 1: Compilación</h3>
+                <p>
+                    Cuando escribes código Java, lo haces en archivos de texto plano con extensión <code>.java</code>. 
+                    Este código lo entienden los humanos, pero no las máquinas. Aquí entra el <strong>compilador</strong> (javac).
+                </p>
+                <p>
+                    <strong>¿Qué hace el compilador?</strong>
+                </p>
+                <ul>
+                    <li>Lee tu archivo <code>.java</code></li>
+                    <li>Verifica que la sintaxis sea correcta</li>
+                    <li>Traduce el código a <strong>bytecode</strong></li>
+                    <li>Genera un archivo <code>.class</code> con el bytecode</li>
+                </ul>
+                <p>
+                    El bytecode es un <strong>lenguaje intermedio</strong> que no es código máquina nativo, 
+                    pero tampoco es código fuente legible. Es el lenguaje que entiende la JVM.
+                </p>
+
+                <div class="code-block">
+                    <pre>// Ejemplo: Archivo HolaMundo.java
+public class HolaMundo {
+    public static void main(String[] args) {
+        System.out.println("¡Hola Mundo!");
+    }
+}</pre>
+                </div>
+
+                <p>Para compilar este archivo, usas el comando:</p>
+                <div class="code-block">
+                    <pre>javac HolaMundo.java</pre>
+                </div>
+                <p>
+                    Esto generará un archivo <code>HolaMundo.class</code> que contiene el bytecode.
+                </p>
+
+                <h3 id="jvm"><i class="fas fa-microchip"></i> La JVM - Java Virtual Machine</h3>
+                <p>
+                    La <strong>JVM</strong> es el corazón de Java. Es un programa que actúa como una 
+                    <strong>"computadora virtual"</strong> capaz de ejecutar bytecode. Cada sistema operativo 
+                    tiene su propia JVM (JVM para Windows, JVM para Linux, etc.), pero todas entienden el mismo bytecode.
+                </p>
+                <p>
+                    <strong>Componentes principales de la JVM:</strong>
+                </p>
+                <ul>
+                    <li>
+                        <strong>Class Loader:</strong> Carga las clases (<code>.class</code>) en memoria cuando son necesarias.
+                        No carga todas las clases al inicio, solo las que se van usando.
+                    </li>
+                    <li>
+                        <strong>Bytecode Verifier:</strong> Verifica que el bytecode sea válido y seguro antes de ejecutarlo.
+                        Comprueba que no haya operaciones ilegales como acceso a memoria prohibido.
+                    </li>
+                    <li>
+                        <strong>JIT Compiler (Just-In-Time):</strong> Optimiza el rendimiento. Convierte las partes del bytecode 
+                        que se ejecutan frecuentemente a código máquina nativo, haciendo que el programa sea más rápido.
+                    </li>
+                    <li>
+                        <strong>Garbage Collector:</strong> Se encarga de la gestión automática de memoria. Busca objetos que 
+                        ya no se usan y libera la memoria que ocupan, evitando fugas de memoria.
+                    </li>
+                </ul>
+
+                <h3 id="ejecucion"><i class="fas fa-play-circle"></i> Fase 2: Ejecución</h3>
+                <p>
+                    Una vez compilado, puedes ejecutar tu programa con el comando <code>java</code>:
+                </p>
+                <div class="code-block">
+                    <pre>java HolaMundo</pre>
+                </div>
+                <p>
+                    <strong>Nota:</strong> No incluyes la extensión <code>.class</code> en el comando, 
+                    solo el nombre de la clase.
+                </p>
+                <p>
+                    Al ejecutar este comando, la JVM:
+                </p>
+                <ol>
+                    <li>Carga la clase <code>HolaMundo.class</code></li>
+                    <li>Busca el método <code>main()</code> (punto de entrada del programa)</li>
+                    <li>Empieza a ejecutar las instrucciones del método main</li>
+                    <li>En este caso, imprime "¡Hola Mundo!" en la consola</li>
+                </ol>
+            </div>
+
+            <!-- Mi Primer Programa -->
+            <div class="content-section" id="primer-programa">
+                <h2><i class="fas fa-code"></i> Mi Primer Programa en Java</h2>
+                <p>
+                    Vamos a analizar en detalle el programa "Hola Mundo" para entender cada componente:
+                </p>
+
+                <div class="code-block">
+                    <pre>public class HolaMundo {
+    public static void main(String[] args) {
+        System.out.println("¡Hola Mundo!");
+    }
+}</pre>
+                </div>
+
+                <h3>Desglose línea por línea:</h3>
+                
+                <h4>1. <code>public class HolaMundo {</code></h4>
+                <ul>
+                    <li><code>public</code>: Es un <strong>modificador de acceso</strong>. Significa que esta clase es accesible desde cualquier lugar.</li>
+                    <li><code>class</code>: Palabra clave que indica que estamos definiendo una clase.</li>
+                    <li><code>HolaMundo</code>: El <strong>nombre de la clase</strong>. IMPORTANTE: Debe coincidir exactamente con el nombre del archivo (<code>HolaMundo.java</code>).</li>
+                    <li><code>{</code>: Abre el bloque de código de la clase.</li>
+                </ul>
+
+                <h4>2. <code>public static void main(String[] args) {</code></h4>
+                <p>
+                    Esta es la <strong>firma del método main</strong>, el punto de entrada de cualquier aplicación Java. 
+                    Es obligatorio y debe escribirse exactamente así:
+                </p>
+                <ul>
+                    <li><code>public</code>: El método debe ser público para que la JVM pueda acceder a él.</li>
+                    <li><code>static</code>: Indica que este método pertenece a la clase, no a instancias de la clase. 
+                    La JVM puede llamarlo sin crear un objeto.</li>
+                    <li><code>void</code>: Indica que el método <strong>no devuelve ningún valor</strong>.</li>
+                    <li><code>main</code>: El nombre del método. La JVM busca específicamente este nombre.</li>
+                    <li><code>String[] args</code>: Un <strong>parámetro</strong> que es un array de Strings. Permite pasar 
+                    argumentos al programa desde la línea de comandos.</li>
+                </ul>
+
+                <h4>3. <code>System.out.println("¡Hola Mundo!");</code></h4>
+                <ul>
+                    <li><code>System</code>: Una clase del paquete <code>java.lang</code> que proporciona acceso al sistema.</li>
+                    <li><code>out</code>: Un objeto de tipo <code>PrintStream</code> que representa la salida estándar (consola).</li>
+                    <li><code>println</code>: Un <strong>método</strong> que imprime texto en la consola y añade un salto de línea al final.</li>
+                    <li><code>"¡Hola Mundo!"</code>: El <strong>String</strong> (cadena de texto) que queremos imprimir.</li>
+                    <li><code>;</code>: Todas las instrucciones en Java terminan con punto y coma.</li>
+                </ul>
+
+                <h4>4. Las llaves de cierre <code>}</code></h4>
+                <p>
+                    La primera cierra el método <code>main</code>, la segunda cierra la clase <code>HolaMundo</code>.
+                </p>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Errores Comunes</h4>
+                    <ul>
+                        <li><strong>Nombre del archivo ≠ nombre de la clase:</strong> Causará un error de compilación</li>
+                        <li><strong>Olvidar el punto y coma (;)</strong> al final de las instrucciones</li>
+                        <li><strong>Mayúsculas/minúsculas:</strong> Java es case-sensitive. <code>Main</code> ≠ <code>main</code></li>
+                        <li><strong>Olvidar las llaves de cierre:</strong> Cada <code>{</code> debe tener su <code>}</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Estructura Básica -->
+            <div class="content-section" id="estructura-basica">
+                <h2><i class="fas fa-sitemap"></i> Estructura Básica de un Programa Java</h2>
+                <p>
+                    Todo programa Java sigue una estructura organizada. Aquí te muestro los elementos clave:
+                </p>
+
+                <div class="code-block">
+                    <pre>// 1. Declaración del paquete (opcional)
+package com.miempresa.proyecto;
+
+// 2. Importaciones (opcional)
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// 3. Declaración de la clase (obligatorio)
+public class MiPrograma {
+    
+    // 4. Atributos de la clase
+    private String nombre;
+    private int edad;
+    
+    // 5. Constructor
+    public MiPrograma(String nombre, int edad) {
+        this.nombre = nombre;
+        this.edad = edad;
+    }
+    
+    // 6. Métodos
+    public void saludar() {
+        System.out.println("Hola, soy " + nombre);
+    }
+    
+    // 7. Método main (punto de entrada)
+    public static void main(String[] args) {
+        MiPrograma persona = new MiPrograma("Ana", 25);
+        persona.saludar();
+    }
+}</pre>
+                </div>
+
+                <h3>Explicación de cada sección:</h3>
+
+                <h4>1. Paquete (package)</h4>
+                <p>
+                    Los <strong>paquetes</strong> son como carpetas que organizan tus clases. Ayudan a:
+                </p>
+                <ul>
+                    <li>Evitar conflictos de nombres (dos clases pueden tener el mismo nombre si están en paquetes diferentes)</li>
+                    <li>Organizar el código en módulos lógicos</li>
+                    <li>Controlar el acceso a las clases</li>
+                </ul>
+                <p>
+                    Ejemplo: <code>com.miempresa.proyecto</code> indica que esta clase está en la carpeta 
+                    <code>com/miempresa/proyecto</code>
+                </p>
+
+                <h4>2. Importaciones (import)</h4>
+                <p>
+                    Cuando quieres usar clases de otros paquetes, debes <strong>importarlas</strong>. Por ejemplo:
+                </p>
+                <ul>
+                    <li><code>import java.util.ArrayList;</code> - Importa solo la clase ArrayList</li>
+                    <li><code>import java.util.*;</code> - Importa todas las clases del paquete java.util</li>
+                </ul>
+                <p>
+                    <strong>Nota:</strong> El paquete <code>java.lang</code> se importa automáticamente, por eso no necesitas 
+                    importar <code>System</code> o <code>String</code>.
+                </p>
+
+                <h4>3. Clase</h4>
+                <p>
+                    Es el contenedor principal de tu código. Define un <strong>tipo de objeto</strong> con sus propiedades y comportamientos.
+                </p>
+
+                <h4>4. Atributos</h4>
+                <p>
+                    Variables que almacenan el <strong>estado</strong> del objeto. Generalmente se declaran como <code>private</code> 
+                    para proteger los datos (encapsulación).
+                </p>
+
+                <h4>5. Constructor</h4>
+                <p>
+                    Método especial que se ejecuta al <strong>crear un objeto</strong>. Su nombre debe ser igual al de la clase 
+                    y no tiene tipo de retorno.
+                </p>
+
+                <h4>6. Métodos</h4>
+                <p>
+                    Definen el <strong>comportamiento</strong> del objeto. Son las acciones que puede realizar.
+                </p>
+
+                <h4>7. Método main</h4>
+                <p>
+                    El <strong>punto de entrada</strong> del programa. Es donde comienza la ejecución.
+                </p>
+
+                <div class="warning-box">
+                    <h4><i class="fas fa-info-circle"></i> Convenciones de Nombres en Java</h4>
+                    <ul>
+                        <li><strong>Clases:</strong> PascalCase (primera letra mayúscula) - <code>MiClase</code>, <code>PersonaJoven</code></li>
+                        <li><strong>Métodos y variables:</strong> camelCase (primera letra minúscula) - <code>miMetodo</code>, <code>nombreCompleto</code></li>
+                        <li><strong>Constantes:</strong> MAYÚSCULAS con guiones bajos - <code>MAX_VALOR</code>, <code>PI</code></li>
+                        <li><strong>Paquetes:</strong> Todo en minúsculas - <code>com.empresa.proyecto</code></li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        // Script para resaltar la sección activa en el sidebar
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let currentSection = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + currentSection) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

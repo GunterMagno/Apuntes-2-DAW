@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Mongoose - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a MongoDB</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-database"></i> Mongoose</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#intro" class="active">¿Qué es Mongoose?</a></li>
+                <li><a href="#schemas">Schemas</a></li>
+                <li><a href="#modelos">Modelos</a></li>
+                <li><a href="#validaciones">Validaciones</a></li>
+                <li><a href="#middleware">Middleware</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--mongodb-color);"><i class="fas fa-database"></i></div>
+                <h1 class="detail-title">5. Mongoose</h1>
+                <p class="detail-subtitle">ODM para MongoDB en Node.js</p>
+            </div>
+            <div class="content-section" id="intro">
+                <h2><i class="fas fa-question-circle"></i> ¿Qué es Mongoose?</h2>
+                <p><strong>Mongoose</strong> es un ODM (Object Document Mapper) que facilita trabajar con MongoDB desde Node.js, proporcionando esquemas, validaciones y métodos.</p>
+                <div class="code-block"><pre>// Instalación
+npm install mongoose
+
+// Conexión
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/miBaseDatos')
+  .then(() => console.log('Conectado a MongoDB'))
+  .catch(err => console.error('Error de conexión', err));</pre></div>
+            </div>
+            <div class="content-section" id="schemas">
+                <h2><i class="fas fa-file-code"></i> Schemas</h2>
+                <p>Un <strong>schema</strong> define la estructura de los documentos.</p>
+                <div class="code-block"><pre>const { Schema } = require('mongoose');
+
+const usuarioSchema = new Schema({
+  nombre: String,
+  edad: Number,
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  fechaRegistro: {
+    type: Date,
+    default: Date.now
+  },
+  activo: {
+    type: Boolean,
+    default: true
+  }
+});</pre></div>
+            </div>
+            <div class="content-section" id="modelos">
+                <h2><i class="fas fa-database"></i> Modelos y Operaciones</h2>
+                <div class="code-block"><pre>const Usuario = mongoose.model('Usuario', usuarioSchema);
+
+// Crear
+const nuevoUsuario = new Usuario({
+  nombre: 'Ana García',
+  edad: 25,
+  email: 'ana@example.com'
+});
+await nuevoUsuario.save();
+
+// O directamente
+await Usuario.create({ nombre: 'Luis', edad: 30, email: 'luis@example.com' });
+
+// Leer
+const usuarios = await Usuario.find({ edad: { $gte: 25 } });
+const usuario = await Usuario.findById(id);
+const uno = await Usuario.findOne({ email: 'ana@example.com' });
+
+// Actualizar
+await Usuario.updateOne({ _id: id }, { edad: 26 });
+await Usuario.findByIdAndUpdate(id, { edad: 26 }, { new: true });
+
+// Eliminar
+await Usuario.deleteOne({ _id: id });
+await Usuario.findByIdAndDelete(id);</pre></div>
+            </div>
+            <div class="content-section" id="validaciones">
+                <h2><i class="fas fa-check-circle"></i> Validaciones</h2>
+                <div class="code-block"><pre>const productoSchema = new Schema({
+  nombre: {
+    type: String,
+    required: [true, 'El nombre es obligatorio'],
+    minlength: 3,
+    maxlength: 100
+  },
+  precio: {
+    type: Number,
+    required: true,
+    min: [0, 'El precio no puede ser negativo']
+  },
+  categoria: {
+    type: String,
+    enum: ['Electrónica', 'Ropa', 'Alimentos']
+  },
+  email: {
+    type: String,
+    match: [/^\S+@\S+\.\S+$/, 'Email inválido']
+  }
+});</pre></div>
+            </div>
+            <div class="content-section" id="middleware">
+                <h2><i class="fas fa-cogs"></i> Middleware (Hooks)</h2>
+                <div class="code-block"><pre>// Pre-save
+usuarioSchema.pre('save', function(next) {
+  console.log('Antes de guardar:', this.nombre);
+  this.fechaActualizacion = Date.now();
+  next();
+});
+
+// Post-save
+usuarioSchema.post('save', function(doc) {
+  console.log('Usuario guardado:', doc._id);
+});
+
+// Métodos personalizados
+usuarioSchema.methods.saludar = function() {
+  return `Hola, soy ${this.nombre}`;
+};
+
+const usuario = await Usuario.findById(id);
+console.log(usuario.saludar());</pre></div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

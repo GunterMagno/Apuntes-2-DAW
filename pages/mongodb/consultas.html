@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Consultas Avanzadas - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a MongoDB</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-database"></i> Consultas</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#introduccion" class="active">Introducción</a></li>
+                <li><a href="#operadores">Operadores de Comparación</a></li>
+                <li><a href="#logicos">Operadores Lógicos</a></li>
+                <li><a href="#arrays">Consultas en Arrays</a></li>
+                <li><a href="#embebidos">Documentos Embebidos</a></li>
+                <li><a href="#regex">Expresiones Regulares</a></li>
+                <li><a href="#proyecciones">Proyecciones</a></li>
+                <li><a href="#cursor">Métodos de Cursor</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--mongodb-color);"><i class="fas fa-database"></i></div>
+                <h1 class="detail-title">3. Consultas Avanzadas en MongoDB</h1>
+                <p class="detail-subtitle">Filtros complejos, proyecciones y optimización de consultas</p>
+            </div>
+
+            <div class="content-section" id="introduccion">
+                <h2><i class="fas fa-info-circle"></i> Introducción a Consultas Avanzadas</h2>
+                <p>MongoDB ofrece un sistema de consultas extremadamente potente y flexible que va mucho más allá de las búsquedas simples. Las <strong>consultas avanzadas</strong> te permiten filtrar, transformar y recuperar datos de formas complejas sin necesidad de traer toda la información a la aplicación.</p>
+
+                <p><strong>¿Por qué son importantes las consultas avanzadas?</strong></p>
+                <ul>
+                    <li><strong>Rendimiento:</strong> Filtrar datos en el servidor es mucho más rápido que hacerlo en la aplicación</li>
+                    <li><strong>Eficiencia de red:</strong> Solo transfieres los datos que realmente necesitas</li>
+                    <li><strong>Escalabilidad:</strong> Reducir la carga de procesamiento en tu aplicación</li>
+                    <li><strong>Simplicidad:</strong> Menos código en tu aplicación, más lógica en la base de datos</li>
+                </ul>
+
+                <div class="info-box">
+                    <strong>💡 Filosofía de consultas en MongoDB:</strong>
+                    <p>A diferencia de SQL donde usas un lenguaje de consulta separado, MongoDB usa <strong>documentos JSON/JavaScript</strong> para expresar consultas. Esto hace que sean naturales para desarrolladores web.</p>
+                    <div class="code-block"><pre>// SQL:
+SELECT * FROM usuarios WHERE edad > 25 AND ciudad = 'Madrid'
+
+// MongoDB (sintaxis de documento JSON):
+db.usuarios.find({ 
+  edad: { $gt: 25 }, 
+  ciudad: "Madrid" 
+})</pre></div>
+                </div>
+
+                <h3>Estructura de una Consulta</h3>
+                <p>Las consultas en MongoDB tienen dos partes principales:</p>
+                <div class="code-block"><pre>db.coleccion.find(
+  { filtro },      // ← Qué documentos buscar
+  { proyeccion }   // ← Qué campos devolver (opcional)
+)</pre></div>
+
+                <p>Además, puedes encadenar <strong>métodos de cursor</strong> para transformar los resultados:</p>
+                <div class="code-block"><pre>db.usuarios.find({ edad: { $gte: 18 } })  // Filtro
+  .sort({ nombre: 1 })                      // Ordenar
+  .limit(10)                                // Limitar
+  .skip(20)                                 // Saltar (paginación)
+  .projection({ nombre: 1, email: 1 })      // Proyección</pre></div>
+            </div>
+
+            <div class="content-section" id="operadores">
+                <h2><i class="fas fa-filter"></i> Operadores de Comparación</h2>
+                <p>Los operadores de comparación permiten filtrar documentos basándose en condiciones sobre los valores de los campos.</p>
+
+                <h3>Operadores Básicos</h3>
+                
+                <h4>$eq - Igual (Equality)</h4>
+                <p>Busca documentos donde el campo sea exactamente igual al valor especificado.</p>
+                <div class="code-block"><pre>// Forma explícita:
+db.productos.find({ precio: { $eq: 100 } })
+
+// Forma implícita (recomendada):
+db.productos.find({ precio: 100 })
+
+// Con strings:
+db.usuarios.find({ ciudad: "Madrid" })
+
+// IMPORTANTE: Es case-sensitive
+db.usuarios.find({ ciudad: "madrid" })  // No encontrará "Madrid"</pre></div>
+
+                <h4>$ne - No Igual (Not Equal)</h4>
+                <p>Busca documentos donde el campo NO sea igual al valor, o donde el campo no exista.</p>
+                <div class="code-block"><pre>// Productos que NO son de electrónica:
+db.productos.find({ categoria: { $ne: "Electrónica" } })
+
+// Usuarios que NO tienen 25 años:
+db.usuarios.find({ edad: { $ne: 25 } })
+
+// ⚠️ CUIDADO: También devuelve documentos sin el campo
+db.usuarios.find({ edad: { $ne: 25 } })
+// Devuelve usuarios con edad ≠ 25 Y usuarios sin campo "edad"</pre></div>
+
+                <h4>$gt y $gte - Mayor que / Mayor o igual</h4>
+                <p><code>$gt</code> (greater than) y <code>$gte</code> (greater than or equal) filtran valores mayores.</p>
+                <div class="code-block"><pre>// Productos con precio mayor a 100:
+db.productos.find({ precio: { $gt: 100 } })
+
+// Usuarios con 18 años o más (mayores de edad):
+db.usuarios.find({ edad: { $gte: 18 } })
+
+// Con fechas:
+db.pedidos.find({ 
+  fecha: { $gte: ISODate("2024-01-01") } 
+})
+
+// Combinar ambos (rango abierto):
+db.productos.find({ 
+  precio: { $gt: 50 }  // Más de 50 (no incluye 50)
+})</pre></div>
+
+                <h4>$lt y $lte - Menor que / Menor o igual</h4>
+                <div class="code-block"><pre>// Productos baratos (menos de 50€):
+db.productos.find({ precio: { $lt: 50 } })
+
+// Usuarios menores de edad (hasta 17 años):
+db.usuarios.find({ edad: { $lte: 17 } })
+
+// Stock bajo (10 unidades o menos):
+db.productos.find({ stock: { $lte: 10 } })</pre></div>
+
+                <h3>Combinar Operadores: Rangos</h3>
+                <p>Puedes combinar operadores para crear rangos de valores:</p>
+                <div class="code-block"><pre>// Productos entre 50€ y 200€ (inclusivo):
+db.productos.find({ 
+  precio: { 
+    $gte: 50, 
+    $lte: 200 
+  } 
+})
+
+// Usuarios entre 25 y 35 años:
+db.usuarios.find({ 
+  edad: { 
+    $gte: 25, 
+    $lte: 35 
+  } 
+})
+
+// Pedidos del año 2024:
+db.pedidos.find({
+  fecha: {
+    $gte: ISODate("2024-01-01"),
+    $lt: ISODate("2025-01-01")
+  }
+})
+
+// Temperaturas anormales (fuera del rango normal):
+db.sensores.find({
+  $or: [
+    { temperatura: { $lt: 15 } },
+    { temperatura: { $gt: 30 } }
+  ]
+})</pre></div>
+
+                <h3>Operadores de Conjunto</h3>
+
+                <h4>$in - En Lista</h4>
+                <p>Busca documentos donde el campo coincida con cualquier valor de un array.</p>
+                <div class="code-block"><pre>// Productos de varias categorías:
+db.productos.find({ 
+  categoria: { 
+    $in: ["Libros", "Música", "Películas"] 
+  } 
+})
+
+// Usuarios de ciudades específicas:
+db.usuarios.find({ 
+  ciudad: { 
+    $in: ["Madrid", "Barcelona", "Valencia"] 
+  } 
+})
+
+// Estados de pedido válidos:
+db.pedidos.find({ 
+  estado: { 
+    $in: ["pendiente", "procesando", "enviado"] 
+  } 
+})
+
+// Con números:
+db.productos.find({ 
+  stock: { $in: [0, 1, 2] }  // Stock crítico
+})</pre></div>
+
+                <h4>$nin - No En Lista</h4>
+                <p>Busca documentos donde el campo NO coincida con ningún valor del array.</p>
+                <div class="code-block"><pre>// Productos que NO son de estas categorías:
+db.productos.find({ 
+  categoria: { 
+    $nin: ["Electrónica", "Informática"] 
+  } 
+})
+
+// Pedidos que NO están cancelados ni devueltos:
+db.pedidos.find({ 
+  estado: { 
+    $nin: ["cancelado", "devuelto"] 
+  } 
+})</pre></div>
+
+                <h3>Operadores de Existencia y Tipo</h3>
+
+                <h4>$exists - Campo Existe</h4>
+                <p>Verifica si un campo existe en el documento (independientemente de su valor).</p>
+                <div class="code-block"><pre>// Usuarios que tienen email:
+db.usuarios.find({ email: { $exists: true } })
+
+// Usuarios SIN email:
+db.usuarios.find({ email: { $exists: false } })
+
+// Productos con descuento definido:
+db.productos.find({ descuento: { $exists: true } })
+
+// Combinar con valor:
+// Usuarios CON email Y que sea gmail:
+db.usuarios.find({
+  email: { 
+    $exists: true,
+    $regex: /@gmail\.com$/
+  }
+})</pre></div>
+
+                <h4>$type - Tipo de Dato</h4>
+                <p>Filtra documentos basándose en el tipo BSON del campo.</p>
+                <div class="code-block"><pre>// Campos que son strings:
+db.productos.find({ precio: { $type: "string" } })
+
+// Campos que son números:
+db.productos.find({ precio: { $type: "number" } })
+
+// Tipos BSON específicos:
+db.usuarios.find({ edad: { $type: "int" } })        // Int32
+db.productos.find({ precio: { $type: "double" } })  // Double
+db.logs.find({ fecha: { $type: "date" } })          // Date
+db.docs.find({ _id: { $type: "objectId" } })        // ObjectId
+
+// Múltiples tipos (array de tipos):
+db.mixed.find({ 
+  valor: { 
+    $type: ["int", "long", "double"] 
+  } 
+})</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Tipos BSON comunes:</strong>
+                    <ul>
+                        <li><code>"string"</code> - Cadena de texto</li>
+                        <li><code>"int"</code> - Entero de 32 bits</li>
+                        <li><code>"long"</code> - Entero de 64 bits</li>
+                        <li><code>"double"</code> - Número decimal</li>
+                        <li><code>"bool"</code> - Booleano</li>
+                        <li><code>"date"</code> - Fecha/hora</li>
+                        <li><code>"objectId"</code> - ObjectId de MongoDB</li>
+                        <li><code>"array"</code> - Array</li>
+                        <li><code>"object"</code> - Documento embebido</li>
+                        <li><code>"null"</code> - Valor nulo</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="logicos">
+                <h2><i class="fas fa-code-branch"></i> Operadores Lógicos</h2>
+                <p>Los operadores lógicos permiten combinar múltiples condiciones de formas complejas.</p>
+
+                <h3>$and - Y Lógico</h3>
+                <p>Todos los criterios deben cumplirse. MongoDB usa AND implícito por defecto.</p>
+
+                <div class="code-block"><pre>// AND implícito (forma natural):
+db.productos.find({ 
+  precio: { $gte: 100 },
+  categoria: "Electrónica",
+  stock: { $gt: 0 }
+})
+// Equivale a: precio >= 100 AND categoria = "Electrónica" AND stock > 0
+
+// AND explícito (cuando necesitas múltiples condiciones en el mismo campo):
+db.productos.find({
+  $and: [
+    { precio: { $gte: 50 } },
+    { precio: { $lte: 200 } }
+  ]
+})
+
+// Caso de uso real - cuando tienes condiciones duplicadas:
+db.logs.find({
+  $and: [
+    { timestamp: { $gte: ISODate("2024-01-01") } },
+    { timestamp: { $lt: ISODate("2024-02-01") } },
+    { nivel: "error" },
+    { nivel: { $ne: "warning" } }  // Necesitas $and explícito aquí
+  ]
+})</pre></div>
+
+                <h3>$or - O Lógico</h3>
+                <p>Al menos una de las condiciones debe cumplirse.</p>
+
+                <div class="code-block"><pre>// Productos de varias categorías:
+db.productos.find({
+  $or: [
+    { categoria: "Libros" },
+    { categoria: "Música" },
+    { categoria: "Películas" }
+  ]
+})
+// Equivale a: categoria = "Libros" OR "Música" OR "Películas"
+
+// Mejor alternativa con $in:
+db.productos.find({ 
+  categoria: { $in: ["Libros", "Música", "Películas"] } 
+})
+
+// Caso donde $or es necesario - condiciones en campos diferentes:
+db.usuarios.find({
+  $or: [
+    { edad: { $lt: 18 } },
+    { tutor: { $exists: true } }
+  ]
+})
+// Menores de edad O personas con tutor
+
+// Combinar condiciones complejas:
+db.productos.find({
+  $or: [
+    { descuento: { $gte: 50 } },
+    { 
+      $and: [
+        { precio: { $lt: 20 } },
+        { stock: { $gt: 100 } }
+      ]
+    }
+  ]
+})
+// Descuento >= 50% O (precio < 20 Y stock > 100)</pre></div>
+
+                <h3>$nor - Ni... Ni... (Ninguna condición)</h3>
+                <p>Ninguna de las condiciones debe cumplirse.</p>
+
+                <div class="code-block"><pre>// Productos que NO son ni libros ni música:
+db.productos.find({
+  $nor: [
+    { categoria: "Libros" },
+    { categoria: "Música" }
+  ]
+})
+
+// Usuarios que NO son menores ni jubilados:
+db.usuarios.find({
+  $nor: [
+    { edad: { $lt: 18 } },
+    { edad: { $gte: 65 } }
+  ]
+})
+
+// Pedidos que NO están ni cancelados ni devueltos:
+db.pedidos.find({
+  $nor: [
+    { estado: "cancelado" },
+    { estado: "devuelto" }
+  ]
+})</pre></div>
+
+                <h3>$not - Negación</h3>
+                <p>Niega una expresión. Útil para invertir condiciones complejas.</p>
+
+                <div class="code-block"><pre>// Productos que NO cuestan más de 100€:
+db.productos.find({ 
+  precio: { $not: { $gt: 100 } } 
+})
+// Equivale a: precio <= 100
+
+// Usuarios cuyo nombre NO empieza con "A":
+db.usuarios.find({ 
+  nombre: { $not: /^A/ } 
+})
+
+// Productos sin descuento o con descuento menor al 10%:
+db.productos.find({ 
+  descuento: { $not: { $gte: 10 } } 
+})</pre></div>
+
+                <h3>Combinaciones Complejas</h3>
+                <div class="code-block"><pre>// Ejemplo real: Filtro de productos para oferta
+db.productos.find({
+  $and: [
+    // Debe estar disponible:
+    { stock: { $gt: 0 } },
+    { activo: true },
+    // Y cumplir UNA de estas condiciones:
+    {
+      $or: [
+        // Productos con descuento alto:
+        { descuento: { $gte: 30 } },
+        // O productos económicos con buen rating:
+        {
+          $and: [
+            { precio: { $lt: 50 } },
+            { rating: { $gte: 4 } }
+          ]
+        }
+      ]
+    }
+  ]
+})
+
+// Filtro de usuarios para campaña de marketing:
+db.usuarios.find({
+  $and: [
+    // Usuario activo y con email:
+    { activo: true },
+    { email: { $exists: true } },
+    // NO debe estar en estos grupos:
+    {
+      $nor: [
+        { suscrito: false },
+        { bloqueado: true }
+      ]
+    },
+    // Y debe cumplir AL MENOS una condición:
+    {
+      $or: [
+        { ultimaCompra: { $gte: ISODate("2024-01-01") } },
+        { valorVidaCliente: { $gte: 500 } },
+        { nivel: "premium" }
+      ]
+    }
+  ]
+})</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Rendimiento de operadores lógicos:</strong>
+                    <ul>
+                        <li><code>$and</code> implícito es más eficiente que <code>$and</code> explícito</li>
+                        <li><code>$in</code> es más eficiente que <code>$or</code> para el mismo campo</li>
+                        <li><code>$or</code> puede impedir el uso eficiente de índices si las condiciones están en campos diferentes</li>
+                        <li>Coloca las condiciones más restrictivas primero para filtrar más documentos antes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="arrays">
+                <h2><i class="fas fa-list"></i> Consultas en Arrays</h2>
+                <p>MongoDB tiene operadores específicos para consultar campos que contienen arrays de forma eficiente.</p>
+
+                <h3>Búsqueda Simple en Arrays</h3>
+                <p>Para buscar si un array contiene un valor específico, usa la sintaxis normal:</p>
+
+                <div class="code-block"><pre>// Documento de ejemplo:
+{
+  _id: 1,
+  nombre: "Ana",
+  hobbies: ["lectura", "música", "natación"]
+}
+
+// Buscar usuarios con hobby "música":
+db.usuarios.find({ hobbies: "música" })
+// Devuelve documentos donde el array hobbies contiene "música"
+
+// ⚠️ IMPORTANTE: NO es lo mismo buscar el array completo:
+db.usuarios.find({ hobbies: ["música"] })
+// Esto busca documentos donde hobbies sea EXACTAMENTE ["música"]</pre></div>
+
+                <h3>$all - Contiene Todos los Valores</h3>
+                <p>El array debe contener TODOS los valores especificados (en cualquier orden).</p>
+
+                <div class="code-block"><pre>// Usuarios con TODOS estos hobbies:
+db.usuarios.find({ 
+  hobbies: { 
+    $all: ["lectura", "música"] 
+  } 
+})
+// Devuelve usuarios que tienen AMBOS hobbies (pueden tener más)
+
+// Ejemplo:
+// ✅ Coincide: { hobbies: ["lectura", "música", "natación"] }
+// ✅ Coincide: { hobbies: ["música", "cine", "lectura"] }
+// ❌ No coincide: { hobbies: ["lectura", "cine"] } // falta "música"
+
+// Productos con todas estas características:
+db.productos.find({ 
+  caracteristicas: { 
+    $all: ["WiFi", "Bluetooth", "USB-C"] 
+  } 
+})</pre></div>
+
+                <h3>$elemMatch - Elemento que Cumple Múltiples Condiciones</h3>
+                <p>Para arrays de documentos u objetos, busca elementos que cumplan TODAS las condiciones especificadas.</p>
+
+                <div class="code-block"><pre>// Documento con array de objetos:
+{
+  _id: 1,
+  nombre: "Smartphone X",
+  reviews: [
+    { usuario: "Ana", rating: 5, verificado: true },
+    { usuario: "Luis", rating: 3, verificado: false },
+    { usuario: "María", rating: 4, verificado: true }
+  ]
+}
+
+// Productos con AL MENOS una review verificada con rating >= 4:
+db.productos.find({
+  reviews: {
+    $elemMatch: {
+      rating: { $gte: 4 },
+      verificado: true
+    }
+  }
+})
+
+// Sin $elemMatch (INCORRECTO para este caso):
+db.productos.find({
+  "reviews.rating": { $gte: 4 },
+  "reviews.verificado": true
+})
+// ⚠️ Esto encuentra productos donde:
+// - CUALQUIER review tiene rating >= 4 (puede ser review diferente)
+// - Y CUALQUIER review está verificada (puede ser otra review)
+
+// Ejemplo real - pedidos con productos caros:
+db.pedidos.find({
+  productos: {
+    $elemMatch: {
+      precio: { $gt: 100 },
+      cantidad: { $gte: 2 }
+    }
+  }
+})
+// Pedidos con AL MENOS un producto que cueste > 100€ Y se pidieron >= 2 unidades</pre></div>
+
+                <h3>$size - Tamaño del Array</h3>
+                <p>Busca documentos donde el array tenga exactamente el tamaño especificado.</p>
+
+                <div class="code-block"><pre>// Usuarios con exactamente 3 hobbies:
+db.usuarios.find({ hobbies: { $size: 3 } })
+
+// Pedidos con exactamente 1 producto:
+db.pedidos.find({ productos: { $size: 1 } })
+
+// Usuarios sin hobbies:
+db.usuarios.find({ hobbies: { $size: 0 } })
+
+// ⚠️ LIMITACIÓN: No puedes usar rangos con $size
+// ❌ ESTO NO FUNCIONA:
+db.usuarios.find({ hobbies: { $size: { $gt: 3 } } })
+
+// ✅ Solución para rangos - almacena el tamaño en un campo separado:
+// Al insertar/actualizar:
+db.usuarios.updateOne(
+  { _id: userId },
+  { 
+    $set: { hobbies: ["lectura", "música"] },
+    $set: { numHobbies: 2 }
+  }
+)
+// Luego consultar:
+db.usuarios.find({ numHobbies: { $gt: 3 } })</pre></div>
+
+                <h3>Operador $ (Posicional) en Proyecciones</h3>
+                <p>Devuelve solo el PRIMER elemento del array que coincide con la consulta.</p>
+
+                <div class="code-block"><pre>// Devolver solo la review con rating 5:
+db.productos.find(
+  { "reviews.rating": 5 },
+  { "reviews.$": 1, nombre: 1 }
+)
+
+// Resultado:
+{
+  _id: 1,
+  nombre: "Producto X",
+  reviews: [
+    { usuario: "Ana", rating: 5, verificado: true }  // Solo la que coincide
+  ]
+}</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Arrays vs Documentos Embebidos:</strong>
+                    <p><strong>Cuándo usar arrays:</strong></p>
+                    <ul>
+                        <li>Listas de valores simples: tags, categorías, hobbies</li>
+                        <li>Colecciones pequeñas de objetos similares: reviews, comentarios</li>
+                        <li>Máximo ~100 elementos por array (por rendimiento)</li>
+                    </ul>
+                    <p><strong>Cuándo NO usar arrays:</strong></p>
+                    <ul>
+                        <li>Si el array puede crecer indefinidamente (riesgo de superar 16MB)</li>
+                        <li>Si necesitas consultar frecuentemente por múltiples campos del subdocumento</li>
+                        <li>Si necesitas índices en campos del subdocumento (mejor usar colección separada)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="embebidos">
+                <h2><i class="fas fa-layer-group"></i> Consultas en Documentos Embebidos</h2>
+                <p>MongoDB permite consultar campos dentro de documentos embebidos usando la <strong>notación de puntos</strong>.</p>
+
+                <h3>Notación de Puntos</h3>
+                <div class="code-block"><pre>// Documento de ejemplo:
+{
+  _id: 1,
+  nombre: "Ana García",
+  direccion: {
+    calle: "Gran Vía 123",
+    ciudad: "Madrid",
+    codigoPostal: "28013",
+    coordenadas: {
+      lat: 40.4168,
+      lng: -3.7038
+    }
+  }
+}
+
+// Buscar por campo embebido:
+db.usuarios.find({ "direccion.ciudad": "Madrid" })
+
+// Múltiples niveles de anidamiento:
+db.usuarios.find({ "direccion.coordenadas.lat": { $gt: 40 } })
+
+// Combinar con otros operadores:
+db.usuarios.find({
+  "direccion.ciudad": "Madrid",
+  "direccion.codigoPostal": { $regex: /^280/ }
+})</pre></div>
+
+                <h3>Coincidencia Exacta de Documento</h3>
+                <p>Buscar por el documento completo requiere coincidencia exacta en todos los campos Y en el mismo orden:</p>
+
+                <div class="code-block"><pre>// ❌ Esto requiere coincidencia EXACTA (orden incluido):
+db.usuarios.find({
+  direccion: {
+    calle: "Gran Vía 123",
+    ciudad: "Madrid",
+    codigoPostal: "28013"
+  }
+})
+// Solo coincide si el documento tiene EXACTAMENTE estos campos en este ORDEN
+
+// ✅ Mejor: Usa notación de puntos para campos específicos:
+db.usuarios.find({
+  "direccion.calle": "Gran Vía 123",
+  "direccion.ciudad": "Madrid"
+})
+// Coincide independientemente de otros campos u orden</pre></div>
+
+                <h3>Arrays de Documentos Embebidos</h3>
+                <div class="code-block"><pre>// Documento con array de objetos:
+{
+  _id: 1,
+  nombre: "Pedido #123",
+  productos: [
+    { nombre: "Teclado", precio: 89.99, cantidad: 1 },
+    { nombre: "Ratón", precio: 29.99, cantidad: 2 },
+    { nombre: "Monitor", precio: 299.99, cantidad: 1 }
+  ]
+}
+
+// Buscar pedidos con algún producto llamado "Teclado":
+db.pedidos.find({ "productos.nombre": "Teclado" })
+
+// Buscar pedidos con productos caros:
+db.pedidos.find({ "productos.precio": { $gt: 200 } })
+
+// Con $elemMatch (condiciones múltiples en el MISMO elemento):
+db.pedidos.find({
+  productos: {
+    $elemMatch: {
+      precio: { $gt: 100 },
+      cantidad: { $gte: 2 }
+    }
+  }
+})
+// Solo pedidos con un producto que cueste >100€ Y cantidad >=2 (mismo producto)</pre></div>
+            </div>
+
+            <div class="content-section" id="regex">
+                <h2><i class="fas fa-font"></i> Expresiones Regulares</h2>
+                <p>Las <strong>expresiones regulares (regex)</strong> permiten buscar patrones de texto complejos. MongoDB soporta regex compatibles con PCRE (Perl Compatible Regular Expressions).</p>
+
+                <h3>Sintaxis Básica</h3>
+                <div class="code-block"><pre>// Sintaxis JavaScript (recomendada):
+db.usuarios.find({ nombre: /patrón/opciones })
+
+// Sintaxis con $regex:
+db.usuarios.find({ 
+  nombre: { 
+    $regex: "patrón", 
+    $options: "opciones" 
+  } 
+})</pre></div>
+
+                <h3>Patrones Comunes</h3>
+                <div class="code-block"><pre>// Empieza con "Ana":
+db.usuarios.find({ nombre: /^Ana/ })
+
+// Termina con "García":
+db.usuarios.find({ nombre: /García$/ })
+
+// Contiene "López":
+db.usuarios.find({ nombre: /López/ })
+
+// Case-insensitive (opción "i"):
+db.usuarios.find({ nombre: /ana/i })
+// Coincide: "Ana", "ANA", "ana", "ANA"
+
+// Multiline (opción "m"):
+db.articulos.find({ contenido: /^Capítulo/m })
+
+// Dot matches all (opción "s"):
+db.logs.find({ mensaje: /error.+stack/s })</pre></div>
+
+                <h3>Ejemplos Prácticos</h3>
+                <div class="code-block"><pre>// Emails de Gmail:
+db.usuarios.find({ email: /@gmail\.com$/ })
+
+// Teléfonos españoles:
+db.usuarios.find({ telefono: /^\+34/ })
+
+// Códigos postales de Madrid (28xxx):
+db.usuarios.find({ "direccion.codigoPostal": /^28\d{3}$/ })
+
+// Productos con nombre que contiene "iPhone" o "iPad":
+db.productos.find({ nombre: /iP(hone|ad)/ })
+
+// Nombres con acento:
+db.usuarios.find({ nombre: /[áéíóú]/i })
+
+// Emails válidos (patrón simple):
+db.usuarios.find({ 
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ 
+})</pre></div>
+
+                <h3>Con $regex Operador</h3>
+                <div class="code-block"><pre>// Usar variables:
+const busqueda = "MongoDB";
+db.articulos.find({ 
+  titulo: { 
+    $regex: busqueda, 
+    $options: "i" 
+  } 
+})
+
+// Combinar con otros operadores:
+db.productos.find({
+  $and: [
+    { nombre: { $regex: /iPhone/, $options: "i" } },
+    { precio: { $lt: 1000 } }
+  ]
+})</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Rendimiento de Regex:</strong>
+                    <ul>
+                        <li><strong>Regex sin ^ (inicio):</strong> No puede usar índices eficientemente</li>
+                        <li><code>/^Ana/</code> ✅ Puede usar índice</li>
+                        <li><code>/Ana/</code> ❌ Scan completo de la colección</li>
+                        <li><strong>Case-insensitive (/i):</strong> No puede usar índices normales (usa índice de texto)</li>
+                        <li><strong>Alternativa:</strong> Para búsquedas de texto completo, usa <strong>Text Indexes</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="proyecciones">
+                <h2><i class="fas fa-eye"></i> Proyecciones: Seleccionar Campos</h2>
+                <p>Las <strong>proyecciones</strong> controlan qué campos se devuelven en los resultados. Esto mejora el rendimiento al transferir menos datos.</p>
+
+                <h3>Sintaxis de Proyección</h3>
+                <div class="code-block"><pre>// Segundo parámetro de find():
+db.coleccion.find(
+  { filtro },
+  { campo1: 1, campo2: 1 }  // 1 = incluir, 0 = excluir
+)</pre></div>
+
+                <h3>Inclusión de Campos</h3>
+                <div class="code-block"><pre>// Solo nombre y email (+ _id por defecto):
+db.usuarios.find({}, { nombre: 1, email: 1 })
+
+// Resultado:
+{
+  _id: ObjectId("..."),
+  nombre: "Ana García",
+  email: "ana@example.com"
+}
+
+// Excluir _id explícitamente:
+db.usuarios.find({}, { nombre: 1, email: 1, _id: 0 })
+
+// Resultado (sin _id):
+{
+  nombre: "Ana García",
+  email: "ana@example.com"
+}</pre></div>
+
+                <h3>Exclusión de Campos</h3>
+                <div class="code-block"><pre>// Excluir campos sensibles:
+db.usuarios.find({}, { password: 0, tokenSession: 0 })
+
+// Resultado: Todos los campos EXCEPTO password y tokenSession
+
+// ⚠️ NO puedes mezclar inclusión y exclusión (excepto con _id):
+// ❌ ESTO ES INVÁLIDO:
+db.usuarios.find({}, { nombre: 1, password: 0 })
+
+// ✅ VÁLIDO (solo _id se puede excluir con inclusión):
+db.usuarios.find({}, { nombre: 1, email: 1, _id: 0 })</pre></div>
+
+                <h3>Proyección en Documentos Embebidos</h3>
+                <div class="code-block"><pre>// Incluir solo un campo embebido:
+db.usuarios.find({}, { "direccion.ciudad": 1 })
+
+// Resultado:
+{
+  _id: ObjectId("..."),
+  direccion: {
+    ciudad: "Madrid"
+  }
+}
+
+// Incluir todo el subdocumento:
+db.usuarios.find({}, { direccion: 1, _id: 0 })
+
+// Resultado:
+{
+  direccion: {
+    calle: "Gran Vía 123",
+    ciudad: "Madrid",
+    codigoPostal: "28013"
+  }
+}</pre></div>
+
+                <h3>Operadores de Proyección</h3>
+
+                <h4>$slice - Limitar Elementos de Array</h4>
+                <div class="code-block"><pre>// Primeros 3 elementos del array:
+db.usuarios.find({}, { hobbies: { $slice: 3 } })
+
+// Últimos 3 elementos:
+db.usuarios.find({}, { hobbies: { $slice: -3 } })
+
+// Saltar 2 elementos, devolver 3:
+db.usuarios.find({}, { hobbies: { $slice: [2, 3] } })
+
+// Ejemplo práctico - últimos 5 comentarios:
+db.posts.find({}, { 
+  titulo: 1,
+  comentarios: { $slice: -5 }
+})</pre></div>
+
+                <h4>$elemMatch (en proyección)</h4>
+                <div class="code-block"><pre>// Devolver solo el primer elemento que coincida:
+db.productos.find(
+  {},
+  { 
+    nombre: 1,
+    reviews: { 
+      $elemMatch: { rating: 5 } 
+    } 
+  }
+)
+
+// Resultado:
+{
+  _id: ObjectId("..."),
+  nombre: "Producto X",
+  reviews: [
+    { usuario: "Ana", rating: 5, verificado: true }  // Solo coincidencias
+  ]
+}</pre></div>
+
+                <h4>$ (Operador Posicional)</h4>
+                <div class="code-block"><pre>// Devolver solo el elemento del array que coincide con la consulta:
+db.usuarios.find(
+  { "hobbies": "música" },
+  { "hobbies.$": 1 }
+)
+
+// Si hobbies = ["lectura", "música", "natación"]
+// Resultado:
+{
+  _id: ObjectId("..."),
+  hobbies: ["música"]  // Solo el que coincide
+}</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Ventajas de las Proyecciones:</strong>
+                    <ul>
+                        <li><strong>Rendimiento:</strong> Menos datos transferidos por la red</li>
+                        <li><strong>Seguridad:</strong> No expones campos sensibles (passwords, tokens)</li>
+                        <li><strong>Claridad:</strong> Tu código solo recibe los datos que necesita</li>
+                        <li><strong>Bandwidth:</strong> Importante en aplicaciones móviles con conexiones limitadas</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="cursor">
+                <h2><i class="fas fa-stream"></i> Métodos de Cursor</h2>
+                <p>El método <code>find()</code> devuelve un <strong>cursor</strong>, no los documentos directamente. Los cursores tienen métodos para transformar y limitar resultados.</p>
+
+                <h3>sort() - Ordenar Resultados</h3>
+                <div class="code-block"><pre>// Sintaxis:
+// 1 = ascendente (A-Z, 0-9, fechas antiguas primero)
+// -1 = descendente (Z-A, 9-0, fechas recientes primero)
+
+// Ordenar por un campo:
+db.productos.find().sort({ precio: 1 })  // Más baratos primero
+
+// Ordenar descendente:
+db.usuarios.find().sort({ edad: -1 })  // Más viejos primero
+
+// Ordenar por múltiples campos:
+db.productos.find().sort({ categoria: 1, precio: -1 })
+// Primero por categoría (A-Z), luego por precio (mayor a menor)
+
+// Con fechas:
+db.posts.find().sort({ fechaPublicacion: -1 })  // Más recientes primero
+
+// Ordenar por campo embebido:
+db.usuarios.find().sort({ "direccion.ciudad": 1 })</pre></div>
+
+                <h3>limit() - Limitar Resultados</h3>
+                <div class="code-block"><pre>// Primeros 10 documentos:
+db.productos.find().limit(10)
+
+// Top 5 productos más caros:
+db.productos.find().sort({ precio: -1 }).limit(5)
+
+// Último usuario registrado:
+db.usuarios.find().sort({ fechaRegistro: -1 }).limit(1)</pre></div>
+
+                <h3>skip() - Saltar Documentos</h3>
+                <div class="code-block"><pre>// Saltar primeros 20 documentos:
+db.productos.find().skip(20)
+
+// Paginación (página 3, 10 por página):
+const pagina = 3;
+const porPagina = 10;
+db.productos.find()
+  .skip((pagina - 1) * porPagina)
+  .limit(porPagina)
+
+// Fórmula: skip = (página - 1) * tamaño_página
+// Página 1: skip(0).limit(10)   → docs 1-10
+// Página 2: skip(10).limit(10)  → docs 11-20
+// Página 3: skip(20).limit(10)  → docs 21-30</pre></div>
+
+                <h3>count() y countDocuments()</h3>
+                <div class="code-block"><pre>// Contar documentos que coinciden:
+db.usuarios.countDocuments({ ciudad: "Madrid" })
+
+// Contar todos:
+db.usuarios.countDocuments({})
+
+// DEPRECATED (no usar):
+db.usuarios.count()  // ❌ Obsoleto
+
+// Estimar count (más rápido pero menos preciso):
+db.usuarios.estimatedDocumentCount()</pre></div>
+
+                <h3>distinct() - Valores Únicos</h3>
+                <div class="code-block"><pre>// Todas las ciudades únicas:
+db.usuarios.distinct("ciudad")
+// Resultado: ["Madrid", "Barcelona", "Valencia", ...]
+
+// Categorías de productos:
+db.productos.distinct("categoria")
+
+// Con filtro:
+db.productos.distinct("marca", { precio: { $gt: 100 } })
+// Marcas de productos que cuestan más de 100€
+
+// En campos embebidos:
+db.usuarios.distinct("direccion.ciudad")</pre></div>
+
+                <h3>Combinar Métodos (Orden Importa)</h3>
+                <div class="code-block"><pre>// ✅ Orden eficiente:
+db.productos.find({ categoria: "Electrónica" })
+  .sort({ precio: -1 })
+  .skip(10)
+  .limit(5)
+
+// Explicación del orden:
+// 1. find() - Filtra documentos
+// 2. sort() - Ordena resultados filtrados
+// 3. skip() - Salta documentos ordenados
+// 4. limit() - Limita después de saltar
+
+// Paginación completa (ejemplo real):
+function obtenerProductosPaginados(pagina = 1, tamaño = 20) {
+  return db.productos.find({ stock: { $gt: 0 } })
+    .sort({ fechaCreacion: -1 })
+    .skip((pagina - 1) * tamaño)
+    .limit(tamaño)
+    .toArray();
+}
+
+// Obtener también el total de páginas:
+const total = db.productos.countDocuments({ stock: { $gt: 0 } });
+const totalPaginas = Math.ceil(total / tamaño);</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Rendimiento con skip():</strong>
+                    <ul>
+                        <li><code>skip()</code> es lento con valores grandes (debe recorrer todos los documentos saltados)</li>
+                        <li>Para paginación profunda (página 1000+), usa <strong>cursor-based pagination</strong>:</li>
+                    </ul>
+                    <div class="code-block"><pre>// En lugar de skip():
+// Guardar el último _id de la página anterior:
+db.productos.find({ 
+  _id: { $gt: ultimoIdPaginaAnterior } 
+})
+.sort({ _id: 1 })
+.limit(20)</pre></div>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Resumen de Consultas Avanzadas:</strong>
+                    <ul>
+                        <li><strong>Operadores de comparación:</strong> $eq, $ne, $gt, $gte, $lt, $lte, $in, $nin</li>
+                        <li><strong>Operadores lógicos:</strong> $and, $or, $nor, $not</li>
+                        <li><strong>Arrays:</strong> $all, $elemMatch, $size</li>
+                        <li><strong>Documentos embebidos:</strong> Notación de puntos "campo.subcampo"</li>
+                        <li><strong>Regex:</strong> Búsquedas de patrones de texto</li>
+                        <li><strong>Proyecciones:</strong> Incluir (1) o excluir (0) campos</li>
+                        <li><strong>Cursor:</strong> sort(), limit(), skip(), count(), distinct()</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

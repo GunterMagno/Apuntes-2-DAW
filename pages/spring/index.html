@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Spring Boot - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="../../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <div class="topics-page">
+        <div class="topics-header">
+            <div class="topics-icon" style="color: var(--spring-color);">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <h1 class="topics-title">Spring Boot</h1>
+            <p class="topics-subtitle">Framework empresarial de Java con configuración mínima</p>
+        </div>
+
+        <div class="topics-grid">
+            <a href="introduccion.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--spring-color);">1</div>
+                <h3 class="topic-title">Introducción a Spring Boot</h3>
+                <p class="topic-description">Qué es Spring Boot, Spring Initializr, estructura de proyecto y configuración básica.</p>
+            </a>
+
+            <a href="inyeccion-dependencias.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--spring-color);">2</div>
+                <h3 class="topic-title">Inyección de Dependencias</h3>
+                <p class="topic-description">IoC Container, @Autowired, @Component, @Service, @Repository y ciclo de vida de beans.</p>
+            </a>
+
+            <a href="rest-controllers.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--spring-color);">3</div>
+                <h3 class="topic-title">REST Controllers</h3>
+                <p class="topic-description">@RestController, @RequestMapping, @GetMapping, @PostMapping y respuestas HTTP.</p>
+            </a>
+
+            <a href="jpa.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--spring-color);">4</div>
+                <h3 class="topic-title">JPA y Bases de Datos</h3>
+                <p class="topic-description">Spring Data JPA, entidades, repositorios, relaciones entre entidades y consultas personalizadas.</p>
+            </a>
+
+            <a href="validacion.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--spring-color);">5</div>
+                <h3 class="topic-title">Validación y Manejo de Errores</h3>
+                <p class="topic-description">Bean Validation, @Valid, @NotNull, excepciones personalizadas y @ControllerAdvice.</p>
+            </a>
+
+            <a href="seguridad.html" class="topic-card">
+                <div class="topic-number" style="background-color: var(--spring-color);">6</div>
+                <h3 class="topic-title">Spring Security</h3>
+                <p class="topic-description">Autenticación, autorización, JWT, roles, permisos y configuración de seguridad.</p>
+            </a>
+        </div>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

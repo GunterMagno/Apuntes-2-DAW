@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>APIs REST con Express - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Express</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-cloud"></i> APIs REST</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#intro" class="active">¿Qué es REST?</a></li>
+                <li><a href="#principios">Principios REST</a></li>
+                <li><a href="#metodos">Métodos HTTP</a></li>
+                <li><a href="#codigos">Códigos de Estado</a></li>
+                <li><a href="#ejemplo">API Completa</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--accent-primary);"><i class="fas fa-cloud"></i></div>
+                <h1 class="detail-title">4. APIs REST con Express</h1>
+                <p class="detail-subtitle">REpresentational State Transfer</p>
+            </div>
+
+            <div class="content-section" id="intro">
+                <h2><i class="fas fa-question-circle"></i> ¿Qué es una API REST?</h2>
+                <p><strong>REST</strong> (Representational State Transfer) es un estilo arquitectónico para diseñar servicios web. Una <strong>API REST</strong> es una interfaz que permite a diferentes aplicaciones comunicarse usando el protocolo HTTP.</p>
+
+                <div class="info-box">
+                    <p><strong>Conceptos clave:</strong></p>
+                    <ul>
+                        <li><strong>Cliente-Servidor:</strong> Separación entre quien pide (frontend) y quien responde (backend)</li>
+                        <li><strong>Sin estado:</strong> Cada petición es independiente, contiene toda la info necesaria</li>
+                        <li><strong>Recursos:</strong> Todo se representa como recursos (users, products, posts...)</li>
+                        <li><strong>URI:</strong> Cada recurso tiene una dirección única</li>
+                        <li><strong>JSON:</strong> Formato estándar para intercambiar datos</li>
+                    </ul>
+                </div>
+
+                <h3>¿Por qué usar APIs REST?</h3>
+                <ul>
+                    <li>Separar frontend y backend (pueden desarrollarse independientemente)</li>
+                    <li>Reutilización: la misma API sirve para web, móvil, IoT...</li>
+                    <li>Escalabilidad: fácil de escalar horizontalmente</li>
+                    <li>Estandarización: todos entienden los métodos HTTP</li>
+                </ul>
+            </div>
+
+            <div class="content-section" id="principios">
+                <h2><i class="fas fa-check-double"></i> Principios de Diseño REST</h2>
+
+                <h3>1. Identificar recursos con URIs</h3>
+                <p>Cada recurso debe tener una URI única y descriptiva:</p>
+                <div class="code-block"><pre>✓ Buenos ejemplos:
+GET    /api/users          → Todos los usuarios
+GET    /api/users/123      → Usuario con ID 123
+GET    /api/users/123/posts → Posts del usuario 123
+GET    /api/products       → Todos los productos
+GET    /api/products/456   → Producto 456
+
+✗ Malos ejemplos:
+GET    /api/getUsers       → No usar verbos
+GET    /api/user-list      → Inconsistente
+GET    /api/p?id=456       → No descriptivo</pre></div>
+
+                <h3>2. Usar sustantivos (no verbos)</h3>
+                <div class="code-block"><pre>✓ Correcto:
+GET    /api/users
+POST   /api/users
+DELETE /api/users/123
+
+✗ Incorrecto:
+GET    /api/getUsers
+POST   /api/createUser
+DELETE /api/deleteUser/123</pre></div>
+
+                <h3>3. Usar plural para colecciones</h3>
+                <div class="code-block"><pre>✓ Correcto:
+/api/users
+/api/products
+/api/orders
+
+✗ Inconsistente:
+/api/user      (mezclar singular y plural confunde)
+/api/products</pre></div>
+
+                <h3>4. Versionado de API</h3>
+                <div class="code-block"><pre>// Incluir versión en la URI
+GET /api/v1/users
+GET /api/v2/users
+
+// O en headers
+GET /api/users
+Headers: Accept: application/vnd.myapi.v1+json</pre></div>
+
+                <h3>5. Filtrado, ordenamiento y paginación</h3>
+                <div class="code-block"><pre>// Filtrado
+GET /api/users?role=admin
+GET /api/products?category=electronics&price_min=100
+
+// Ordenamiento
+GET /api/users?sort=created_at&order=desc
+
+// Paginación
+GET /api/users?page=2&limit=20</pre></div>
+            </div>
+
+            <div class="content-section" id="metodos">
+                <h2><i class="fas fa-exchange-alt"></i> Métodos HTTP (CRUD)</h2>
+
+                <h3>GET - Leer (Read)</h3>
+                <p>Obtener información sin modificar nada.</p>
+                <div class="code-block"><pre>// Obtener todos los usuarios
+app.get('/api/users', (req, res) => {
+  // Simular base de datos
+  const users = [
+    { id: 1, nombre: 'Ana', email: 'ana@example.com' },
+    { id: 2, nombre: 'Luis', email: 'luis@example.com' }
+  ];
+  res.json(users);
+});
+
+// Obtener un usuario específico
+app.get('/api/users/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const user = users.find(u => u.id === id);
+  
+  if (!user) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+  
+  res.json(user);
+});</pre></div>
+
+                <h3>POST - Crear (Create)</h3>
+                <p>Crear un nuevo recurso.</p>
+                <div class="code-block"><pre>app.use(express.json()); // Importante para req.body
+
+app.post('/api/users', (req, res) => {
+  const { nombre, email } = req.body;
+  
+  // Validación básica
+  if (!nombre || !email) {
+    return res.status(400).json({ 
+      error: 'Nombre y email son requeridos' 
+    });
+  }
+  
+  const nuevoUsuario = {
+    id: users.length + 1,
+    nombre,
+    email,
+    createdAt: new Date()
+  };
+  
+  users.push(nuevoUsuario);
+  
+  // 201 = Created
+  res.status(201).json(nuevoUsuario);
+});</pre></div>
+
+                <h3>PUT - Actualizar completo (Update)</h3>
+                <p>Reemplazar completamente un recurso.</p>
+                <div class="code-block"><pre>app.put('/api/users/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const { nombre, email } = req.body;
+  
+  const index = users.findIndex(u => u.id === id);
+  
+  if (index === -1) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+  
+  // Reemplazar completamente
+  users[index] = {
+    id,
+    nombre,
+    email,
+    updatedAt: new Date()
+  };
+  
+  res.json(users[index]);
+});</pre></div>
+
+                <h3>PATCH - Actualizar parcial</h3>
+                <p>Actualizar solo algunos campos.</p>
+                <div class="code-block"><pre>app.patch('/api/users/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const user = users.find(u => u.id === id);
+  
+  if (!user) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+  
+  // Solo actualizar campos enviados
+  if (req.body.nombre) user.nombre = req.body.nombre;
+  if (req.body.email) user.email = req.body.email;
+  user.updatedAt = new Date();
+  
+  res.json(user);
+});</pre></div>
+
+                <h3>DELETE - Eliminar (Delete)</h3>
+                <div class="code-block"><pre>app.delete('/api/users/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const index = users.findIndex(u => u.id === id);
+  
+  if (index === -1) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+  
+  const eliminado = users.splice(index, 1)[0];
+  
+  // 204 = No Content (sin cuerpo de respuesta)
+  // O 200 con confirmación
+  res.json({ 
+    mensaje: 'Usuario eliminado', 
+    usuario: eliminado 
+  });
+});</pre></div>
+            </div>
+
+            <div class="content-section" id="codigos">
+                <h2><i class="fas fa-list-ol"></i> Códigos de Estado HTTP</h2>
+                <p>Informan al cliente sobre el resultado de la petición.</p>
+
+                <h3>2xx - Éxito</h3>
+                <div class="code-block"><pre>200 OK               → Petición exitosa (GET, PUT, PATCH)
+201 Created          → Recurso creado (POST)
+204 No Content       → Éxito sin contenido (DELETE)
+
+// Ejemplos
+res.status(200).json(data);
+res.status(201).json(nuevoRecurso);
+res.status(204).send();</pre></div>
+
+                <h3>4xx - Error del cliente</h3>
+                <div class="code-block"><pre>400 Bad Request       → Datos inválidos o faltantes
+401 Unauthorized      → No autenticado (falta token)
+403 Forbidden         → Autenticado pero sin permisos
+404 Not Found         → Recurso no existe
+409 Conflict          → Conflicto (ej: email duplicado)
+422 Unprocessable     → Validación fallida
+
+// Ejemplos
+res.status(400).json({ error: 'Email inválido' });
+res.status(401).json({ error: 'Token requerido' });
+res.status(404).json({ error: 'Usuario no encontrado' });</pre></div>
+
+                <h3>5xx - Error del servidor</h3>
+                <div class="code-block"><pre>500 Internal Server Error → Error inesperado
+503 Service Unavailable   → Servidor no disponible
+
+// Ejemplo
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Error del servidor' });
+});</pre></div>
+
+                <h3>Tabla de referencia rápida:</h3>
+                <div class="code-block"><pre>ACCIÓN                  MÉTODO    CÓDIGO    RESPUESTA
+----------------------------------------
+Listar todos           GET       200       [{...}, {...}]
+Obtener uno            GET       200       {...}
+  No encontrado        GET       404       {error: "..."}
+Crear nuevo            POST      201       {...}
+  Datos inválidos      POST      400       {error: "..."}
+Actualizar            PUT/PATCH  200       {...}
+  No encontrado       PUT/PATCH  404       {error: "..."}
+Eliminar               DELETE    200/204   {...} o vacío
+  No encontrado        DELETE    404       {error: "..."}</pre></div>
+            </div>
+
+            <div class="content-section" id="ejemplo">
+                <h2><i class="fas fa-code"></i> API REST Completa</h2>
+                <p>Ejemplo de una API funcional con todas las operaciones CRUD:</p>
+
+                <div class="code-block"><pre>const express = require('express');
+const app = express();
+
+// Middleware
+app.use(express.json());
+
+// Base de datos simulada
+let users = [
+  { id: 1, nombre: 'Ana García', email: 'ana@example.com', rol: 'admin' },
+  { id: 2, nombre: 'Luis López', email: 'luis@example.com', rol: 'user' }
+];
+let nextId = 3;
+
+// =============== RUTAS ===============
+
+// GET /api/users - Listar todos
+app.get('/api/users', (req, res) => {
+  // Filtrado opcional
+  const { rol } = req.query;
+  const resultado = rol 
+    ? users.filter(u => u.rol === rol)
+    : users;
+  
+  res.json({
+    total: resultado.length,
+    usuarios: resultado
+  });
+});
+
+// GET /api/users/:id - Obtener uno
+app.get('/api/users/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const user = users.find(u => u.id === id);
+  
+  if (!user) {
+    return res.status(404).json({ 
+      error: 'Usuario no encontrado' 
+    });
+  }
+  
+  res.json(user);
+});
+
+// POST /api/users - Crear
+app.post('/api/users', (req, res) => {
+  const { nombre, email, rol } = req.body;
+  
+  // Validación
+  if (!nombre || !email) {
+    return res.status(400).json({ 
+      error: 'Nombre y email son requeridos' 
+    });
+  }
+  
+  // Verificar duplicados
+  if (users.find(u => u.email === email)) {
+    return res.status(409).json({ 
+      error: 'El email ya está registrado' 
+    });
+  }
+  
+  const nuevoUsuario = {
+    id: nextId++,
+    nombre,
+    email,
+    rol: rol || 'user',
+    createdAt: new Date().toISOString()
+  };
+  
+  users.push(nuevoUsuario);
+  
+  res.status(201).json(nuevoUsuario);
+});
+
+// PUT /api/users/:id - Actualizar completo
+app.put('/api/users/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const { nombre, email, rol } = req.body;
+  
+  const index = users.findIndex(u => u.id === id);
+  
+  if (index === -1) {
+    return res.status(404).json({ 
+      error: 'Usuario no encontrado' 
+    });
+  }
+  
+  if (!nombre || !email) {
+    return res.status(400).json({ 
+      error: 'Nombre y email son requeridos' 
+    });
+  }
+  
+  users[index] = {
+    id,
+    nombre,
+    email,
+    rol: rol || users[index].rol,
+    updatedAt: new Date().toISOString()
+  };
+  
+  res.json(users[index]);
+});
+
+// PATCH /api/users/:id - Actualizar parcial
+app.patch('/api/users/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const user = users.find(u => u.id === id);
+  
+  if (!user) {
+    return res.status(404).json({ 
+      error: 'Usuario no encontrado' 
+    });
+  }
+  
+  // Actualizar solo campos enviados
+  const { nombre, email, rol } = req.body;
+  if (nombre) user.nombre = nombre;
+  if (email) user.email = email;
+  if (rol) user.rol = rol;
+  user.updatedAt = new Date().toISOString();
+  
+  res.json(user);
+});
+
+// DELETE /api/users/:id - Eliminar
+app.delete('/api/users/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const index = users.findIndex(u => u.id === id);
+  
+  if (index === -1) {
+    return res.status(404).json({ 
+      error: 'Usuario no encontrado' 
+    });
+  }
+  
+  const eliminado = users.splice(index, 1)[0];
+  
+  res.json({ 
+    mensaje: 'Usuario eliminado exitosamente',
+    usuario: eliminado 
+  });
+});
+
+// Manejo de rutas no encontradas
+app.use((req, res) => {
+  res.status(404).json({ 
+    error: 'Endpoint no encontrado' 
+  });
+});
+
+// Manejo de errores
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    error: 'Error interno del servidor' 
+  });
+});
+
+// Iniciar servidor
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`API REST corriendo en http://localhost:${PORT}`);
+});</pre></div>
+
+                <h3>Probar la API con curl:</h3>
+                <div class="code-block"><pre># Listar todos
+curl http://localhost:3000/api/users
+
+# Obtener uno
+curl http://localhost:3000/api/users/1
+
+# Crear
+curl -X POST http://localhost:3000/api/users \
+  -H "Content-Type: application/json" \
+  -d '{"nombre":"María","email":"maria@example.com","rol":"user"}'
+
+# Actualizar
+curl -X PUT http://localhost:3000/api/users/1 \
+  -H "Content-Type: application/json" \
+  -d '{"nombre":"Ana García Updated","email":"ana@example.com"}'
+
+# Eliminar
+curl -X DELETE http://localhost:3000/api/users/2</pre></div>
+
+                <div class="info-box">
+                    <p><strong>💡 Mejores prácticas:</strong></p>
+                    <ul>
+                        <li>Siempre validar datos de entrada</li>
+                        <li>Usar códigos HTTP apropiados</li>
+                        <li>Incluir mensajes de error descriptivos</li>
+                        <li>Documentar la API (Swagger/Postman)</li>
+                        <li>Versionado para cambios futuros</li>
+                        <li>Implementar paginación en listados grandes</li>
+                        <li>Usar HTTPS en producción</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let currentSection = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + currentSection) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

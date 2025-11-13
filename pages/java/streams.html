@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Streams en Java - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Java</a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-java"></i> Streams</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#intro" class="active">¿Qué son los Streams?</a></li>
+                <li><a href="#crear">Crear Streams</a></li>
+                <li><a href="#operaciones">Operaciones Intermedias</a></li>
+                <li><a href="#terminales">Operaciones Terminales</a></li>
+                <li><a href="#ejemplos">Ejemplos Prácticos</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--java-color);"><i class="fab fa-java"></i></div>
+                <h1 class="detail-title">6. Streams API</h1>
+                <p class="detail-subtitle">Programación funcional con Java 8+</p>
+            </div>
+
+            <div class="content-section" id="intro">
+                <h2><i class="fas fa-water"></i> ¿Qué son los Streams?</h2>
+                <p>
+                    Los <strong>Streams</strong> son una característica introducida en Java 8 que permite procesar 
+                    colecciones de datos de forma <strong>funcional y declarativa</strong>. En lugar de usar bucles 
+                    tradicionales, describes <strong>qué quieres hacer</strong> con los datos.
+                </p>
+                <div class="info-box">
+                    <p><strong>Ventajas:</strong></p>
+                    <ul>
+                        <li>Código más legible y conciso</li>
+                        <li>Facilita el procesamiento paralelo</li>
+                        <li>Operaciones encadenadas (fluent API)</li>
+                    </ul>
+                </div>
+                <p><strong>Analogía:</strong> Imagina una cadena de producción donde cada trabajador hace una tarea específica 
+                (filtrar, transformar, ordenar) hasta obtener el producto final.</p>
+            </div>
+
+            <div class="content-section" id="crear">
+                <h2><i class="fas fa-plus-circle"></i> Crear Streams</h2>
+                <div class="code-block"><pre>// Desde una lista
+List&lt;String&gt; nombres = Arrays.asList("Ana", "Luis", "María");
+Stream&lt;String&gt; streamNombres = nombres.stream();
+
+// Desde un array
+String[] array = {"Java", "Python", "JavaScript"};
+Stream&lt;String&gt; streamArray = Arrays.stream(array);
+
+// Desde valores directos
+Stream&lt;Integer&gt; numeros = Stream.of(1, 2, 3, 4, 5);
+
+// Stream infinito
+Stream&lt;Integer&gt; infinito = Stream.iterate(0, n -&gt; n + 2);  // 0, 2, 4, 6...</pre></div>
+            </div>
+
+            <div class="content-section" id="operaciones">
+                <h2><i class="fas fa-filter"></i> Operaciones Intermedias</h2>
+                <p>Las operaciones intermedias <strong>transforman</strong> el stream y devuelven otro stream. Son <strong>lazy</strong> 
+                (no se ejecutan hasta que hay una operación terminal).</p>
+
+                <h3>filter() - Filtrar elementos</h3>
+                <div class="code-block"><pre>List&lt;Integer&gt; numeros = Arrays.asList(1, 2, 3, 4, 5, 6);
+List&lt;Integer&gt; pares = numeros.stream()
+    .filter(n -&gt; n % 2 == 0)  // Solo números pares
+    .collect(Collectors.toList());
+// Resultado: [2, 4, 6]</pre></div>
+
+                <h3>map() - Transformar elementos</h3>
+                <div class="code-block"><pre>List&lt;String&gt; nombres = Arrays.asList("Ana", "Luis", "María");
+List&lt;String&gt; mayusculas = nombres.stream()
+    .map(String::toUpperCase)  // Convertir a mayúsculas
+    .collect(Collectors.toList());
+// Resultado: ["ANA", "LUIS", "MARÍA"]</pre></div>
+
+                <h3>sorted() - Ordenar</h3>
+                <div class="code-block"><pre>List&lt;Integer&gt; numeros = Arrays.asList(5, 2, 8, 1, 9);
+List&lt;Integer&gt; ordenados = numeros.stream()
+    .sorted()
+    .collect(Collectors.toList());
+// Resultado: [1, 2, 5, 8, 9]</pre></div>
+
+                <h3>distinct() - Eliminar duplicados</h3>
+                <div class="code-block"><pre>List&lt;Integer&gt; numeros = Arrays.asList(1, 2, 2, 3, 3, 3);
+List&lt;Integer&gt; unicos = numeros.stream()
+    .distinct()
+    .collect(Collectors.toList());
+// Resultado: [1, 2, 3]</pre></div>
+            </div>
+
+            <div class="content-section" id="terminales">
+                <h2><i class="fas fa-flag-checkered"></i> Operaciones Terminales</h2>
+                <p>Las operaciones terminales <strong>producen un resultado</strong> y cierran el stream.</p>
+
+                <h3>collect() - Recolectar en colección</h3>
+                <div class="code-block"><pre>List&lt;String&gt; resultado = stream.collect(Collectors.toList());
+Set&lt;String&gt; conjunto = stream.collect(Collectors.toSet());</pre></div>
+
+                <h3>forEach() - Iterar</h3>
+                <div class="code-block"><pre>nombres.stream()
+    .forEach(nombre -&gt; System.out.println(nombre));</pre></div>
+
+                <h3>count() - Contar elementos</h3>
+                <div class="code-block"><pre>long cantidad = numeros.stream()
+    .filter(n -&gt; n &gt; 5)
+    .count();</pre></div>
+
+                <h3>reduce() - Reducir a un valor</h3>
+                <div class="code-block"><pre>int suma = numeros.stream()
+    .reduce(0, (a, b) -&gt; a + b);  // Suma todos los números</pre></div>
+
+                <h3>anyMatch(), allMatch(), noneMatch()</h3>
+                <div class="code-block"><pre>boolean hayPares = numeros.stream().anyMatch(n -&gt; n % 2 == 0);
+boolean todosPares = numeros.stream().allMatch(n -&gt; n % 2 == 0);
+boolean ningunNegativo = numeros.stream().noneMatch(n -&gt; n &lt; 0);</pre></div>
+            </div>
+
+            <div class="content-section" id="ejemplos">
+                <h2><i class="fas fa-code"></i> Ejemplos Prácticos</h2>
+
+                <h3>Ejemplo 1: Procesamiento de Lista de Personas</h3>
+                <div class="code-block"><pre>class Persona {
+    String nombre;
+    int edad;
+    
+    public Persona(String nombre, int edad) {
+        this.nombre = nombre;
+        this.edad = edad;
+    }
+    
+    public String getNombre() { return nombre; }
+    public int getEdad() { return edad; }
+}
+
+List&lt;Persona&gt; personas = Arrays.asList(
+    new Persona("Ana", 25),
+    new Persona("Luis", 30),
+    new Persona("María", 22)
+);
+
+// Obtener nombres de personas mayores de 23 años
+List&lt;String&gt; nombres = personas.stream()
+    .filter(p -&gt; p.getEdad() &gt; 23)
+    .map(Persona::getNombre)
+    .collect(Collectors.toList());
+// Resultado: ["Ana", "Luis"]</pre></div>
+
+                <h3>Ejemplo 2: Estadísticas</h3>
+                <div class="code-block"><pre>List&lt;Integer&gt; numeros = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+// Suma de números pares
+int sumaPares = numeros.stream()
+    .filter(n -&gt; n % 2 == 0)
+    .mapToInt(Integer::intValue)
+    .sum();  // 2 + 4 + 6 + 8 + 10 = 30
+
+// Promedio
+double promedio = numeros.stream()
+    .mapToInt(Integer::intValue)
+    .average()
+    .orElse(0.0);  // 5.5</pre></div>
+
+                <h3>Ejemplo 3: Encadenamiento Complejo</h3>
+                <div class="code-block"><pre>List&lt;String&gt; palabras = Arrays.asList("java", "python", "javascript", "c++", "ruby");
+
+// Filtrar palabras con más de 4 letras, convertir a mayúsculas y ordenar
+List&lt;String&gt; resultado = palabras.stream()
+    .filter(p -&gt; p.length() &gt; 4)
+    .map(String::toUpperCase)
+    .sorted()
+    .collect(Collectors.toList());
+// Resultado: ["JAVASCRIPT", "PYTHON"]</pre></div>
+
+                <div class="warning-box">
+                    <p><strong>Importante:</strong> Un stream solo puede usarse una vez. Después de una operación terminal, 
+                    el stream se cierra y no puede reutilizarse.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

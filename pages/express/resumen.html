@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen Express.js - Wiki 2º DAW</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-md) 0;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .command-table th {
+            background-color: #000;
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .command-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .command-table tr:last-child td {
+            border-bottom: none;
+        }
+        .command-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+        .command-table code {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+        </div>
+    </nav>
+
+    <div class="topics-page">
+        <div class="topics-header">
+            <div class="topics-icon" style="color: #000;">
+                <i class="fas fa-server"></i>
+            </div>
+            <h1 class="topics-title">Resumen Express.js</h1>
+            <p class="topics-subtitle">Métodos, middleware y rutas esenciales</p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-terminal"></i> Setup Inicial</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>npm install express</code></td>
+                        <td>Instala Express en el proyecto</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm install --save-dev nodemon</code></td>
+                        <td>Instala Nodemon para auto-reinicio</td>
+                    </tr>
+                    <tr>
+                        <td><code>const express = require('express')</code></td>
+                        <td>Importa Express</td>
+                    </tr>
+                    <tr>
+                        <td><code>const app = express()</code></td>
+                        <td>Crea instancia de Express</td>
+                    </tr>
+                    <tr>
+                        <td><code>app.listen(PORT, callback)</code></td>
+                        <td>Inicia servidor en puerto</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-route"></i> Métodos HTTP (Rutas)</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>app.get()</code></td>
+                        <td><code>app.get('/ruta', (req, res) => {})</code></td>
+                        <td>Maneja peticiones GET</td>
+                    </tr>
+                    <tr>
+                        <td><code>app.post()</code></td>
+                        <td><code>app.post('/ruta', (req, res) => {})</code></td>
+                        <td>Maneja peticiones POST</td>
+                    </tr>
+                    <tr>
+                        <td><code>app.put()</code></td>
+                        <td><code>app.put('/ruta/:id', (req, res) => {})</code></td>
+                        <td>Maneja peticiones PUT (actualizar)</td>
+                    </tr>
+                    <tr>
+                        <td><code>app.delete()</code></td>
+                        <td><code>app.delete('/ruta/:id', (req, res) => {})</code></td>
+                        <td>Maneja peticiones DELETE</td>
+                    </tr>
+                    <tr>
+                        <td><code>app.patch()</code></td>
+                        <td><code>app.patch('/ruta/:id', (req, res) => {})</code></td>
+                        <td>Maneja peticiones PATCH</td>
+                    </tr>
+                    <tr>
+                        <td><code>app.all()</code></td>
+                        <td><code>app.all('/ruta', (req, res) => {})</code></td>
+                        <td>Maneja todos los métodos HTTP</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-paper-plane"></i> Objeto Request (req)</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Propiedad/Método</th>
+                        <th>Ejemplo</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>req.params</code></td>
+                        <td><code>req.params.id</code></td>
+                        <td>Parámetros de ruta (/users/:id)</td>
+                    </tr>
+                    <tr>
+                        <td><code>req.query</code></td>
+                        <td><code>req.query.page</code></td>
+                        <td>Parámetros de query (?page=1)</td>
+                    </tr>
+                    <tr>
+                        <td><code>req.body</code></td>
+                        <td><code>req.body.name</code></td>
+                        <td>Datos del body (requiere middleware)</td>
+                    </tr>
+                    <tr>
+                        <td><code>req.headers</code></td>
+                        <td><code>req.headers.authorization</code></td>
+                        <td>Cabeceras HTTP</td>
+                    </tr>
+                    <tr>
+                        <td><code>req.method</code></td>
+                        <td><code>req.method</code></td>
+                        <td>Método HTTP (GET, POST, etc.)</td>
+                    </tr>
+                    <tr>
+                        <td><code>req.url</code></td>
+                        <td><code>req.url</code></td>
+                        <td>URL completa de la petición</td>
+                    </tr>
+                    <tr>
+                        <td><code>req.ip</code></td>
+                        <td><code>req.ip</code></td>
+                        <td>IP del cliente</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-reply"></i> Objeto Response (res)</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Ejemplo</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>res.send()</code></td>
+                        <td><code>res.send('Hola')</code></td>
+                        <td>Envía respuesta (texto, HTML, JSON)</td>
+                    </tr>
+                    <tr>
+                        <td><code>res.json()</code></td>
+                        <td><code>res.json({nombre: 'Juan'})</code></td>
+                        <td>Envía respuesta JSON</td>
+                    </tr>
+                    <tr>
+                        <td><code>res.status()</code></td>
+                        <td><code>res.status(404).send('No encontrado')</code></td>
+                        <td>Establece código de estado HTTP</td>
+                    </tr>
+                    <tr>
+                        <td><code>res.redirect()</code></td>
+                        <td><code>res.redirect('/login')</code></td>
+                        <td>Redirige a otra URL</td>
+                    </tr>
+                    <tr>
+                        <td><code>res.render()</code></td>
+                        <td><code>res.render('vista', {data})</code></td>
+                        <td>Renderiza una vista (template engine)</td>
+                    </tr>
+                    <tr>
+                        <td><code>res.sendFile()</code></td>
+                        <td><code>res.sendFile(path)</code></td>
+                        <td>Envía archivo</td>
+                    </tr>
+                    <tr>
+                        <td><code>res.download()</code></td>
+                        <td><code>res.download(filePath)</code></td>
+                        <td>Descarga archivo</td>
+                    </tr>
+                    <tr>
+                        <td><code>res.set()</code></td>
+                        <td><code>res.set('Content-Type', 'text/html')</code></td>
+                        <td>Establece cabecera HTTP</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-layer-group"></i> Middleware Esenciales</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Middleware</th>
+                        <th>Uso</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>express.json()</code></td>
+                        <td><code>app.use(express.json())</code></td>
+                        <td>Parsea JSON del body</td>
+                    </tr>
+                    <tr>
+                        <td><code>express.urlencoded()</code></td>
+                        <td><code>app.use(express.urlencoded({extended: true}))</code></td>
+                        <td>Parsea datos de formularios</td>
+                    </tr>
+                    <tr>
+                        <td><code>express.static()</code></td>
+                        <td><code>app.use(express.static('public'))</code></td>
+                        <td>Sirve archivos estáticos</td>
+                    </tr>
+                    <tr>
+                        <td><code>cors</code></td>
+                        <td><code>app.use(cors())</code></td>
+                        <td>Habilita CORS (npm install cors)</td>
+                    </tr>
+                    <tr>
+                        <td><code>morgan</code></td>
+                        <td><code>app.use(morgan('dev'))</code></td>
+                        <td>Logger HTTP (npm install morgan)</td>
+                    </tr>
+                    <tr>
+                        <td><code>Middleware custom</code></td>
+                        <td><code>app.use((req, res, next) => {next()})</code></td>
+                        <td>Middleware personalizado</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-project-diagram"></i> Router</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>const router = express.Router()</code></td>
+                        <td>Crea un router modular</td>
+                    </tr>
+                    <tr>
+                        <td><code>router.get('/path', handler)</code></td>
+                        <td>Define ruta en el router</td>
+                    </tr>
+                    <tr>
+                        <td><code>app.use('/api', router)</code></td>
+                        <td>Monta router con prefijo</td>
+                    </tr>
+                    <tr>
+                        <td><code>module.exports = router</code></td>
+                        <td>Exporta router para usar en otro archivo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-exclamation-triangle"></i> Manejo de Errores</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>app.use((err, req, res, next) => {})</code></td>
+                        <td>Middleware de manejo de errores (4 parámetros)</td>
+                    </tr>
+                    <tr>
+                        <td><code>next(error)</code></td>
+                        <td>Pasa error al siguiente middleware de error</td>
+                    </tr>
+                    <tr>
+                        <td><code>app.use((req, res) => {res.status(404).send()})</code></td>
+                        <td>Manejo de rutas no encontradas (404)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Wiki 2º DAW - Tu repositorio de conocimiento en desarrollo web</p>
+    </footer>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

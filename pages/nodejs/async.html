@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Asincronía en Node.js - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Node.js</a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-node-js"></i> Asincronía</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#callbacks" class="active">Callbacks</a></li>
+                <li><a href="#promises">Promises</a></li>
+                <li><a href="#async-await">Async/Await</a></li>
+                <li><a href="#errores">Manejo de Errores</a></li>
+                <li><a href="#ejemplos">Ejemplos Prácticos</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--node-color);"><i class="fab fa-node-js"></i></div>
+                <h1 class="detail-title">5. Asincronía</h1>
+                <p class="detail-subtitle">Callbacks, Promises y Async/Await</p>
+            </div>
+
+            <div class="content-section" id="callbacks">
+                <h2><i class="fas fa-arrow-right"></i> Callbacks</h2>
+                <p>Un <strong>callback</strong> es una función que se pasa como argumento y se ejecuta después de completar una operación asíncrona.</p>
+                <div class="code-block"><pre>const fs = require('fs');
+
+fs.readFile('archivo.txt', 'utf8', (err, data) => {
+    if (err) {
+        console.error('Error:', err);
+        return;
+    }
+    console.log(data);
+});</pre></div>
+                <div class="warning-box">
+                    <p><strong>Callback Hell:</strong> Callbacks anidados difíciles de leer</p>
+                </div>
+                <div class="code-block"><pre>fs.readFile('1.txt', (err, data1) => {
+    fs.readFile('2.txt', (err, data2) => {
+        fs.readFile('3.txt', (err, data3) => {
+            // Pirámide del doom
+        });
+    });
+});</pre></div>
+            </div>
+
+            <div class="content-section" id="promises">
+                <h2><i class="fas fa-handshake"></i> Promises</h2>
+                <p>Una <strong>Promise</strong> representa un valor que puede estar disponible ahora, en el futuro, o nunca.</p>
+                <div class="code-block"><pre>const fs = require('fs/promises');
+
+fs.readFile('archivo.txt', 'utf8')
+    .then(data => {
+        console.log(data);
+        return fs.readFile('otro.txt', 'utf8');
+    })
+    .then(data2 => {
+        console.log(data2);
+    })
+    .catch(err => {
+        console.error('Error:', err);
+    });</pre></div>
+                <h3>Crear una Promise</h3>
+                <div class="code-block"><pre>function esperar(ms) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve('Completado');
+        }, ms);
+    });
+}
+
+esperar(2000).then(msg => console.log(msg));  // Después de 2 segundos</pre></div>
+            </div>
+
+            <div class="content-section" id="async-await">
+                <h2><i class="fas fa-clock"></i> Async/Await</h2>
+                <p>Sintaxis más limpia para trabajar con Promises.</p>
+                <div class="code-block"><pre>const fs = require('fs/promises');
+
+async function leerArchivos() {
+    try {
+        const data1 = await fs.readFile('1.txt', 'utf8');
+        console.log(data1);
+        
+        const data2 = await fs.readFile('2.txt', 'utf8');
+        console.log(data2);
+        
+        const data3 = await fs.readFile('3.txt', 'utf8');
+        console.log(data3);
+    } catch (err) {
+        console.error('Error:', err);
+    }
+}
+
+leerArchivos();</pre></div>
+            </div>
+
+            <div class="content-section" id="errores">
+                <h2><i class="fas fa-exclamation-triangle"></i> Manejo de Errores</h2>
+                <p><strong>Con callbacks:</strong></p>
+                <div class="code-block"><pre>fs.readFile('archivo.txt', (err, data) => {
+    if (err) {
+        // Manejar error
+        return;
+    }
+    // Usar data
+});</pre></div>
+                <p><strong>Con async/await:</strong></p>
+                <div class="code-block"><pre>async function main() {
+    try {
+        const data = await fs.readFile('archivo.txt', 'utf8');
+        console.log(data);
+    } catch (err) {
+        console.error('Error:', err.message);
+    }
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="ejemplos">
+                <h2><i class="fas fa-code"></i> Ejemplos Prácticos</h2>
+                <h3>Múltiples operaciones en paralelo</h3>
+                <div class="code-block"><pre>async function leerTodos() {
+    const [data1, data2, data3] = await Promise.all([
+        fs.readFile('1.txt', 'utf8'),
+        fs.readFile('2.txt', 'utf8'),
+        fs.readFile('3.txt', 'utf8')
+    ]);
+    console.log(data1, data2, data3);
+}</pre></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

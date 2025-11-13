@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Gestión de Estado - React</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-react"></i> Estado</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#introduccion" class="active">¿Qué es el Estado?</a></li>
+                <li><a href="#local">Estado Local</a></li>
+                <li><a href="#lifting">Lifting State Up</a></li>
+                <li><a href="#context">Context API</a></li>
+                <li><a href="#reducer">useReducer</a></li>
+                <li><a href="#patrones">Patrones Avanzados</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color:var(--react-color)"><i class="fab fa-react"></i></div>
+                <h1>4. Gestión de Estado en React</h1>
+                <p class="detail-subtitle">Manejar datos dinámicos en la aplicación</p>
+            </div>
+
+            <div class="content-section" id="introduccion">
+                <h2><i class="fas fa-database"></i> ¿Qué es el Estado?</h2>
+                <p>El <strong>estado</strong> es un objeto que contiene datos que cambian con el tiempo y afectan lo que se renderiza en pantalla.</p>
+
+                <div class="info-box">
+                    <p><strong>Estado vs Props:</strong></p>
+                    <ul>
+                        <li><strong>Props:</strong> Datos que vienen del padre (read-only, no se modifican)</li>
+                        <li><strong>Estado:</strong> Datos internos del componente (mutable, se puede modificar)</li>
+                    </ul>
+                </div>
+
+                <h3>Cuándo necesitas estado:</h3>
+                <ul>
+                    <li>✓ Formularios (inputs controlados)</li>
+                    <li>✓ Toggles (mostrar/ocultar, menús)</li>
+                    <li>✓ Datos de APIs (usuarios, productos)</li>
+                    <li>✓ Contadores, timers</li>
+                    <li>✓ Información del usuario (autenticación, tema)</li>
+                </ul>
+
+                <h3>Tipos de estado:</h3>
+                <div class="code-block"><pre>1. Estado Local    → useState en un componente
+2. Estado Elevado  → Compartido entre componentes hermanos
+3. Estado Global   → useContext, Redux, Zustand
+4. Estado Servidor → React Query, SWR</pre></div>
+            </div>
+
+            <div class="content-section" id="local">
+                <h2><i class="fas fa-home"></i> Estado Local</h2>
+                <p>El <strong>estado local</strong> pertenece a un solo componente y se maneja con <code>useState</code>.</p>
+
+                <h3>Formulario simple:</h3>
+                <div class="code-block"><pre>function FormularioContacto() {
+  const [nombre, setNombre] = useState('');
+  const [email, setEmail] = useState('');
+  const [mensaje, setMensaje] = useState('');
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log({ nombre, email, mensaje });
+    // Resetear formulario
+    setNombre('');
+    setEmail('');
+    setMensaje('');
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input 
+        type="text"
+        value={nombre}
+        onChange={(e) => setNombre(e.target.value)}
+        placeholder="Tu nombre"
+      /&gt;
+      &lt;input 
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Tu email"
+      /&gt;
+      &lt;textarea 
+        value={mensaje}
+        onChange={(e) => setMensaje(e.target.value)}
+        placeholder="Tu mensaje"
+      /&gt;
+      &lt;button type="submit"&gt;Enviar&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre></div>
+
+                <h3>Formulario con un solo estado (objeto):</h3>
+                <div class="code-block"><pre>function FormularioContacto() {
+  const [form, setForm] = useState({
+    nombre: '',
+    email: '',
+    mensaje: ''
+  });
+  
+  // Manejar todos los campos con una función
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({
+      ...form,
+      [name]: value  // Propiedad dinámica
+    });
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(form);
+    setForm({ nombre: '', email: '', mensaje: '' });
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input 
+        name="nombre"
+        value={form.nombre}
+        onChange={handleChange}
+        placeholder="Tu nombre"
+      /&gt;
+      &lt;input 
+        name="email"
+        value={form.email}
+        onChange={handleChange}
+        placeholder="Tu email"
+      /&gt;
+      &lt;textarea 
+        name="mensaje"
+        value={form.mensaje}
+        onChange={handleChange}
+        placeholder="Tu mensaje"
+      /&gt;
+      &lt;button type="submit"&gt;Enviar&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre></div>
+
+                <h3>Toggle (mostrar/ocultar):</h3>
+                <div class="code-block"><pre>function Acordeon() {
+  const [abierto, setAbierto] = useState(false);
+  
+  return (
+    &lt;div&gt;
+      &lt;button onClick={() => setAbierto(!abierto)}&gt;
+        {abierto ? 'Ocultar' : 'Mostrar'} contenido
+      &lt;/button&gt;
+      {abierto && (
+        &lt;div&gt;
+          &lt;p&gt;Este es el contenido del acordeón&lt;/p&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <h3>Lista dinámica (agregar/eliminar):</h3>
+                <div class="code-block"><pre>function ListaTareas() {
+  const [tareas, setTareas] = useState([]);
+  const [nuevaTarea, setNuevaTarea] = useState('');
+  
+  const agregarTarea = () => {
+    if (nuevaTarea.trim() === '') return;
+    
+    const tarea = {
+      id: Date.now(),
+      texto: nuevaTarea,
+      completada: false
+    };
+    
+    setTareas([...tareas, tarea]);
+    setNuevaTarea('');
+  };
+  
+  const eliminarTarea = (id) => {
+    setTareas(tareas.filter(t => t.id !== id));
+  };
+  
+  const toggleCompletada = (id) => {
+    setTareas(tareas.map(t => 
+      t.id === id ? { ...t, completada: !t.completada } : t
+    ));
+  };
+  
+  return (
+    &lt;div&gt;
+      &lt;input 
+        value={nuevaTarea}
+        onChange={(e) => setNuevaTarea(e.target.value)}
+        placeholder="Nueva tarea"
+      /&gt;
+      &lt;button onClick={agregarTarea}&gt;Agregar&lt;/button&gt;
+      
+      &lt;ul&gt;
+        {tareas.map(tarea => (
+          &lt;li key={tarea.id}&gt;
+            &lt;input 
+              type="checkbox"
+              checked={tarea.completada}
+              onChange={() => toggleCompletada(tarea.id)}
+            /&gt;
+            &lt;span style={{ 
+              textDecoration: tarea.completada ? 'line-through' : 'none' 
+            }}&gt;
+              {tarea.texto}
+            &lt;/span&gt;
+            &lt;button onClick={() => eliminarTarea(tarea.id)}&gt;
+              Eliminar
+            &lt;/button&gt;
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="lifting">
+                <h2><i class="fas fa-arrow-up"></i> Lifting State Up (Elevar Estado)</h2>
+                <p><strong>Lifting State Up</strong> significa mover el estado a un componente padre común cuando varios componentes hermanos necesitan compartir datos.</p>
+
+                <h3>Problema: Estado separado</h3>
+                <div class="code-block"><pre>// ❌ Problema: Estado duplicado, difícil sincronizar
+function ComponenteA() {
+  const [usuario, setUsuario] = useState(null);
+  return &lt;div&gt;{usuario?.nombre}&lt;/div&gt;;
+}
+
+function ComponenteB() {
+  const [usuario, setUsuario] = useState(null);  // Duplicado!
+  return &lt;div&gt;{usuario?.email}&lt;/div&gt;;
+}</pre></div>
+
+                <h3>Solución: Elevar al padre</h3>
+                <div class="code-block"><pre>// ✓ Estado en el padre, props a los hijos
+function App() {
+  const [usuario, setUsuario] = useState(null);
+  
+  return (
+    &lt;div&gt;
+      &lt;FormularioLogin onLogin={setUsuario} /&gt;
+      &lt;PerfilUsuario usuario={usuario} /&gt;
+      &lt;MenuUsuario usuario={usuario} /&gt;
+    &lt;/div&gt;
+  );
+}
+
+function FormularioLogin({ onLogin }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Simular login
+    onLogin({ nombre: 'Ana', email });
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input 
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+      /&gt;
+      &lt;input 
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Contraseña"
+      /&gt;
+      &lt;button type="submit"&gt;Login&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+
+function PerfilUsuario({ usuario }) {
+  if (!usuario) return &lt;p&gt;No has iniciado sesión&lt;/p&gt;;
+  return &lt;div&gt;&lt;h2&gt;{usuario.nombre}&lt;/h2&gt;&lt;/div&gt;;
+}
+
+function MenuUsuario({ usuario }) {
+  if (!usuario) return null;
+  return &lt;nav&gt;&lt;p&gt;Bienvenido, {usuario.nombre}&lt;/p&gt;&lt;/nav&gt;;
+}</pre></div>
+
+                <h3>Ejemplo: Filtro compartido</h3>
+                <div class="code-block"><pre>function App() {
+  const [filtro, setFiltro] = useState('todos');
+  const [tareas] = useState([
+    { id: 1, texto: 'Comprar', completada: false },
+    { id: 2, texto: 'Estudiar', completada: true },
+    { id: 3, texto: 'Ejercicio', completada: false }
+  ]);
+  
+  return (
+    &lt;div&gt;
+      &lt;FiltroTareas filtro={filtro} onChange={setFiltro} /&gt;
+      &lt;ListaTareas tareas={tareas} filtro={filtro} /&gt;
+      &lt;EstadisticasTareas tareas={tareas} filtro={filtro} /&gt;
+    &lt;/div&gt;
+  );
+}
+
+function FiltroTareas({ filtro, onChange }) {
+  return (
+    &lt;div&gt;
+      &lt;button onClick={() => onChange('todos')}&gt;Todas&lt;/button&gt;
+      &lt;button onClick={() => onChange('pendientes')}&gt;Pendientes&lt;/button&gt;
+      &lt;button onClick={() => onChange('completadas')}&gt;Completadas&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+function ListaTareas({ tareas, filtro }) {
+  const tareasFiltradas = tareas.filter(t => {
+    if (filtro === 'pendientes') return !t.completada;
+    if (filtro === 'completadas') return t.completada;
+    return true;
+  });
+  
+  return (
+    &lt;ul&gt;
+      {tareasFiltradas.map(t => &lt;li key={t.id}&gt;{t.texto}&lt;/li&gt;)}
+    &lt;/ul&gt;
+  );
+}</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Cuándo NO elevar estado:</strong>
+                    <p>Si solo un componente usa el estado, déjalo local. Elevar crea complejidad innecesaria.</p>
+                </div>
+            </div>
+
+            <div class="content-section" id="context">
+                <h2><i class="fas fa-globe"></i> Context API - Estado Global</h2>
+                <p><strong>Context API</strong> evita prop drilling (pasar props a través de muchos niveles). Ideal para datos globales: tema, idioma, autenticación.</p>
+
+                <h3>Ejemplo completo: Tema</h3>
+                <div class="code-block"><pre>// 1. Crear contexto
+import { createContext, useContext, useState } from 'react';
+
+const ThemeContext = createContext();
+
+// 2. Provider personalizado
+export function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState('light');
+  
+  const toggleTheme = () => {
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  };
+  
+  const value = { theme, toggleTheme };
+  
+  return (
+    &lt;ThemeContext.Provider value={value}&gt;
+      {children}
+    &lt;/ThemeContext.Provider&gt;
+  );
+}
+
+// 3. Custom hook para consumir
+export function useTheme() {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme debe usarse dentro de ThemeProvider');
+  }
+  return context;
+}
+
+// 4. App.js
+import { ThemeProvider } from './context/ThemeContext';
+
+function App() {
+  return (
+    &lt;ThemeProvider&gt;
+      &lt;Header /&gt;
+      &lt;Main /&gt;
+      &lt;Footer /&gt;
+    &lt;/ThemeProvider&gt;
+  );
+}
+
+// 5. Usar en cualquier componente (sin prop drilling!)
+import { useTheme } from './context/ThemeContext';
+
+function Header() {
+  const { theme, toggleTheme } = useTheme();
+  
+  return (
+    &lt;header className={theme}&gt;
+      &lt;h1&gt;Mi App&lt;/h1&gt;
+      &lt;button onClick={toggleTheme}&gt;
+        Cambiar a {theme === 'light' ? 'dark' : 'light'}
+      &lt;/button&gt;
+    &lt;/header&gt;
+  );
+}
+
+function Main() {
+  const { theme } = useTheme();
+  
+  return (
+    &lt;main className={theme}&gt;
+      &lt;p&gt;Tema actual: {theme}&lt;/p&gt;
+    &lt;/main&gt;
+  );
+}</pre></div>
+
+                <h3>Ejemplo: Carrito de compras</h3>
+                <div class="code-block"><pre>// CartContext.js
+const CartContext = createContext();
+
+export function CartProvider({ children }) {
+  const [items, setItems] = useState([]);
+  
+  const addItem = (producto) => {
+    setItems(prevItems => {
+      const existe = prevItems.find(i => i.id === producto.id);
+      if (existe) {
+        return prevItems.map(i =>
+          i.id === producto.id ? { ...i, cantidad: i.cantidad + 1 } : i
+        );
+      }
+      return [...prevItems, { ...producto, cantidad: 1 }];
+    });
+  };
+  
+  const removeItem = (id) => {
+    setItems(prevItems => prevItems.filter(i => i.id !== id));
+  };
+  
+  const total = items.reduce((sum, i) => sum + (i.precio * i.cantidad), 0);
+  
+  return (
+    &lt;CartContext.Provider value={{ items, addItem, removeItem, total }}&gt;
+      {children}
+    &lt;/CartContext.Provider&gt;
+  );
+}
+
+export const useCart = () => useContext(CartContext);
+
+// ProductCard.js
+function ProductCard({ producto }) {
+  const { addItem } = useCart();
+  
+  return (
+    &lt;div&gt;
+      &lt;h3&gt;{producto.nombre}&lt;/h3&gt;
+      &lt;p&gt;${producto.precio}&lt;/p&gt;
+      &lt;button onClick={() => addItem(producto)}&gt;
+        Agregar al carrito
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Cart.js
+function Cart() {
+  const { items, removeItem, total } = useCart();
+  
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Carrito ({items.length} items)&lt;/h2&gt;
+      {items.map(item => (
+        &lt;div key={item.id}&gt;
+          &lt;p&gt;{item.nombre} x{item.cantidad} = ${item.precio * item.cantidad}&lt;/p&gt;
+          &lt;button onClick={() => removeItem(item.id)}&gt;Eliminar&lt;/button&gt;
+        &lt;/div&gt;
+      ))}
+      &lt;h3&gt;Total: ${total}&lt;/h3&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="reducer">
+                <h2><i class="fas fa-cogs"></i> useReducer - Estado Complejo</h2>
+                <p><strong>useReducer</strong> es como useState pero para lógica de estado compleja. Similar a Redux.</p>
+
+                <h3>Cuándo usar useReducer:</h3>
+                <ul>
+                    <li>✓ Estado con múltiples sub-valores relacionados</li>
+                    <li>✓ Lógica compleja de actualización</li>
+                    <li>✓ Siguiente estado depende del anterior</li>
+                    <li>✓ Quieres separar lógica de UI</li>
+                </ul>
+
+                <h3>Estructura básica:</h3>
+                <div class="code-block"><pre>import { useReducer } from 'react';
+
+// 1. Definir reducer (función pura que calcula nuevo estado)
+function reducer(state, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return { count: state.count + 1 };
+    case 'DECREMENT':
+      return { count: state.count - 1 };
+    case 'RESET':
+      return { count: 0 };
+    default:
+      return state;
+  }
+}
+
+// 2. Usar en componente
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, { count: 0 });
+  
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Count: {state.count}&lt;/p&gt;
+      &lt;button onClick={() => dispatch({ type: 'INCREMENT' })}&gt;+&lt;/button&gt;
+      &lt;button onClick={() => dispatch({ type: 'DECREMENT' })}&gt;-&lt;/button&gt;
+      &lt;button onClick={() => dispatch({ type: 'RESET' })}&gt;Reset&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <h3>Ejemplo complejo: Formulario con validación</h3>
+                <div class="code-block"><pre>const initialState = {
+  username: '',
+  email: '',
+  password: '',
+  errors: {},
+  isSubmitting: false
+};
+
+function formReducer(state, action) {
+  switch (action.type) {
+    case 'UPDATE_FIELD':
+      return {
+        ...state,
+        [action.field]: action.value,
+        errors: { ...state.errors, [action.field]: '' }
+      };
+    
+    case 'SET_ERROR':
+      return {
+        ...state,
+        errors: { ...state.errors, [action.field]: action.error }
+      };
+    
+    case 'SUBMIT_START':
+      return { ...state, isSubmitting: true };
+    
+    case 'SUBMIT_SUCCESS':
+      return initialState;
+    
+    case 'SUBMIT_ERROR':
+      return { ...state, isSubmitting: false };
+    
+    default:
+      return state;
+  }
+}
+
+function RegistroForm() {
+  const [state, dispatch] = useReducer(formReducer, initialState);
+  
+  const handleChange = (field, value) => {
+    dispatch({ type: 'UPDATE_FIELD', field, value });
+  };
+  
+  const validate = () => {
+    let isValid = true;
+    
+    if (state.username.length < 3) {
+      dispatch({ 
+        type: 'SET_ERROR', 
+        field: 'username', 
+        error: 'Mínimo 3 caracteres' 
+      });
+      isValid = false;
+    }
+    
+    if (!state.email.includes('@')) {
+      dispatch({ 
+        type: 'SET_ERROR', 
+        field: 'email', 
+        error: 'Email inválido' 
+      });
+      isValid = false;
+    }
+    
+    return isValid;
+  };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validate()) return;
+    
+    dispatch({ type: 'SUBMIT_START' });
+    
+    try {
+      // Simular API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      dispatch({ type: 'SUBMIT_SUCCESS' });
+      alert('Registro exitoso!');
+    } catch (error) {
+      dispatch({ type: 'SUBMIT_ERROR' });
+    }
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input
+        value={state.username}
+        onChange={(e) => handleChange('username', e.target.value)}
+        placeholder="Username"
+      /&gt;
+      {state.errors.username && &lt;span&gt;{state.errors.username}&lt;/span&gt;}
+      
+      &lt;input
+        value={state.email}
+        onChange={(e) => handleChange('email', e.target.value)}
+        placeholder="Email"
+      /&gt;
+      {state.errors.email && &lt;span&gt;{state.errors.email}&lt;/span&gt;}
+      
+      &lt;input
+        type="password"
+        value={state.password}
+        onChange={(e) => handleChange('password', e.target.value)}
+        placeholder="Password"
+      /&gt;
+      
+      &lt;button disabled={state.isSubmitting}&gt;
+        {state.isSubmitting ? 'Enviando...' : 'Registrar'}
+      &lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre></div>
+
+                <h3>useReducer + Context (mini Redux):</h3>
+                <div class="code-block"><pre>// TodoContext.js
+const TodoContext = createContext();
+
+const todoReducer = (state, action) => {
+  switch (action.type) {
+    case 'ADD_TODO':
+      return [...state, { id: Date.now(), text: action.text, done: false }];
+    case 'TOGGLE_TODO':
+      return state.map(todo =>
+        todo.id === action.id ? { ...todo, done: !todo.done } : todo
+      );
+    case 'DELETE_TODO':
+      return state.filter(todo => todo.id !== action.id);
+    default:
+      return state;
+  }
+};
+
+export function TodoProvider({ children }) {
+  const [todos, dispatch] = useReducer(todoReducer, []);
+  
+  return (
+    &lt;TodoContext.Provider value={{ todos, dispatch }}&gt;
+      {children}
+    &lt;/TodoContext.Provider&gt;
+  );
+}
+
+export const useTodos = () => useContext(TodoContext);
+
+// Componente
+function TodoList() {
+  const { todos, dispatch } = useTodos();
+  const [input, setInput] = useState('');
+  
+  const addTodo = () => {
+    dispatch({ type: 'ADD_TODO', text: input });
+    setInput('');
+  };
+  
+  return (
+    &lt;div&gt;
+      &lt;input value={input} onChange={(e) => setInput(e.target.value)} /&gt;
+      &lt;button onClick={addTodo}&gt;Agregar&lt;/button&gt;
+      {todos.map(todo => (
+        &lt;div key={todo.id}&gt;
+          &lt;input
+            type="checkbox"
+            checked={todo.done}
+            onChange={() => dispatch({ type: 'TOGGLE_TODO', id: todo.id })}
+          /&gt;
+          &lt;span&gt;{todo.text}&lt;/span&gt;
+          &lt;button onClick={() => dispatch({ type: 'DELETE_TODO', id: todo.id })}&gt;
+            X
+          &lt;/button&gt;
+        &lt;/div&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="patrones">
+                <h2><i class="fas fa-puzzle-piece"></i> Patrones Avanzados</h2>
+
+                <h3>Computed Values (valores derivados):</h3>
+                <div class="code-block"><pre>function ShoppingCart() {
+  const [items, setItems] = useState([]);
+  
+  // Valores derivados (calculados del estado)
+  const subtotal = items.reduce((sum, i) => sum + i.precio * i.cantidad, 0);
+  const iva = subtotal * 0.21;
+  const total = subtotal + iva;
+  const cantidadItems = items.reduce((sum, i) => sum + i.cantidad, 0);
+  
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Items: {cantidadItems}&lt;/p&gt;
+      &lt;p&gt;Subtotal: ${subtotal}&lt;/p&gt;
+      &lt;p&gt;IVA: ${iva}&lt;/p&gt;
+      &lt;h3&gt;Total: ${total}&lt;/h3&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <h3>Estado derivado con useMemo (optimización):</h3>
+                <div class="code-block"><pre>import { useMemo } from 'react';
+
+function DataTable({ data, filterText }) {
+  // Solo recalcular cuando data o filterText cambien
+  const filteredData = useMemo(() => {
+    console.log('Filtrando...');
+    return data.filter(item =>
+      item.nombre.toLowerCase().includes(filterText.toLowerCase())
+    );
+  }, [data, filterText]);
+  
+  return (
+    &lt;table&gt;
+      {filteredData.map(item => (
+        &lt;tr key={item.id}&gt;&lt;td&gt;{item.nombre}&lt;/td&gt;&lt;/tr&gt;
+      ))}
+    &lt;/table&gt;
+  );
+}</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Comparación de soluciones de estado:</strong>
+                    <table>
+                        <tr>
+                            <th>Solución</th>
+                            <th>Cuándo usar</th>
+                        </tr>
+                        <tr>
+                            <td><strong>useState</strong></td>
+                            <td>Estado local simple</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lifting State</strong></td>
+                            <td>Compartir entre 2-3 componentes cercanos</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Context</strong></td>
+                            <td>Estado global (tema, auth, idioma)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>useReducer</strong></td>
+                            <td>Lógica compleja, múltiples acciones</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Redux/Zustand</strong></td>
+                            <td>Apps grandes, DevTools, middleware</td>
+                        </tr>
+                        <tr>
+                            <td><strong>React Query</strong></td>
+                            <td>Estado del servidor (APIs, cache)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

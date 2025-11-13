@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Pipeline de Agregación - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a MongoDB</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-database"></i> Agregación</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#intro" class="active">Introducción al Pipeline</a></li>
+                <li><a href="#match">$match - Filtrar</a></li>
+                <li><a href="#group">$group - Agrupar</a></li>
+                <li><a href="#project">$project - Transformar</a></li>
+                <li><a href="#sort-limit">$sort, $limit, $skip</a></li>
+                <li><a href="#unwind">$unwind - Descomponer Arrays</a></li>
+                <li><a href="#lookup">$lookup - Joins</a></li>
+                <li><a href="#ejemplos">Ejemplos Complejos</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--mongodb-color);"><i class="fas fa-database"></i></div>
+                <h1 class="detail-title">4. Pipeline de Agregación en MongoDB</h1>
+                <p class="detail-subtitle">Análisis y transformación avanzada de datos</p>
+            </div>
+
+            <div class="content-section" id="intro">
+                <h2><i class="fas fa-stream"></i> ¿Qué es el Aggregation Pipeline?</h2>
+                <p>El <strong>Aggregation Pipeline</strong> es el framework de MongoDB para procesar y transformar documentos. Es similar a una tubería donde los documentos pasan a través de múltiples <strong>etapas</strong> (stages), y cada etapa transforma los datos de alguna manera.</p>
+
+                <p><strong>¿Por qué es importante?</strong></p>
+                <ul>
+                    <li><strong>Análisis de datos:</strong> Calcula estadísticas, promedios, totales, agrupaciones</li>
+                    <li><strong>Transformación:</strong> Modifica la estructura de documentos, crea campos calculados</li>
+                    <li><strong>Rendimiento:</strong> Procesa datos en el servidor (más rápido que en la aplicación)</li>
+                    <li><strong>Flexibilidad:</strong> Combina múltiples operaciones en una sola consulta</li>
+                    <li><strong>Potencia:</strong> Equivalente a consultas SQL complejas con GROUP BY, JOIN, etc.</li>
+                </ul>
+
+                <div class="info-box">
+                    <strong>💡 Comparación con SQL:</strong>
+                    <div class="code-block"><pre>// SQL:
+SELECT categoria, 
+       COUNT(*) as total,
+       AVG(precio) as precioPromedio
+FROM productos
+WHERE stock > 0
+GROUP BY categoria
+HAVING COUNT(*) > 5
+ORDER BY total DESC
+LIMIT 10
+
+// MongoDB Aggregation Pipeline (equivalente):
+db.productos.aggregate([
+  { $match: { stock: { $gt: 0 } } },
+  { 
+    $group: {
+      _id: "$categoria",
+      total: { $sum: 1 },
+      precioPromedio: { $avg: "$precio" }
+    }
+  },
+  { $match: { total: { $gt: 5 } } },
+  { $sort: { total: -1 } },
+  { $limit: 10 }
+])</pre></div>
+                </div>
+
+                <h3>Estructura del Pipeline</h3>
+                <p>Un pipeline es un array de etapas. Cada etapa es un objeto que especifica una operación:</p>
+
+                <div class="code-block"><pre>db.coleccion.aggregate([
+  { $etapa1: { ... } },  // Primera transformación
+  { $etapa2: { ... } },  // Segunda transformación
+  { $etapa3: { ... } }   // Tercera transformación
+])
+
+// Los documentos fluyen de arriba hacia abajo:
+// Documentos originales → Etapa1 → Resultado1 → Etapa2 → Resultado2 → ...
+
+// Ejemplo visual:
+// Entrada: 1000 documentos
+//    ↓
+// $match (filtrar) → 500 documentos
+//    ↓
+// $group (agrupar) → 10 grupos
+//    ↓
+// $sort (ordenar) → 10 grupos ordenados
+//    ↓
+// Salida: 10 documentos finales</pre></div>
+
+                <h3>Etapas Principales</h3>
+                <p>MongoDB ofrece más de 30 etapas. Las más comunes son:</p>
+                <ul>
+                    <li><code>$match</code> - Filtra documentos (como find())</li>
+                    <li><code>$group</code> - Agrupa documentos y calcula valores</li>
+                    <li><code>$project</code> - Selecciona/transforma campos</li>
+                    <li><code>$sort</code> - Ordena documentos</li>
+                    <li><code>$limit</code> - Limita número de documentos</li>
+                    <li><code>$skip</code> - Salta documentos</li>
+                    <li><code>$unwind</code> - Descompone arrays</li>
+                    <li><code>$lookup</code> - Join con otra colección</li>
+                    <li><code>$addFields</code> - Añade campos calculados</li>
+                    <li><code>$count</code> - Cuenta documentos</li>
+                </ul>
+
+                <div class="warning-box">
+                    <strong>⚠️ Orden de las etapas importa:</strong>
+                    <p>El orden afecta tanto la lógica como el rendimiento:</p>
+                    <ul>
+                        <li><strong>Coloca $match temprano:</strong> Filtra antes de procesar para reducir datos</li>
+                        <li><strong>$project después de $group:</strong> Solo proyecta lo necesario al final</li>
+                        <li><strong>Índices:</strong> Solo la primera $match puede usar índices eficientemente</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="match">
+                <h2><i class="fas fa-filter"></i> $match - Filtrar Documentos</h2>
+                <p><code>$match</code> filtra documentos que pasan a la siguiente etapa. Es equivalente a <code>find()</code> pero se usa dentro del pipeline.</p>
+
+                <h3>Sintaxis Básica</h3>
+                <div class="code-block"><pre>// Sintaxis:
+{ $match: { campo: valor } }
+
+// Ejemplo simple:
+db.ventas.aggregate([
+  { $match: { estado: "completado" } }
+])
+// Solo documentos con estado "completado"</pre></div>
+
+                <h3>Con Operadores de Consulta</h3>
+                <p><code>$match</code> soporta todos los operadores de consulta de MongoDB:</p>
+
+                <div class="code-block"><pre>// Rango de fechas:
+db.ventas.aggregate([
+  {
+    $match: {
+      fecha: {
+        $gte: ISODate("2024-01-01"),
+        $lt: ISODate("2024-02-01")
+      }
+    }
+  }
+])
+
+// Múltiples condiciones:
+db.productos.aggregate([
+  {
+    $match: {
+      categoria: "Electrónica",
+      precio: { $gte: 100, $lte: 500 },
+      stock: { $gt: 0 }
+    }
+  }
+])
+
+// Con operadores lógicos:
+db.usuarios.aggregate([
+  {
+    $match: {
+      $or: [
+        { edad: { $gte: 65 } },
+        { tipoCliente: "premium" }
+      ]
+    }
+  }
+])</pre></div>
+
+                <h3>Múltiples $match en un Pipeline</h3>
+                <p>Puedes usar $match varias veces para filtrar en diferentes etapas:</p>
+
+                <div class="code-block"><pre>db.ventas.aggregate([
+  // Primer filtro: solo ventas completadas
+  { $match: { estado: "completado" } },
+  
+  // Agrupar por producto
+  {
+    $group: {
+      _id: "$producto",
+      totalVentas: { $sum: "$cantidad" }
+    }
+  },
+  
+  // Segundo filtro: solo productos con más de 100 ventas
+  { $match: { totalVentas: { $gt: 100 } } }
+])</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Optimización con $match:</strong>
+                    <ul>
+                        <li><strong>Primera etapa:</strong> Si $match es la primera etapa, puede usar índices</li>
+                        <li><strong>Reduce datos temprano:</strong> Menos documentos = procesamiento más rápido</li>
+                        <li><strong>Divide filtros:</strong> Filtra datos originales primero, luego resultados agregados</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="group">
+                <h2><i class="fas fa-object-group"></i> $group - Agrupar y Calcular</h2>
+                <p><code>$group</code> agrupa documentos por un campo específico y calcula valores agregados. Es equivalente a SQL's GROUP BY.</p>
+
+                <h3>Sintaxis Básica</h3>
+                <div class="code-block"><pre>// Sintaxis:
+{
+  $group: {
+    _id: "$campoParaAgrupar",  // Campo de agrupación (obligatorio)
+    campo1: { $operador: "$campo" },
+    campo2: { $operador: "$campo" }
+  }
+}</pre></div>
+
+                <h3>Agrupar por un Campo</h3>
+                <div class="code-block"><pre>// Contar usuarios por ciudad:
+db.usuarios.aggregate([
+  {
+    $group: {
+      _id: "$ciudad",           // Agrupar por ciudad
+      total: { $sum: 1 }        // Contar documentos
+    }
+  }
+])
+
+// Resultado:
+[
+  { _id: "Madrid", total: 150 },
+  { _id: "Barcelona", total: 120 },
+  { _id: "Valencia", total: 80 }
+]</pre></div>
+
+                <h3>Operadores de Acumulación</h3>
+
+                <h4>$sum - Sumar</h4>
+                <div class="code-block"><pre>// Contar documentos (suma 1 por cada documento):
+{ $sum: 1 }
+
+// Sumar valores de un campo:
+db.ventas.aggregate([
+  {
+    $group: {
+      _id: "$categoria",
+      totalVentas: { $sum: "$precio" }
+    }
+  }
+])
+
+// Sumar campo calculado:
+db.pedidos.aggregate([
+  {
+    $group: {
+      _id: "$usuarioId",
+      gastTotal: { $sum: { $multiply: ["$precio", "$cantidad"] } }
+    }
+  }
+])</pre></div>
+
+                <h4>$avg - Promedio</h4>
+                <div class="code-block"><pre>// Edad promedio por ciudad:
+db.usuarios.aggregate([
+  {
+    $group: {
+      _id: "$ciudad",
+      edadPromedio: { $avg: "$edad" }
+    }
+  }
+])
+
+// Precio promedio por categoría:
+db.productos.aggregate([
+  {
+    $group: {
+      _id: "$categoria",
+      precioPromedio: { $avg: "$precio" }
+    }
+  }
+])</pre></div>
+
+                <h4>$min y $max - Mínimo y Máximo</h4>
+                <div class="code-block"><pre>// Producto más barato y más caro por categoría:
+db.productos.aggregate([
+  {
+    $group: {
+      _id: "$categoria",
+      precioMin: { $min: "$precio" },
+      precioMax: { $max: "$precio" }
+    }
+  }
+])
+
+// Primera y última venta de cada producto:
+db.ventas.aggregate([
+  {
+    $group: {
+      _id: "$producto",
+      primeraVenta: { $min: "$fecha" },
+      ultimaVenta: { $max: "$fecha" }
+    }
+  }
+])</pre></div>
+
+                <h4>$first y $last - Primer y Último Documento</h4>
+                <div class="code-block"><pre>// IMPORTANTE: Requiere $sort antes para ser útil
+db.ventas.aggregate([
+  { $sort: { fecha: 1 } },  // Ordenar por fecha ascendente
+  {
+    $group: {
+      _id: "$usuarioId",
+      primeraCompra: { $first: "$fecha" },
+      ultimaCompra: { $last: "$fecha" }
+    }
+  }
+])</pre></div>
+
+                <h4>$push y $addToSet - Acumular en Arrays</h4>
+                <div class="code-block"><pre>// $push: Añade todos los valores (con duplicados)
+db.pedidos.aggregate([
+  {
+    $group: {
+      _id: "$usuarioId",
+      productos: { $push: "$nombreProducto" }
+    }
+  }
+])
+// Resultado: { _id: 1, productos: ["Libro", "Ratón", "Libro"] }
+
+// $addToSet: Añade valores únicos (sin duplicados)
+db.pedidos.aggregate([
+  {
+    $group: {
+      _id: "$usuarioId",
+      productosUnicos: { $addToSet: "$nombreProducto" }
+    }
+  }
+])
+// Resultado: { _id: 1, productosUnicos: ["Libro", "Ratón"] }</pre></div>
+
+                <h3>Agrupar por Múltiples Campos</h3>
+                <div class="code-block"><pre>// Ventas por ciudad Y categoría:
+db.ventas.aggregate([
+  {
+    $group: {
+      _id: {
+        ciudad: "$ciudad",
+        categoria: "$categoria"
+      },
+      total: { $sum: "$precio" }
+    }
+  }
+])
+
+// Resultado:
+[
+  { _id: { ciudad: "Madrid", categoria: "Libros" }, total: 5000 },
+  { _id: { ciudad: "Madrid", categoria: "Música" }, total: 3000 },
+  { _id: { ciudad: "Barcelona", categoria: "Libros" }, total: 4500 }
+]</pre></div>
+
+                <h3>Agrupar Todos los Documentos</h3>
+                <div class="code-block"><pre>// Usar _id: null para agrupar todos:
+db.ventas.aggregate([
+  {
+    $group: {
+      _id: null,                    // Agrupa todo
+      totalVentas: { $sum: "$precio" },
+      ventaPromedio: { $avg: "$precio" },
+      numVentas: { $sum: 1 }
+    }
+  }
+])
+
+// Resultado:
+[
+  {
+    _id: null,
+    totalVentas: 50000,
+    ventaPromedio: 125.50,
+    numVentas: 398
+  }
+]</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Ejemplo Completo - Estadísticas de Ventas:</strong>
+                    <div class="code-block"><pre>db.ventas.aggregate([
+  // 1. Filtrar solo 2024
+  { 
+    $match: { 
+      fecha: { 
+        $gte: ISODate("2024-01-01"),
+        $lt: ISODate("2025-01-01")
+      } 
+    } 
+  },
+  // 2. Agrupar por producto
+  {
+    $group: {
+      _id: "$producto",
+      cantidadVendida: { $sum: "$cantidad" },
+      ingresos: { $sum: { $multiply: ["$precio", "$cantidad"] } },
+      precioPromedio: { $avg: "$precio" },
+      numVentas: { $sum: 1 }
+    }
+  },
+  // 3. Filtrar productos rentables
+  { $match: { ingresos: { $gte: 1000 } } },
+  // 4. Ordenar por ingresos
+  { $sort: { ingresos: -1 } }
+])</pre></div>
+                </div>
+            </div>
+
+            <div class="content-section" id="project">
+                <h2><i class="fas fa-pencil-ruler"></i> $project - Transformar y Dar Forma a Documentos</h2>
+                <p><code>$project</code> controla qué campos aparecen en la salida y puede crear campos calculados. Similar a SELECT en SQL.</p>
+
+                <h3>Incluir/Excluir Campos</h3>
+                <div class="code-block"><pre>// Incluir solo campos específicos:
+db.usuarios.aggregate([
+  {
+    $project: {
+      nombre: 1,
+      email: 1,
+      ciudad: 1
+      // _id se incluye por defecto
+    }
+  }
+])
+
+// Excluir _id:
+db.usuarios.aggregate([
+  {
+    $project: {
+      _id: 0,
+      nombre: 1,
+      email: 1
+    }
+  }
+])
+
+// Excluir campos específicos:
+db.usuarios.aggregate([
+  {
+    $project: {
+      password: 0,
+      tokenSession: 0
+    }
+  }
+])</pre></div>
+
+                <h3>Renombrar Campos</h3>
+                <div class="code-block"><pre>db.usuarios.aggregate([
+  {
+    $project: {
+      _id: 0,
+      nombreUsuario: "$nombre",     // Renombrar "nombre" a "nombreUsuario"
+      correo: "$email",             // Renombrar "email" a "correo"
+      ubicacion: "$ciudad"
+    }
+  }
+])</pre></div>
+
+                <h3>Crear Campos Calculados</h3>
+
+                <h4>Operadores Aritméticos</h4>
+                <div class="code-block"><pre>// $add, $subtract, $multiply, $divide
+db.productos.aggregate([
+  {
+    $project: {
+      nombre: 1,
+      precio: 1,
+      precioConIVA: { $multiply: ["$precio", 1.21] },
+      descuento: { $multiply: ["$precio", 0.10] },
+      precioFinal: {
+        $subtract: [
+          { $multiply: ["$precio", 1.21] },
+          { $multiply: ["$precio", 0.10] }
+        ]
+      }
+    }
+  }
+])</pre></div>
+
+                <h4>Operadores de String</h4>
+                <div class="code-block"><pre>// $concat - Concatenar strings:
+db.usuarios.aggregate([
+  {
+    $project: {
+      nombreCompleto: {
+        $concat: ["$nombre", " ", "$apellido"]
+      },
+      emailFormateado: {
+        $concat: ["Email: ", "$email"]
+      }
+    }
+  }
+])
+
+// $toUpper, $toLower - Mayúsculas/minúsculas:
+db.usuarios.aggregate([
+  {
+    $project: {
+      nombreMayusculas: { $toUpper: "$nombre" },
+      emailMinusculas: { $toLower: "$email" }
+    }
+  }
+])
+
+// $substr - Subcadena:
+db.usuarios.aggregate([
+  {
+    $project: {
+      iniciales: { $substr: ["$nombre", 0, 1] }
+    }
+  }
+])</pre></div>
+
+                <h4>Operadores Condicionales</h4>
+                <div class="code-block"><pre>// $cond - If-then-else:
+db.productos.aggregate([
+  {
+    $project: {
+      nombre: 1,
+      precio: 1,
+      categoria: {
+        $cond: {
+          if: { $gte: ["$precio", 100] },
+          then: "Premium",
+          else: "Económico"
+        }
+      }
+    }
+  }
+])
+
+// Forma abreviada:
+db.productos.aggregate([
+  {
+    $project: {
+      categoria: {
+        $cond: [
+          { $gte: ["$precio", 100] },
+          "Premium",
+          "Económico"
+        ]
+      }
+    }
+  }
+])
+
+// $switch - Múltiples condiciones:
+db.usuarios.aggregate([
+  {
+    $project: {
+      rangoEdad: {
+        $switch: {
+          branches: [
+            { case: { $lt: ["$edad", 18] }, then: "Menor" },
+            { case: { $lt: ["$edad", 65] }, then: "Adulto" },
+            { case: { $gte: ["$edad", 65] }, then: "Senior" }
+          ],
+          default: "Desconocido"
+        }
+      }
+    }
+  }
+])</pre></div>
+
+                <h4>Operadores de Fecha</h4>
+                <div class="code-block"><pre>// Extraer componentes de fecha:
+db.ventas.aggregate([
+  {
+    $project: {
+      año: { $year: "$fecha" },
+      mes: { $month: "$fecha" },
+      dia: { $dayOfMonth: "$fecha" },
+      diaSemana: { $dayOfWeek: "$fecha" },  // 1 = Domingo
+      hora: { $hour: "$fecha" }
+    }
+  }
+])</pre></div>
+
+                <h3>$addFields - Añadir Campos sin Excluir Otros</h3>
+                <p><code>$addFields</code> es como $project pero mantiene todos los campos originales:</p>
+
+                <div class="code-block"><pre>// $project: Solo campos especificados
+db.productos.aggregate([
+  {
+    $project: {
+      nombre: 1,
+      precioConIVA: { $multiply: ["$precio", 1.21] }
+      // ❌ Todos los demás campos se excluyen
+    }
+  }
+])
+
+// $addFields: Añade campo, mantiene todo lo demás
+db.productos.aggregate([
+  {
+    $addFields: {
+      precioConIVA: { $multiply: ["$precio", 1.21] }
+      // ✅ Todos los campos originales + el nuevo
+    }
+  }
+])</pre></div>
+            </div>
+
+            <div class="content-section" id="sort-limit">
+                <h2><i class="fas fa-sort"></i> $sort, $limit y $skip</h2>
+                <p>Estas etapas controlan el orden y la cantidad de documentos en el pipeline.</p>
+
+                <h3>$sort - Ordenar</h3>
+                <div class="code-block"><pre>// Sintaxis: 1 = ascendente, -1 = descendente
+db.productos.aggregate([
+  { $sort: { precio: -1 } }  // Más caros primero
+])
+
+// Ordenar por múltiples campos:
+db.ventas.aggregate([
+  { $sort: { categoria: 1, precio: -1 } }
+  // Primero por categoría (A-Z), luego por precio (mayor a menor)
+])</pre></div>
+
+                <h3>$limit - Limitar</h3>
+                <div class="code-block"><pre>// Top 10 productos más vendidos:
+db.ventas.aggregate([
+  {
+    $group: {
+      _id: "$producto",
+      totalVentas: { $sum: "$cantidad" }
+    }
+  },
+  { $sort: { totalVentas: -1 } },
+  { $limit: 10 }
+])</pre></div>
+
+                <h3>$skip - Saltar</h3>
+                <div class="code-block"><pre>// Paginación:
+const pagina = 2;
+const porPagina = 20;
+
+db.productos.aggregate([
+  { $sort: { nombre: 1 } },
+  { $skip: (pagina - 1) * porPagina },
+  { $limit: porPagina }
+])</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Orden de $sort, $limit, $skip:</strong>
+                    <p>MongoDB optimiza automáticamente estas etapas, pero el orden lógico es:</p>
+                    <ol>
+                        <li>$sort - Ordena todos los documentos</li>
+                        <li>$skip - Salta N documentos</li>
+                        <li>$limit - Devuelve M documentos</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="content-section" id="unwind">
+                <h2><i class="fas fa-expand-arrows-alt"></i> $unwind - Descomponer Arrays</h2>
+                <p><code>$unwind</code> "descompone" un array, creando un documento por cada elemento del array.</p>
+
+                <h3>Concepto de $unwind</h3>
+                <div class="code-block"><pre>// Documento original:
+{
+  _id: 1,
+  usuario: "Ana",
+  hobbies: ["lectura", "música", "natación"]
+}
+
+// Después de $unwind sobre "hobbies":
+[
+  { _id: 1, usuario: "Ana", hobbies: "lectura" },
+  { _id: 1, usuario: "Ana", hobbies: "música" },
+  { _id: 1, usuario: "Ana", hobbies: "natación" }
+]
+// ✅ Un documento por cada elemento del array</pre></div>
+
+                <h3>Sintaxis Básica</h3>
+                <div class="code-block"><pre>// Sintaxis simple:
+{ $unwind: "$nombreArray" }
+
+// Ejemplo:
+db.usuarios.aggregate([
+  { $unwind: "$hobbies" }
+])</pre></div>
+
+                <h3>Caso de Uso Real - Análisis de Productos en Pedidos</h3>
+                <div class="code-block"><pre>// Colección pedidos:
+{
+  _id: 1,
+  usuario: "Ana",
+  productos: [
+    { nombre: "Libro", precio: 20, cantidad: 2 },
+    { nombre: "Ratón", precio: 15, cantidad: 1 }
+  ]
+}
+
+// Contar ventas por producto:
+db.pedidos.aggregate([
+  // 1. Descomponer array de productos
+  { $unwind: "$productos" },
+  
+  // 2. Agrupar por nombre de producto
+  {
+    $group: {
+      _id: "$productos.nombre",
+      totalVendido: { $sum: "$productos.cantidad" },
+      ingresos: { 
+        $sum: { 
+          $multiply: ["$productos.precio", "$productos.cantidad"] 
+        } 
+      }
+    }
+  },
+  
+  // 3. Ordenar por más vendidos
+  { $sort: { totalVendido: -1 } }
+])
+
+// Resultado:
+[
+  { _id: "Libro", totalVendido: 150, ingresos: 3000 },
+  { _id: "Ratón", totalVendido: 80, ingresos: 1200 }
+]</pre></div>
+
+                <h3>Opciones de $unwind</h3>
+                <div class="code-block"><pre>// Sintaxis completa:
+{
+  $unwind: {
+    path: "$array",
+    preserveNullAndEmptyArrays: true,  // Mantener docs sin array/array vacío
+    includeArrayIndex: "indice"        // Añadir índice del elemento
+  }
+}
+
+// Ejemplo:
+db.usuarios.aggregate([
+  {
+    $unwind: {
+      path: "$hobbies",
+      includeArrayIndex: "posicionHobby",
+      preserveNullAndEmptyArrays: true
+    }
+  }
+])
+
+// Resultado incluye documentos sin hobbies:
+{ _id: 1, usuario: "Ana", hobbies: "lectura", posicionHobby: 0 }
+{ _id: 1, usuario: "Ana", hobbies: "música", posicionHobby: 1 }
+{ _id: 2, usuario: "Luis" }  // ✅ Sin hobbies pero incluido</pre></div>
+            </div>
+
+            <div class="content-section" id="lookup">
+                <h2><i class="fas fa-link"></i> $lookup - Joins entre Colecciones</h2>
+                <p><code>$lookup</code> realiza un LEFT OUTER JOIN entre dos colecciones, similar a JOIN en SQL.</p>
+
+                <h3>Sintaxis Básica</h3>
+                <div class="code-block"><pre>// Sintaxis:
+{
+  $lookup: {
+    from: "coleccionExterna",        // Colección a unir
+    localField: "campoLocal",         // Campo de la colección actual
+    foreignField: "campoExterno",     // Campo de la colección externa
+    as: "nombreResultado"             // Nombre del array resultante
+  }
+}</pre></div>
+
+                <h3>Ejemplo - Pedidos con Datos de Usuario</h3>
+                <div class="code-block"><pre>// Colección "pedidos":
+{
+  _id: 1,
+  usuarioId: ObjectId("abc123"),
+  total: 150,
+  fecha: ISODate("2024-01-15")
+}
+
+// Colección "usuarios":
+{
+  _id: ObjectId("abc123"),
+  nombre: "Ana García",
+  email: "ana@example.com"
+}
+
+// JOIN:
+db.pedidos.aggregate([
+  {
+    $lookup: {
+      from: "usuarios",
+      localField: "usuarioId",
+      foreignField: "_id",
+      as: "datosUsuario"
+    }
+  }
+])
+
+// Resultado:
+{
+  _id: 1,
+  usuarioId: ObjectId("abc123"),
+  total: 150,
+  fecha: ISODate("2024-01-15"),
+  datosUsuario: [  // ← Array con el usuario
+    {
+      _id: ObjectId("abc123"),
+      nombre: "Ana García",
+      email: "ana@example.com"
+    }
+  ]
+}</pre></div>
+
+                <h3>Convertir Array a Objeto con $unwind</h3>
+                <p>$lookup devuelve un array. Usa $unwind para convertirlo en objeto:</p>
+
+                <div class="code-block"><pre>db.pedidos.aggregate([
+  {
+    $lookup: {
+      from: "usuarios",
+      localField: "usuarioId",
+      foreignField: "_id",
+      as: "datosUsuario"
+    }
+  },
+  { $unwind: "$datosUsuario" },  // Array → Objeto
+  {
+    $project: {
+      _id: 1,
+      total: 1,
+      nombreUsuario: "$datosUsuario.nombre",
+      emailUsuario: "$datosUsuario.email"
+    }
+  }
+])
+
+// Resultado:
+{
+  _id: 1,
+  total: 150,
+  nombreUsuario: "Ana García",
+  emailUsuario: "ana@example.com"
+}</pre></div>
+
+                <h3>$lookup con Pipeline (Avanzado)</h3>
+                <p>Puedes ejecutar un pipeline en la colección externa:</p>
+
+                <div class="code-block"><pre>db.pedidos.aggregate([
+  {
+    $lookup: {
+      from: "productos",
+      let: { productoIds: "$productos" },  // Variables
+      pipeline: [
+        {
+          $match: {
+            $expr: { $in: ["$_id", "$$productoIds"] }  // $$var
+          }
+        },
+        { $project: { nombre: 1, precio: 1 } }
+      ],
+      as: "detallesProductos"
+    }
+  }
+])</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Rendimiento de $lookup:</strong>
+                    <ul>
+                        <li>$lookup puede ser costoso en colecciones grandes</li>
+                        <li>Crea índices en los campos de join (localField y foreignField)</li>
+                        <li>Considera desnormalizar datos si haces joins frecuentemente</li>
+                        <li>Usa $match después de $lookup para filtrar resultados unidos</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="ejemplos">
+                <h2><i class="fas fa-code"></i> Ejemplos de Pipelines Complejos</h2>
+                <p>Ejemplos reales que combinan múltiples etapas:</p>
+
+                <h3>Ejemplo 1: Dashboard de Ventas</h3>
+                <div class="code-block"><pre>// Análisis de ventas por categoría y mes
+db.ventas.aggregate([
+  // 1. Filtrar ventas de 2024
+  {
+    $match: {
+      fecha: {
+        $gte: ISODate("2024-01-01"),
+        $lt: ISODate("2025-01-01")
+      },
+      estado: "completado"
+    }
+  },
+  
+  // 2. Extraer año y mes
+  {
+    $addFields: {
+      año: { $year: "$fecha" },
+      mes: { $month: "$fecha" }
+    }
+  },
+  
+  // 3. Agrupar por categoría y mes
+  {
+    $group: {
+      _id: {
+        categoria: "$categoria",
+        mes: "$mes"
+      },
+      totalVentas: { $sum: "$cantidad" },
+      ingresos: { $sum: { $multiply: ["$precio", "$cantidad"] } },
+      ventaPromedio: { $avg: { $multiply: ["$precio", "$cantidad"] } },
+      numTransacciones: { $sum: 1 }
+    }
+  },
+  
+  // 4. Ordenar por mes y ingresos
+  { $sort: { "_id.mes": 1, ingresos: -1 } },
+  
+  // 5. Formatear salida
+  {
+    $project: {
+      _id: 0,
+      categoria: "$_id.categoria",
+      mes: "$_id.mes",
+      totalVentas: 1,
+      ingresos: { $round: ["$ingresos", 2] },
+      ventaPromedio: { $round: ["$ventaPromedio", 2] },
+      numTransacciones: 1
+    }
+  }
+])</pre></div>
+
+                <h3>Ejemplo 2: Top Clientes con Detalles</h3>
+                <div class="code-block"><pre>// Top 10 clientes que más gastaron
+db.pedidos.aggregate([
+  // 1. Solo pedidos completados
+  { $match: { estado: "completado" } },
+  
+  // 2. Agrupar por cliente
+  {
+    $group: {
+      _id: "$usuarioId",
+      totalGastado: { $sum: "$total" },
+      numPedidos: { $sum: 1 },
+      ultimoPedido: { $max: "$fecha" }
+    }
+  },
+  
+  // 3. Ordenar por gasto total
+  { $sort: { totalGastado: -1 } },
+  
+  // 4. Top 10
+  { $limit: 10 },
+  
+  // 5. JOIN con usuarios
+  {
+    $lookup: {
+      from: "usuarios",
+      localField: "_id",
+      foreignField: "_id",
+      as: "datosUsuario"
+    }
+  },
+  
+  // 6. Descomponer array de usuario
+  { $unwind: "$datosUsuario" },
+  
+  // 7. Formatear salida
+  {
+    $project: {
+      _id: 0,
+      usuarioId: "$_id",
+      nombre: "$datosUsuario.nombre",
+      email: "$datosUsuario.email",
+      totalGastado: { $round: ["$totalGastado", 2] },
+      numPedidos: 1,
+      promedioGasto: { 
+        $round: [{ $divide: ["$totalGastado", "$numPedidos"] }, 2] 
+      },
+      ultimoPedido: {
+        $dateToString: {
+          format: "%Y-%m-%d",
+          date: "$ultimoPedido"
+        }
+      }
+    }
+  }
+])</pre></div>
+
+                <h3>Ejemplo 3: Análisis de Productos en Pedidos</h3>
+                <div class="code-block"><pre>// Productos más vendidos con análisis detallado
+db.pedidos.aggregate([
+  // 1. Descomponer array de productos
+  { $unwind: "$productos" },
+  
+  // 2. Agrupar por producto
+  {
+    $group: {
+      _id: "$productos.nombre",
+      cantidadTotal: { $sum: "$productos.cantidad" },
+      ingresos: { 
+        $sum: { 
+          $multiply: ["$productos.precio", "$productos.cantidad"] 
+        } 
+      },
+      precioPromedio: { $avg: "$productos.precio" },
+      numPedidos: { $sum: 1 },
+      clientes: { $addToSet: "$usuarioId" }
+    }
+  },
+  
+  // 3. Añadir campo calculado
+  {
+    $addFields: {
+      numClientesUnicos: { $size: "$clientes" },
+      ingresoPorPedido: { $divide: ["$ingresos", "$numPedidos"] }
+    }
+  },
+  
+  // 4. Filtrar productos populares
+  { $match: { numPedidos: { $gte: 10 } } },
+  
+  // 5. Ordenar por ingresos
+  { $sort: { ingresos: -1 } },
+  
+  // 6. Formatear salida
+  {
+    $project: {
+      _id: 0,
+      producto: "$_id",
+      cantidadTotal: 1,
+      ingresos: { $round: ["$ingresos", 2] },
+      precioPromedio: { $round: ["$precioPromedio", 2] },
+      numPedidos: 1,
+      numClientesUnicos: 1,
+      ingresoPorPedido: { $round: ["$ingresoPorPedido", 2] }
+    }
+  }
+])</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Resumen del Aggregation Pipeline:</strong>
+                    <ul>
+                        <li><strong>$match:</strong> Filtra documentos (usa índices si es primera etapa)</li>
+                        <li><strong>$group:</strong> Agrupa y calcula ($sum, $avg, $min, $max, etc.)</li>
+                        <li><strong>$project:</strong> Transforma documentos, crea campos calculados</li>
+                        <li><strong>$sort / $limit / $skip:</strong> Ordena, limita y pagina resultados</li>
+                        <li><strong>$unwind:</strong> Descompone arrays (un doc por elemento)</li>
+                        <li><strong>$lookup:</strong> JOIN con otra colección</li>
+                        <li><strong>$addFields:</strong> Añade campos sin excluir existentes</li>
+                        <li><strong>Orden importa:</strong> Filtra temprano, proyecta al final</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

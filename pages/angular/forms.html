@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Formularios - Angular</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-angular"></i> Formularios</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#introduccion" class="active">Introducción</a></li>
+                <li><a href="#template">Template-Driven Forms</a></li>
+                <li><a href="#reactive">Reactive Forms</a></li>
+                <li><a href="#validacion">Validación</a></li>
+                <li><a href="#formbuilder">FormBuilder</a></li>
+                <li><a href="#dinamicos">Formularios Dinámicos</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color:var(--angular-color)"><i class="fab fa-angular"></i></div>
+                <h1>6. Formularios en Angular</h1>
+                <p class="detail-subtitle">Capturar y validar datos del usuario</p>
+            </div>
+
+            <div class="content-section" id="introduccion">
+                <h2><i class="fas fa-edit"></i> Introducción a Formularios</h2>
+                <p>Los <strong>formularios</strong> son esenciales para capturar datos del usuario. Angular ofrece dos enfoques diferentes para manejar formularios: <strong>Template-Driven</strong> (basados en el template) y <strong>Reactive Forms</strong> (basados en el código).</p>
+
+                <div class="info-box">
+                    <p><strong>Diferencias principales:</strong></p>
+                    <table style="width:100%; border-collapse: collapse; margin-top: 10px;">
+                        <tr style="background:#2c3e50; color:white;">
+                            <th style="padding:8px; border:1px solid #ddd;">Característica</th>
+                            <th style="padding:8px; border:1px solid #ddd;">Template-Driven</th>
+                            <th style="padding:8px; border:1px solid #ddd;">Reactive Forms</th>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;"><strong>Configuración</strong></td>
+                            <td style="padding:8px; border:1px solid #ddd;">En el template HTML</td>
+                            <td style="padding:8px; border:1px solid #ddd;">En el componente TypeScript</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;"><strong>Complejidad</strong></td>
+                            <td style="padding:8px; border:1px solid #ddd;">Formularios simples</td>
+                            <td style="padding:8px; border:1px solid #ddd;">Formularios complejos</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;"><strong>Validación</strong></td>
+                            <td style="padding:8px; border:1px solid #ddd;">Directivas en HTML</td>
+                            <td style="padding:8px; border:1px solid #ddd;">Funciones en TypeScript</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;"><strong>Testeo</strong></td>
+                            <td style="padding:8px; border:1px solid #ddd;">Más difícil</td>
+                            <td style="padding:8px; border:1px solid #ddd;">Más fácil (sincrónico)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ddd;"><strong>Control</strong></td>
+                            <td style="padding:8px; border:1px solid #ddd;">Menos control</td>
+                            <td style="padding:8px; border:1px solid #ddd;">Control total</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>¿Cuál elegir?</h3>
+                <div class="code-block"><pre>// ✓ USA TEMPLATE-DRIVEN cuando:
+// - Formularios simples (login, contacto, búsqueda)
+// - Prototipado rápido
+// - Formularios estáticos sin mucha lógica
+
+// ✓ USA REACTIVE FORMS cuando:
+// - Formularios complejos con validación avanzada
+// - Necesitas controlar valores programáticamente
+// - Formularios dinámicos (agregar/quitar campos)
+// - Testeo unitario es importante
+// - Validación asíncrona compleja
+
+// RECOMENDACIÓN: En proyectos grandes, usa Reactive Forms
+// Son más escalables y mantenibles</pre></div>
+            </div>
+
+            <div class="content-section" id="template">
+                <h2><i class="fas fa-file-code"></i> Template-Driven Forms</h2>
+                <p>Los <strong>formularios basados en template</strong> dependen de directivas en el HTML. Angular crea y gestiona automáticamente el modelo del formulario.</p>
+
+                <h3>Configurar Template-Driven Forms:</h3>
+                <div class="code-block"><pre>// 1. Importar FormsModule en app.module.ts
+import { FormsModule } from '@angular/forms';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    FormsModule  // Necesario para ngModel y validación
+  ]
+})
+export class AppModule { }</pre></div>
+
+                <h3>Formulario básico con ngModel:</h3>
+                <div class="code-block"><pre>// Componente
+export class LoginComponent {
+  usuario = {
+    email: '',
+    password: ''
+  };
+  
+  onSubmit(form: NgForm): void {
+    if (form.valid) {
+      console.log('Formulario enviado:', this.usuario);
+      // Enviar datos al servidor
+    } else {
+      console.log('Formulario inválido');
+    }
+  }
+}
+
+// Template
+&lt;form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)"&gt;
+  &lt;div&gt;
+    &lt;label&gt;Email:&lt;/label&gt;
+    &lt;input 
+      type="email"
+      name="email"
+      [(ngModel)]="usuario.email"
+      required
+      email
+      #emailField="ngModel"
+    &gt;
+    &lt;div *ngIf="emailField.invalid && emailField.touched"&gt;
+      &lt;small *ngIf="emailField.errors?.['required']"&gt;Email es requerido&lt;/small&gt;
+      &lt;small *ngIf="emailField.errors?.['email']"&gt;Email inválido&lt;/small&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;div&gt;
+    &lt;label&gt;Contraseña:&lt;/label&gt;
+    &lt;input 
+      type="password"
+      name="password"
+      [(ngModel)]="usuario.password"
+      required
+      minlength="6"
+      #passwordField="ngModel"
+    &gt;
+    &lt;div *ngIf="passwordField.invalid && passwordField.touched"&gt;
+      &lt;small *ngIf="passwordField.errors?.['required']"&gt;Contraseña requerida&lt;/small&gt;
+      &lt;small *ngIf="passwordField.errors?.['minlength']"&gt;Mínimo 6 caracteres&lt;/small&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;button type="submit" [disabled]="loginForm.invalid"&gt;Iniciar sesión&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;!-- Debug: Ver estado del formulario --&gt;
+&lt;pre&gt;{{ loginForm.value | json }}&lt;/pre&gt;
+&lt;pre&gt;Valid: {{ loginForm.valid }}&lt;/pre&gt;</pre></div>
+
+                <h3>Estados de campos y formularios:</h3>
+                <div class="code-block"><pre>// Cada campo ngModel tiene estos estados:
+
+// TOUCHED vs UNTOUCHED
+// touched: El usuario ha visitado el campo (focus + blur)
+// untouched: Nunca ha sido visitado
+&lt;div *ngIf="emailField.touched"&gt;Campo visitado&lt;/div&gt;
+
+// DIRTY vs PRISTINE
+// dirty: El valor ha sido modificado
+// pristine: El valor NO ha sido modificado
+&lt;div *ngIf="emailField.dirty"&gt;Valor modificado&lt;/div&gt;
+
+// VALID vs INVALID
+// valid: Pasa todas las validaciones
+// invalid: NO pasa alguna validación
+&lt;div *ngIf="emailField.invalid"&gt;Campo inválido&lt;/div&gt;
+
+// PENDING
+// pending: Validación asíncrona en progreso
+&lt;div *ngIf="emailField.pending"&gt;Validando...&lt;/div&gt;</pre></div>
+
+                <h3>Clases CSS automáticas:</h3>
+                <div class="code-block"><pre>// Angular agrega clases CSS automáticamente según el estado:
+
+.ng-untouched { }  // No visitado
+.ng-touched { }    // Visitado
+
+.ng-pristine { }   // No modificado
+.ng-dirty { }      // Modificado
+
+.ng-valid { }      // Válido
+.ng-invalid { }    // Inválido
+
+// Ejemplo de estilos
+input.ng-invalid.ng-touched {
+  border: 2px solid red;
+}
+
+input.ng-valid.ng-touched {
+  border: 2px solid green;
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="reactive">
+                <h2><i class="fas fa-code"></i> Reactive Forms</h2>
+                <p>Los <strong>formularios reactivos</strong> se definen programáticamente en TypeScript. Ofrecen más control, mejor testeo y son ideales para formularios complejos.</p>
+
+                <h3>Configurar Reactive Forms:</h3>
+                <div class="code-block"><pre>// 1. Importar ReactiveFormsModule en app.module.ts
+import { ReactiveFormsModule } from '@angular/forms';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    ReactiveFormsModule  // Necesario para FormControl, FormGroup
+  ]
+})
+export class AppModule { }</pre></div>
+
+                <h3>Formulario básico con FormControl y FormGroup:</h3>
+                <div class="code-block"><pre>// Componente
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+export class RegistroComponent implements OnInit {
+  registroForm!: FormGroup;
+  
+  ngOnInit(): void {
+    // Crear el formulario
+    this.registroForm = new FormGroup({
+      nombre: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      telefono: new FormControl(''),  // Opcional (sin validadores)
+      edad: new FormControl(18, [Validators.min(18), Validators.max(100)])
+    });
+  }
+  
+  onSubmit(): void {
+    if (this.registroForm.valid) {
+      console.log('Datos del formulario:', this.registroForm.value);
+      // Enviar al servidor
+    } else {
+      console.log('Formulario inválido');
+      this.registroForm.markAllAsTouched();  // Marcar todos como touched para mostrar errores
+    }
+  }
+  
+  // Getters para acceder a controles fácilmente
+  get nombre() {
+    return this.registroForm.get('nombre');
+  }
+  
+  get email() {
+    return this.registroForm.get('email');
+  }
+  
+  get password() {
+    return this.registroForm.get('password');
+  }
+}
+
+// Template
+&lt;form [formGroup]="registroForm" (ngSubmit)="onSubmit()"&gt;
+  &lt;div&gt;
+    &lt;label&gt;Nombre:&lt;/label&gt;
+    &lt;input formControlName="nombre" type="text"&gt;
+    &lt;div *ngIf="nombre?.invalid && nombre?.touched"&gt;
+      &lt;small *ngIf="nombre?.errors?.['required']"&gt;Nombre es requerido&lt;/small&gt;
+      &lt;small *ngIf="nombre?.errors?.['minlength']"&gt;
+        Mínimo {{ nombre?.errors?.['minlength'].requiredLength }} caracteres
+      &lt;/small&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;div&gt;
+    &lt;label&gt;Email:&lt;/label&gt;
+    &lt;input formControlName="email" type="email"&gt;
+    &lt;div *ngIf="email?.invalid && email?.touched"&gt;
+      &lt;small *ngIf="email?.errors?.['required']"&gt;Email es requerido&lt;/small&gt;
+      &lt;small *ngIf="email?.errors?.['email']"&gt;Email inválido&lt;/small&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;div&gt;
+    &lt;label&gt;Contraseña:&lt;/label&gt;
+    &lt;input formControlName="password" type="password"&gt;
+    &lt;div *ngIf="password?.invalid && password?.touched"&gt;
+      &lt;small *ngIf="password?.errors?.['required']"&gt;Contraseña requerida&lt;/small&gt;
+      &lt;small *ngIf="password?.errors?.['minlength']"&gt;Mínimo 6 caracteres&lt;/small&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;div&gt;
+    &lt;label&gt;Teléfono (opcional):&lt;/label&gt;
+    &lt;input formControlName="telefono" type="tel"&gt;
+  &lt;/div&gt;
+  
+  &lt;div&gt;
+    &lt;label&gt;Edad:&lt;/label&gt;
+    &lt;input formControlName="edad" type="number"&gt;
+  &lt;/div&gt;
+  
+  &lt;button type="submit" [disabled]="registroForm.invalid"&gt;Registrarse&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;!-- Debug --&gt;
+&lt;pre&gt;{{ registroForm.value | json }}&lt;/pre&gt;
+&lt;pre&gt;Valid: {{ registroForm.valid }}&lt;/pre&gt;</pre></div>
+
+                <h3>Escuchar cambios en el formulario:</h3>
+                <div class="code-block"><pre>ngOnInit(): void {
+  this.registroForm = new FormGroup({
+    nombre: new FormControl(''),
+    email: new FormControl('')
+  });
+  
+  // Escuchar cambios en TODO el formulario
+  this.registroForm.valueChanges.subscribe(valores => {
+    console.log('Formulario cambió:', valores);
+  });
+  
+  // Escuchar cambios en UN CAMPO específico
+  this.registroForm.get('email')?.valueChanges.subscribe(valor => {
+    console.log('Email cambió:', valor);
+  });
+  
+  // Escuchar cambios en el estado (valid/invalid)
+  this.registroForm.statusChanges.subscribe(estado => {
+    console.log('Estado del formulario:', estado);  // 'VALID' o 'INVALID'
+  });
+}</pre></div>
+
+                <h3>Actualizar valores programáticamente:</h3>
+                <div class="code-block"><pre>// setValue - Establece TODOS los valores (debe incluir TODOS los campos)
+this.registroForm.setValue({
+  nombre: 'Ana García',
+  email: 'ana@example.com',
+  password: '123456',
+  telefono: '123456789',
+  edad: 25
+});
+
+// patchValue - Actualiza SOLO algunos valores
+this.registroForm.patchValue({
+  nombre: 'Ana García',
+  email: 'ana@example.com'
+  // No necesitas incluir todos los campos
+});
+
+// Actualizar un campo específico
+this.registroForm.get('nombre')?.setValue('Luis Pérez');
+
+// Reset - Resetear formulario a valores por defecto
+this.registroForm.reset();
+
+// Reset con valores específicos
+this.registroForm.reset({
+  nombre: '',
+  email: '',
+  password: '',
+  telefono: '',
+  edad: 18
+});</pre></div>
+            </div>
+
+            <div class="content-section" id="validacion">
+                <h2><i class="fas fa-check-circle"></i> Validación Avanzada</h2>
+                <p>Angular proporciona <strong>validadores integrados</strong> y permite crear <strong>validadores personalizados</strong> síncronos y asíncronos.</p>
+
+                <h3>Validadores integrados:</h3>
+                <div class="code-block"><pre>import { Validators } from '@angular/forms';
+
+this.form = new FormGroup({
+  // required - Campo obligatorio
+  nombre: new FormControl('', Validators.required),
+  
+  // minLength / maxLength - Longitud mínima/máxima
+  username: new FormControl('', [Validators.minLength(3), Validators.maxLength(20)]),
+  
+  // min / max - Valor numérico mínimo/máximo
+  edad: new FormControl(0, [Validators.min(18), Validators.max(100)]),
+  
+  // email - Validación de email
+  email: new FormControl('', [Validators.required, Validators.email]),
+  
+  // pattern - Expresión regular
+  telefono: new FormControl('', Validators.pattern(/^[0-9]{9}$/)),
+  
+  // requiredTrue - Checkbox debe estar marcado
+  aceptaTerminos: new FormControl(false, Validators.requiredTrue),
+  
+  // Múltiples validadores en array
+  password: new FormControl('', [
+    Validators.required,
+    Validators.minLength(8),
+    Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9])/)  // Al menos 1 mayúscula y 1 número
+  ])
+});</pre></div>
+
+                <h3>Validadores personalizados síncronos:</h3>
+                <div class="code-block"><pre>// validators/custom-validators.ts
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
+export class CustomValidators {
+  
+  // Validar que dos campos sean iguales (confirmar contraseña)
+  static matchValues(campo1: string, campo2: string): ValidatorFn {
+    return (formGroup: AbstractControl): ValidationErrors | null => {
+      const valor1 = formGroup.get(campo1)?.value;
+      const valor2 = formGroup.get(campo2)?.value;
+      
+      if (valor1 !== valor2) {
+        return { mismatch: true };
+      }
+      return null;
+    };
+  }
+  
+  // Validar que NO contenga espacios
+  static noWhitespace(control: AbstractControl): ValidationErrors | null {
+    const isWhitespace = (control.value || '').trim().length === 0;
+    return isWhitespace ? { whitespace: true } : null;
+  }
+  
+  // Validar edad mínima con fecha de nacimiento
+  static edadMinima(edadMinima: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) return null;
+      
+      const fechaNacimiento = new Date(control.value);
+      const hoy = new Date();
+      const edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+      
+      if (edad < edadMinima) {
+        return { edadMinima: { requiredAge: edadMinima, actualAge: edad } };
+      }
+      return null;
+    };
+  }
+}
+
+// Uso en componente
+this.registroForm = new FormGroup({
+  password: new FormControl('', Validators.required),
+  confirmPassword: new FormControl('', Validators.required),
+  username: new FormControl('', CustomValidators.noWhitespace),
+  fechaNacimiento: new FormControl('', CustomValidators.edadMinima(18))
+}, {
+  validators: CustomValidators.matchValues('password', 'confirmPassword')
+});
+
+// Mostrar error en template
+&lt;div *ngIf="registroForm.errors?.['mismatch'] && registroForm.touched"&gt;
+  Las contraseñas no coinciden
+&lt;/div&gt;</pre></div>
+
+                <h3>Validadores asíncronos (verificar en servidor):</h3>
+                <div class="code-block"><pre>// validators/async-validators.ts
+import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
+import { Observable, of } from 'rxjs';
+import { map, delay } from 'rxjs/operators';
+
+export class AsyncValidators {
+  
+  static emailExiste(userService: UserService): AsyncValidatorFn {
+    return (control: AbstractControl): Observable&lt;ValidationErrors | null&gt; => {
+      if (!control.value) {
+        return of(null);
+      }
+      
+      // Simular llamada al servidor (delay de 500ms)
+      return userService.checkEmailExists(control.value).pipe(
+        map(existe => existe ? { emailExiste: true } : null)
+      );
+    };
+  }
+  
+  static usernameDisponible(userService: UserService): AsyncValidatorFn {
+    return (control: AbstractControl): Observable&lt;ValidationErrors | null&gt; => {
+      if (!control.value) {
+        return of(null);
+      }
+      
+      return userService.checkUsername(control.value).pipe(
+        delay(500),  // Debounce para no hacer petición en cada tecla
+        map(disponible => disponible ? null : { usernameNoDisponible: true })
+      );
+    };
+  }
+}
+
+// Uso en componente
+constructor(private userService: UserService) { }
+
+ngOnInit(): void {
+  this.registroForm = new FormGroup({
+    email: new FormControl('', 
+      [Validators.required, Validators.email],  // Validadores síncronos
+      [AsyncValidators.emailExiste(this.userService)]  // Validadores asíncronos
+    ),
+    username: new FormControl('',
+      [Validators.required, Validators.minLength(3)],
+      [AsyncValidators.usernameDisponible(this.userService)]
+    )
+  });
+}
+
+// Mostrar estado en template
+&lt;input formControlName="email" type="email"&gt;
+&lt;span *ngIf="email?.pending"&gt;⏳ Verificando...&lt;/span&gt;
+&lt;span *ngIf="email?.errors?.['emailExiste']"&gt;❌ Email ya registrado&lt;/span&gt;</pre></div>
+            </div>
+
+            <div class="content-section" id="formbuilder">
+                <h2><i class="fas fa-wrench"></i> FormBuilder - Sintaxis Simplificada</h2>
+                <p><strong>FormBuilder</strong> es un servicio que simplifica la creación de formularios reactivos con una sintaxis más concisa.</p>
+
+                <h3>Uso de FormBuilder:</h3>
+                <div class="code-block"><pre>import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+export class RegistroComponent implements OnInit {
+  registroForm!: FormGroup;
+  
+  constructor(private fb: FormBuilder) { }
+  
+  ngOnInit(): void {
+    // CON FormBuilder (más conciso)
+    this.registroForm = this.fb.group({
+      nombre: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required],
+      edad: [18, [Validators.min(18), Validators.max(100)]],
+      telefono: [''],  // Sin validadores
+      direccion: this.fb.group({  // FormGroup anidado
+        calle: ['', Validators.required],
+        ciudad: ['', Validators.required],
+        codigoPostal: ['', [Validators.required, Validators.pattern(/^[0-9]{5}$/)]]
+      }),
+      aceptaTerminos: [false, Validators.requiredTrue]
+    }, {
+      validators: this.passwordsCoinciden  // Validador a nivel de formulario
+    });
+    
+    // SIN FormBuilder (más verboso)
+    // this.registroForm = new FormGroup({
+    //   nombre: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    //   email: new FormControl('', [Validators.required, Validators.email]),
+    //   ...
+    // });
+  }
+  
+  // Validador personalizado
+  passwordsCoinciden(group: FormGroup): { [key: string]: boolean } | null {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { passwordsMismatch: true };
+  }
+  
+  onSubmit(): void {
+    if (this.registroForm.valid) {
+      console.log(this.registroForm.value);
+    }
+  }
+}
+
+// Template con FormGroup anidado
+&lt;form [formGroup]="registroForm" (ngSubmit)="onSubmit()"&gt;
+  &lt;input formControlName="nombre"&gt;
+  &lt;input formControlName="email"&gt;
+  &lt;input formControlName="password" type="password"&gt;
+  &lt;input formControlName="confirmPassword" type="password"&gt;
+  
+  &lt;!-- FormGroup anidado --&gt;
+  &lt;div formGroupName="direccion"&gt;
+    &lt;input formControlName="calle" placeholder="Calle"&gt;
+    &lt;input formControlName="ciudad" placeholder="Ciudad"&gt;
+    &lt;input formControlName="codigoPostal" placeholder="Código Postal"&gt;
+  &lt;/div&gt;
+  
+  &lt;label&gt;
+    &lt;input formControlName="aceptaTerminos" type="checkbox"&gt;
+    Acepto los términos
+  &lt;/label&gt;
+  
+  &lt;button type="submit" [disabled]="registroForm.invalid"&gt;Registrar&lt;/button&gt;
+&lt;/form&gt;</pre></div>
+            </div>
+
+            <div class="content-section" id="dinamicos">
+                <h2><i class="fas fa-plus-circle"></i> FormArray - Formularios Dinámicos</h2>
+                <p><strong>FormArray</strong> permite agregar o eliminar campos dinámicamente. Útil para listas de elementos como teléfonos, direcciones, habilidades, etc.</p>
+
+                <h3>Ejemplo: Lista dinámica de teléfonos:</h3>
+                <div class="code-block"><pre>import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+
+export class ContactoComponent implements OnInit {
+  contactoForm!: FormGroup;
+  
+  constructor(private fb: FormBuilder) { }
+  
+  ngOnInit(): void {
+    this.contactoForm = this.fb.group({
+      nombre: ['', Validators.required],
+      telefonos: this.fb.array([  // FormArray
+        this.crearTelefono()  // Al menos un teléfono por defecto
+      ])
+    });
+  }
+  
+  // Getter para acceder al FormArray
+  get telefonos(): FormArray {
+    return this.contactoForm.get('telefonos') as FormArray;
+  }
+  
+  // Crear un nuevo FormGroup para teléfono
+  crearTelefono(): FormGroup {
+    return this.fb.group({
+      tipo: ['móvil', Validators.required],  // 'móvil', 'casa', 'trabajo'
+      numero: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]]
+    });
+  }
+  
+  // Agregar teléfono
+  agregarTelefono(): void {
+    this.telefonos.push(this.crearTelefono());
+  }
+  
+  // Eliminar teléfono por índice
+  eliminarTelefono(indice: number): void {
+    if (this.telefonos.length > 1) {  // Mantener al menos uno
+      this.telefonos.removeAt(indice);
+    }
+  }
+  
+  onSubmit(): void {
+    if (this.contactoForm.valid) {
+      console.log(this.contactoForm.value);
+      // { nombre: 'Ana', telefonos: [{tipo: 'móvil', numero: '123456789'}] }
+    }
+  }
+}
+
+// Template
+&lt;form [formGroup]="contactoForm" (ngSubmit)="onSubmit()"&gt;
+  &lt;div&gt;
+    &lt;label&gt;Nombre:&lt;/label&gt;
+    &lt;input formControlName="nombre"&gt;
+  &lt;/div&gt;
+  
+  &lt;div formArrayName="telefonos"&gt;
+    &lt;h3&gt;Teléfonos&lt;/h3&gt;
+    &lt;div *ngFor="let telefono of telefonos.controls; let i = index" [formGroupName]="i"&gt;
+      &lt;select formControlName="tipo"&gt;
+        &lt;option value="móvil"&gt;Móvil&lt;/option&gt;
+        &lt;option value="casa"&gt;Casa&lt;/option&gt;
+        &lt;option value="trabajo"&gt;Trabajo&lt;/option&gt;
+      &lt;/select&gt;
+      
+      &lt;input formControlName="numero" placeholder="Número"&gt;
+      
+      &lt;button type="button" (click)="eliminarTelefono(i)"&gt;❌ Eliminar&lt;/button&gt;
+    &lt;/div&gt;
+    
+    &lt;button type="button" (click)="agregarTelefono()"&gt;➕ Agregar teléfono&lt;/button&gt;
+  &lt;/div&gt;
+  
+  &lt;button type="submit" [disabled]="contactoForm.invalid"&gt;Guardar&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;pre&gt;{{ contactoForm.value | json }}&lt;/pre&gt;</pre></div>
+
+                <h3>Ejemplo avanzado: Lista de productos:</h3>
+                <div class="code-block"><pre>export class PedidoComponent implements OnInit {
+  pedidoForm!: FormGroup;
+  
+  constructor(private fb: FormBuilder) { }
+  
+  ngOnInit(): void {
+    this.pedidoForm = this.fb.group({
+      cliente: ['', Validators.required],
+      productos: this.fb.array([])  // Inicialmente vacío
+    });
+  }
+  
+  get productos(): FormArray {
+    return this.pedidoForm.get('productos') as FormArray;
+  }
+  
+  crearProducto(): FormGroup {
+    return this.fb.group({
+      nombre: ['', Validators.required],
+      cantidad: [1, [Validators.required, Validators.min(1)]],
+      precio: [0, [Validators.required, Validators.min(0)]]
+    });
+  }
+  
+  agregarProducto(): void {
+    this.productos.push(this.crearProducto());
+  }
+  
+  eliminarProducto(indice: number): void {
+    this.productos.removeAt(indice);
+  }
+  
+  calcularTotal(): number {
+    return this.productos.controls.reduce((total, producto) => {
+      const cantidad = producto.get('cantidad')?.value || 0;
+      const precio = producto.get('precio')?.value || 0;
+      return total + (cantidad * precio);
+    }, 0);
+  }
+}
+
+// Template
+&lt;form [formGroup]="pedidoForm"&gt;
+  &lt;input formControlName="cliente" placeholder="Nombre del cliente"&gt;
+  
+  &lt;div formArrayName="productos"&gt;
+    &lt;h3&gt;Productos del pedido&lt;/h3&gt;
+    &lt;div *ngFor="let producto of productos.controls; let i = index" [formGroupName]="i"&gt;
+      &lt;input formControlName="nombre" placeholder="Producto"&gt;
+      &lt;input formControlName="cantidad" type="number" min="1"&gt;
+      &lt;input formControlName="precio" type="number" min="0" step="0.01"&gt;
+      &lt;button type="button" (click)="eliminarProducto(i)"&gt;Eliminar&lt;/button&gt;
+    &lt;/div&gt;
+    
+    &lt;button type="button" (click)="agregarProducto()"&gt;Agregar producto&lt;/button&gt;
+  &lt;/div&gt;
+  
+  &lt;p&gt;&lt;strong&gt;Total: ${{ calcularTotal() }}&lt;/strong&gt;&lt;/p&gt;
+&lt;/form&gt;</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Buenas prácticas con formularios:</strong>
+                    <ul>
+                        <li>✓ Usa Reactive Forms para formularios complejos</li>
+                        <li>✓ Crea getters para acceder a controles fácilmente</li>
+                        <li>✓ Valida en submit Y al perder foco (touched)</li>
+                        <li>✓ Muestra mensajes de error específicos</li>
+                        <li>✓ Deshabilita el botón submit si el form es inválido</li>
+                        <li>✓ Usa FormBuilder para código más limpio</li>
+                        <li>✓ Implementa validadores personalizados para lógica específica</li>
+                        <li>✓ Limpia suscripciones en ngOnDestroy</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

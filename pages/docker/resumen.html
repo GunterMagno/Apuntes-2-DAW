@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen Docker - Wiki 2º DAW</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-md) 0;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .command-table th {
+            background-color: var(--docker-color);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .command-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .command-table tr:last-child td {
+            border-bottom: none;
+        }
+        .command-table tr:hover {
+            background-color: rgba(36, 150, 237, 0.05);
+        }
+        .command-table code {
+            background-color: rgba(36, 150, 237, 0.15);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+        </div>
+    </nav>
+
+    <div class="topics-page">
+        <div class="topics-header">
+            <div class="topics-icon" style="color: var(--docker-color);">
+                <i class="fab fa-docker"></i>
+            </div>
+            <h1 class="topics-title">Resumen Docker</h1>
+            <p class="topics-subtitle">Comandos esenciales de contenedores e imágenes</p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-box"></i> Comandos de Imágenes</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Parámetros/Flags</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>docker pull</code></td>
+                        <td><code>imagen[:tag]</code></td>
+                        <td>Descarga imagen de Docker Hub</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker images</code></td>
+                        <td><code>-a</code> (todas)</td>
+                        <td>Lista imágenes locales</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker build</code></td>
+                        <td><code>-t nombre:tag .</code></td>
+                        <td>Construye imagen desde Dockerfile</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker rmi</code></td>
+                        <td><code>imagen_id/nombre</code></td>
+                        <td>Elimina imagen</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker tag</code></td>
+                        <td><code>imagen_origen imagen_destino:tag</code></td>
+                        <td>Renombra/etiqueta imagen</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker push</code></td>
+                        <td><code>usuario/imagen:tag</code></td>
+                        <td>Sube imagen a Docker Hub</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker history</code></td>
+                        <td><code>imagen</code></td>
+                        <td>Muestra historial de capas de imagen</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-cube"></i> Comandos de Contenedores</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Parámetros/Flags Comunes</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>docker run</code></td>
+                        <td><code>-d</code> (detached), <code>-p 8080:80</code> (puerto), <code>--name</code></td>
+                        <td>Crea y ejecuta contenedor</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker ps</code></td>
+                        <td><code>-a</code> (todos, incluye detenidos)</td>
+                        <td>Lista contenedores en ejecución</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker start</code></td>
+                        <td><code>contenedor_id/nombre</code></td>
+                        <td>Inicia contenedor detenido</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker stop</code></td>
+                        <td><code>contenedor_id/nombre</code></td>
+                        <td>Detiene contenedor en ejecución</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker restart</code></td>
+                        <td><code>contenedor_id/nombre</code></td>
+                        <td>Reinicia contenedor</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker rm</code></td>
+                        <td><code>contenedor_id/nombre</code>, <code>-f</code> (forzar)</td>
+                        <td>Elimina contenedor</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker exec</code></td>
+                        <td><code>-it contenedor bash</code></td>
+                        <td>Ejecuta comando en contenedor activo</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker logs</code></td>
+                        <td><code>contenedor</code>, <code>-f</code> (follow)</td>
+                        <td>Muestra logs del contenedor</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker inspect</code></td>
+                        <td><code>contenedor/imagen</code></td>
+                        <td>Muestra información detallada</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker stats</code></td>
+                        <td><code>contenedor</code> (opcional)</td>
+                        <td>Muestra uso de recursos en tiempo real</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-play"></i> Flags Importantes de docker run</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Flag</th>
+                        <th>Ejemplo</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>-d</code></td>
+                        <td><code>docker run -d nginx</code></td>
+                        <td>Modo detached (segundo plano)</td>
+                    </tr>
+                    <tr>
+                        <td><code>-p</code></td>
+                        <td><code>docker run -p 8080:80 nginx</code></td>
+                        <td>Mapea puertos (host:contenedor)</td>
+                    </tr>
+                    <tr>
+                        <td><code>--name</code></td>
+                        <td><code>docker run --name mi-nginx nginx</code></td>
+                        <td>Asigna nombre al contenedor</td>
+                    </tr>
+                    <tr>
+                        <td><code>-e</code></td>
+                        <td><code>docker run -e VAR=valor imagen</code></td>
+                        <td>Define variable de entorno</td>
+                    </tr>
+                    <tr>
+                        <td><code>-v</code></td>
+                        <td><code>docker run -v /host:/contenedor imagen</code></td>
+                        <td>Monta volumen</td>
+                    </tr>
+                    <tr>
+                        <td><code>--rm</code></td>
+                        <td><code>docker run --rm imagen</code></td>
+                        <td>Elimina contenedor al salir</td>
+                    </tr>
+                    <tr>
+                        <td><code>-it</code></td>
+                        <td><code>docker run -it ubuntu bash</code></td>
+                        <td>Modo interactivo con terminal</td>
+                    </tr>
+                    <tr>
+                        <td><code>--network</code></td>
+                        <td><code>docker run --network mi-red imagen</code></td>
+                        <td>Conecta a red específica</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-hdd"></i> Volúmenes</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Parámetros</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>docker volume create</code></td>
+                        <td><code>nombre_volumen</code></td>
+                        <td>Crea volumen</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker volume ls</code></td>
+                        <td>-</td>
+                        <td>Lista volúmenes</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker volume rm</code></td>
+                        <td><code>nombre_volumen</code></td>
+                        <td>Elimina volumen</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker volume inspect</code></td>
+                        <td><code>nombre_volumen</code></td>
+                        <td>Muestra detalles del volumen</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker volume prune</code></td>
+                        <td>-</td>
+                        <td>Elimina volúmenes no usados</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-network-wired"></i> Redes</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Parámetros</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>docker network create</code></td>
+                        <td><code>nombre_red</code></td>
+                        <td>Crea red</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker network ls</code></td>
+                        <td>-</td>
+                        <td>Lista redes</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker network rm</code></td>
+                        <td><code>nombre_red</code></td>
+                        <td>Elimina red</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker network connect</code></td>
+                        <td><code>red contenedor</code></td>
+                        <td>Conecta contenedor a red</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker network disconnect</code></td>
+                        <td><code>red contenedor</code></td>
+                        <td>Desconecta contenedor de red</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker network inspect</code></td>
+                        <td><code>nombre_red</code></td>
+                        <td>Muestra detalles de la red</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-file-code"></i> Docker Compose</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Parámetros/Flags</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>docker-compose up</code></td>
+                        <td><code>-d</code> (detached), <code>--build</code></td>
+                        <td>Levanta servicios definidos en docker-compose.yml</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker-compose down</code></td>
+                        <td><code>-v</code> (elimina volúmenes)</td>
+                        <td>Detiene y elimina contenedores</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker-compose ps</code></td>
+                        <td>-</td>
+                        <td>Lista servicios en ejecución</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker-compose logs</code></td>
+                        <td><code>servicio</code>, <code>-f</code></td>
+                        <td>Muestra logs de servicios</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker-compose exec</code></td>
+                        <td><code>servicio comando</code></td>
+                        <td>Ejecuta comando en servicio</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker-compose build</code></td>
+                        <td><code>servicio</code> (opcional)</td>
+                        <td>Construye/reconstruye servicios</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker-compose restart</code></td>
+                        <td><code>servicio</code> (opcional)</td>
+                        <td>Reinicia servicios</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-broom"></i> Comandos de Limpieza</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>docker system prune</code></td>
+                        <td>Elimina contenedores, redes, imágenes sin usar</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker system prune -a</code></td>
+                        <td>Elimina TODO lo no usado (incluye imágenes no usadas)</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker container prune</code></td>
+                        <td>Elimina contenedores detenidos</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker image prune</code></td>
+                        <td>Elimina imágenes sin usar</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker volume prune</code></td>
+                        <td>Elimina volúmenes sin usar</td>
+                    </tr>
+                    <tr>
+                        <td><code>docker network prune</code></td>
+                        <td>Elimina redes sin usar</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-file-alt"></i> Estructura Dockerfile</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Instrucción</th>
+                        <th>Ejemplo</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>FROM</code></td>
+                        <td><code>FROM node:18</code></td>
+                        <td>Imagen base</td>
+                    </tr>
+                    <tr>
+                        <td><code>WORKDIR</code></td>
+                        <td><code>WORKDIR /app</code></td>
+                        <td>Directorio de trabajo</td>
+                    </tr>
+                    <tr>
+                        <td><code>COPY</code></td>
+                        <td><code>COPY . .</code></td>
+                        <td>Copia archivos al contenedor</td>
+                    </tr>
+                    <tr>
+                        <td><code>RUN</code></td>
+                        <td><code>RUN npm install</code></td>
+                        <td>Ejecuta comando durante build</td>
+                    </tr>
+                    <tr>
+                        <td><code>EXPOSE</code></td>
+                        <td><code>EXPOSE 3000</code></td>
+                        <td>Documenta puerto expuesto</td>
+                    </tr>
+                    <tr>
+                        <td><code>ENV</code></td>
+                        <td><code>ENV NODE_ENV=production</code></td>
+                        <td>Define variable de entorno</td>
+                    </tr>
+                    <tr>
+                        <td><code>CMD</code></td>
+                        <td><code>CMD ["npm", "start"]</code></td>
+                        <td>Comando por defecto al ejecutar</td>
+                    </tr>
+                    <tr>
+                        <td><code>ENTRYPOINT</code></td>
+                        <td><code>ENTRYPOINT ["node"]</code></td>
+                        <td>Punto de entrada del contenedor</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Wiki 2º DAW - Tu repositorio de conocimiento en desarrollo web</p>
+    </footer>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

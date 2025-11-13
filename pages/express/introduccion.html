@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducción a Express - Wiki 2º DAW</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Express</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-server"></i> Introducción</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#intro" class="active">¿Qué es Express?</a></li>
+                <li><a href="#instalacion">Instalación</a></li>
+                <li><a href="#servidor">Primer Servidor</a></li>
+                <li><a href="#estructura">Estructura Básica</a></li>
+                <li><a href="#ventajas">Ventajas y Usos</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--accent-primary);"><i class="fas fa-server"></i></div>
+                <h1 class="detail-title">1. Introducción a Express</h1>
+                <p class="detail-subtitle">Framework web minimalista para Node.js</p>
+            </div>
+
+            <div class="content-section" id="intro">
+                <h2><i class="fas fa-question-circle"></i> ¿Qué es Express?</h2>
+                <p><strong>Express.js</strong> es el framework web más popular para Node.js. Proporciona una capa delgada de características fundamentales para aplicaciones web, sin oscurecer las características de Node.js.</p>
+                
+                <div class="info-box">
+                    <p><strong>Características principales:</strong></p>
+                    <ul>
+                        <li><strong>Minimalista:</strong> No impone una estructura rígida, eres libre de organizar tu código</li>
+                        <li><strong>Routing robusto:</strong> Sistema de rutas potente y flexible</li>
+                        <li><strong>Middleware:</strong> Arquitectura basada en middleware para procesar peticiones</li>
+                        <li><strong>Alto rendimiento:</strong> Capa delgada sobre Node.js, mantiene la velocidad</li>
+                        <li><strong>Extensible:</strong> Miles de paquetes disponibles en npm</li>
+                    </ul>
+                </div>
+
+                <p>Express te ayuda a crear <strong>servidores HTTP</strong>, <strong>APIs REST</strong>, <strong>aplicaciones web completas</strong> y <strong>microservicios</strong>.</p>
+            </div>
+
+            <div class="content-section" id="instalacion">
+                <h2><i class="fas fa-download"></i> Instalación y Setup</h2>
+                
+                <h3>Paso 1: Crear proyecto</h3>
+                <div class="code-block"><pre>// Crear carpeta del proyecto
+mkdir mi-app-express
+cd mi-app-express
+
+// Inicializar npm (crea package.json)
+npm init -y</pre></div>
+
+                <h3>Paso 2: Instalar Express</h3>
+                <div class="code-block"><pre>npm install express</pre></div>
+
+                <h3>Paso 3: Crear archivo principal</h3>
+                <p>Crea un archivo <code>index.js</code> o <code>app.js</code></p>
+            </div>
+
+            <div class="content-section" id="servidor">
+                <h2><i class="fas fa-server"></i> Crear tu Primer Servidor</h2>
+                
+                <h3>Código básico (index.js):</h3>
+                <div class="code-block"><pre>// 1. Importar Express
+const express = require('express');
+
+// 2. Crear la aplicación
+const app = express();
+
+// 3. Definir una ruta
+app.get('/', (req, res) => {
+  res.send('¡Hola Mundo desde Express!');
+});
+
+// 4. Iniciar el servidor
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`? Servidor corriendo en http://localhost:${PORT}`);
+});</pre></div>
+
+                <h3>Ejecutar el servidor:</h3>
+                <div class="code-block"><pre>node index.js</pre></div>
+
+                <p>Abre tu navegador en <code>http://localhost:3000</code> y verás "¡Hola Mundo desde Express!"</p>
+
+                <div class="warning-box">
+                    <strong>?? Nota:</strong> Para detener el servidor, presiona <code>Ctrl + C</code> en la terminal.
+                </div>
+            </div>
+
+            <div class="content-section" id="estructura">
+                <h2><i class="fas fa-sitemap"></i> Estructura Básica de una App Express</h2>
+
+                <h3>Anatomía de una ruta:</h3>
+                <div class="code-block"><pre>// app.METODO(RUTA, MANEJADOR)
+
+app.get('/usuarios', (req, res) => {
+  // req = request (petición entrante)
+  // res = response (respuesta que enviarás)
+  res.send('Lista de usuarios');
+});
+
+app.post('/usuarios', (req, res) => {
+  // Crear un nuevo usuario
+  res.send('Usuario creado');
+});
+
+app.put('/usuarios/:id', (req, res) => {
+  // Actualizar usuario por ID
+  const { id } = req.params;
+  res.send(`Usuario ${id} actualizado`);
+});
+
+app.delete('/usuarios/:id', (req, res) => {
+  // Eliminar usuario
+  const { id } = req.params;
+  res.send(`Usuario ${id} eliminado`);
+});</pre></div>
+
+                <h3>Diferentes tipos de respuestas:</h3>
+                <div class="code-block"><pre>// Enviar texto plano
+res.send('Hola');
+
+// Enviar JSON (para APIs)
+res.json({ mensaje: 'Hola', usuario: 'Ana' });
+
+// Enviar un archivo HTML
+res.sendFile(__dirname + '/index.html');
+
+// Establecer código de estado
+res.status(404).send('No encontrado');
+res.status(201).json({ mensaje: 'Creado' });</pre></div>
+
+                <h3>Proyecto típico:</h3>
+                <div class="code-block"><pre>mi-app-express/
++-- node_modules/
++-- public/           # Archivos estáticos (CSS, JS, imágenes)
++-- routes/           # Definición de rutas
++-- controllers/      # Lógica de negocio
++-- models/           # Modelos de datos
++-- middleware/       # Funciones middleware
++-- views/            # Plantillas HTML
++-- .env              # Variables de entorno
++-- package.json
++-- index.js          # Punto de entrada</pre></div>
+            </div>
+
+            <div class="content-section" id="ventajas">
+                <h2><i class="fas fa-check-circle"></i> ¿Por qué usar Express?</h2>
+
+                <h3>Ventajas:</h3>
+                <ul>
+                    <li><strong>Simplicidad:</strong> API intuitiva y fácil de aprender</li>
+                    <li><strong>Flexibilidad:</strong> No te obliga a seguir una estructura específica</li>
+                    <li><strong>Middleware:</strong> Sistema modular para agregar funcionalidades (logging, autenticación, CORS...)</li>
+                    <li><strong>Routing potente:</strong> Manejo de rutas con parámetros, query strings, etc.</li>
+                    <li><strong>Gran ecosistema:</strong> Miles de paquetes npm compatibles</li>
+                    <li><strong>Comunidad enorme:</strong> Muchos tutoriales, ejemplos y soluciones</li>
+                    <li><strong>Rendimiento:</strong> Muy rápido, ideal para APIs y microservicios</li>
+                </ul>
+
+                <h3>Casos de uso típicos:</h3>
+                <ul>
+                    <li><strong>APIs REST:</strong> Crear servicios backend para aplicaciones móviles/web</li>
+                    <li><strong>Aplicaciones web:</strong> Servir páginas HTML dinámicas</li>
+                    <li><strong>Microservicios:</strong> Servicios pequeños y especializados</li>
+                    <li><strong>Proxies:</strong> Intermediarios entre cliente y otros servicios</li>
+                    <li><strong>SSR (Server-Side Rendering):</strong> Con React, Vue, etc.</li>
+                </ul>
+
+                <div class="info-box">
+                    <p><strong>?? Dato interesante:</strong> Express es usado por empresas como Uber, IBM, Accenture y PayPal en sus aplicaciones de producción.</p>
+                </div>
+
+                <h3>Ejemplo: API básica</h3>
+                <div class="code-block"><pre>const express = require('express');
+const app = express();
+
+// Middleware para parsear JSON
+app.use(express.json());
+
+// Base de datos simulada
+let usuarios = [
+  { id: 1, nombre: 'Ana' },
+  { id: 2, nombre: 'Luis' }
+];
+
+// GET - Obtener todos los usuarios
+app.get('/api/usuarios', (req, res) => {
+  res.json(usuarios);
+});
+
+// GET - Obtener un usuario por ID
+app.get('/api/usuarios/:id', (req, res) => {
+  const usuario = usuarios.find(u => u.id === parseInt(req.params.id));
+  if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+  res.json(usuario);
+});
+
+// POST - Crear nuevo usuario
+app.post('/api/usuarios', (req, res) => {
+  const nuevoUsuario = {
+    id: usuarios.length + 1,
+    nombre: req.body.nombre
+  };
+  usuarios.push(nuevoUsuario);
+  res.status(201).json(nuevoUsuario);
+});
+
+app.listen(3000, () => console.log('API corriendo en puerto 3000'));</pre></div>
+
+                <p>Esta API simple permite crear y consultar usuarios. En los próximos temas veremos routing, middleware, validación y autenticación.</p>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let currentSection = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + currentSection) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

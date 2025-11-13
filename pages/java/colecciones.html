@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Colecciones en Java - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="./index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver a Java
+            </a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-java"></i> Colecciones</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#introduccion" class="active">Introducción</a></li>
+                <li><a href="#list">List - ArrayList</a></li>
+                <li><a href="#set">Set - HashSet</a></li>
+                <li><a href="#map">Map - HashMap</a></li>
+                <li><a href="#genericos">Genéricos</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--java-color);">
+                    <i class="fab fa-java"></i>
+                </div>
+                <h1 class="detail-title">4. Colecciones y Genéricos</h1>
+                <p class="detail-subtitle">Estructuras de datos dinámicas en Java</p>
+            </div>
+
+            <div class="content-section" id="introduccion">
+                <h2><i class="fas fa-boxes"></i> ¿Qué son las Colecciones?</h2>
+                <p>
+                    Las <strong>colecciones</strong> son estructuras de datos que permiten almacenar y organizar 
+                    grupos de objetos. A diferencia de los arrays, las colecciones son <strong>dinámicas</strong>: 
+                    pueden crecer o reducirse según necesites.
+                </p>
+                <p><strong>Ventajas sobre arrays:</strong></p>
+                <ul>
+                    <li>Tamaño dinámico (no necesitas saber el tamaño de antemano)</li>
+                    <li>Métodos útiles para añadir, eliminar, buscar elementos</li>
+                    <li>Diferentes tipos según necesidades (listas, conjuntos, mapas)</li>
+                </ul>
+                
+                <p><strong>Principales interfaces:</strong></p>
+                <ul>
+                    <li><strong>List:</strong> Colección ordenada que permite duplicados (ArrayList, LinkedList)</li>
+                    <li><strong>Set:</strong> Colección sin duplicados (HashSet, TreeSet)</li>
+                    <li><strong>Map:</strong> Pares clave-valor (HashMap, TreeMap)</li>
+                </ul>
+            </div>
+
+            <div class="content-section" id="list">
+                <h2><i class="fas fa-list-ol"></i> List - ArrayList</h2>
+                <p>
+                    <strong>ArrayList</strong> es la colección más usada. Es una lista ordenada que permite duplicados 
+                    y acceso rápido por índice.
+                </p>
+
+                <h3>Crear y Usar ArrayList</h3>
+                <div class="code-block">
+                    <pre>import java.util.ArrayList;
+
+// Crear ArrayList de Strings
+ArrayList&lt;String&gt; nombres = new ArrayList&lt;&gt;();
+
+// Añadir elementos
+nombres.add("Ana");
+nombres.add("Luis");
+nombres.add("María");
+nombres.add("Ana");  // Permite duplicados
+
+// Tamaño
+int cantidad = nombres.size();  // 4
+
+// Acceder por índice
+String primero = nombres.get(0);  // "Ana"
+
+// Modificar
+nombres.set(1, "Carlos");  // Cambia "Luis" por "Carlos"
+
+// Eliminar
+nombres.remove(0);  // Elimina "Ana" (por índice)
+nombres.remove("María");  // Elimina "María" (por valor)
+
+// Verificar existencia
+boolean existe = nombres.contains("Ana");  // true
+
+// Recorrer
+for (String nombre : nombres) {
+    System.out.println(nombre);
+}</pre>
+                </div>
+
+                <h3>Métodos Útiles de ArrayList</h3>
+                <div class="code-block">
+                    <pre>ArrayList&lt;Integer&gt; numeros = new ArrayList&lt;&gt;();
+
+numeros.add(10);
+numeros.add(20);
+numeros.add(30);
+
+// Limpiar todos los elementos
+numeros.clear();
+
+// Verificar si está vacío
+boolean vacio = numeros.isEmpty();  // true
+
+// Añadir en posición específica
+numeros.add(0, 5);  // Añade 5 en la posición 0
+
+// Índice de un elemento
+int indice = numeros.indexOf(20);  // Posición de 20 (-1 si no existe)</pre>
+                </div>
+            </div>
+
+            <div class="content-section" id="set">
+                <h2><i class="fas fa-layer-group"></i> Set - HashSet</h2>
+                <p>
+                    <strong>HashSet</strong> es una colección que <strong>no permite duplicados</strong>. 
+                    Útil cuando necesitas asegurar elementos únicos.
+                </p>
+
+                <div class="code-block">
+                    <pre>import java.util.HashSet;
+
+HashSet&lt;String&gt; emails = new HashSet&lt;&gt;();
+
+// Añadir elementos
+emails.add("ana@example.com");
+emails.add("luis@example.com");
+emails.add("ana@example.com");  // NO se añade (duplicado)
+
+System.out.println(emails.size());  // 2 (no 3)
+
+// Verificar existencia
+if (emails.contains("ana@example.com")) {
+    System.out.println("Email ya registrado");
+}
+
+// Eliminar
+emails.remove("luis@example.com");
+
+// Recorrer
+for (String email : emails) {
+    System.out.println(email);
+}</pre>
+                </div>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-lightbulb"></i> ¿Cuándo usar Set vs List?</h4>
+                    <ul>
+                        <li><strong>Usa List</strong> cuando: necesites orden, duplicados, acceso por índice</li>
+                        <li><strong>Usa Set</strong> cuando: necesites elementos únicos, no importa el orden</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="map">
+                <h2><i class="fas fa-map"></i> Map - HashMap</h2>
+                <p>
+                    <strong>HashMap</strong> almacena pares <strong>clave-valor</strong>. Cada clave es única 
+                    y está asociada a un valor. Es como un diccionario.
+                </p>
+
+                <div class="code-block">
+                    <pre>import java.util.HashMap;
+
+// Crear HashMap (Clave: String, Valor: Integer)
+HashMap&lt;String, Integer&gt; edades = new HashMap&lt;&gt;();
+
+// Añadir pares clave-valor
+edades.put("Ana", 25);
+edades.put("Luis", 30);
+edades.put("María", 28);
+
+// Obtener valor por clave
+int edadAna = edades.get("Ana");  // 25
+
+// Verificar si existe una clave
+if (edades.containsKey("Luis")) {
+    System.out.println("Luis tiene " + edades.get("Luis") + " años");
+}
+
+// Verificar si existe un valor
+boolean hayMenorDe30 = edades.containsValue(28);  // true
+
+// Eliminar
+edades.remove("María");
+
+// Tamaño
+int cantidad = edades.size();  // 2
+
+// Recorrer claves
+for (String nombre : edades.keySet()) {
+    System.out.println(nombre + ": " + edades.get(nombre));
+}
+
+// Recorrer valores
+for (Integer edad : edades.values()) {
+    System.out.println("Edad: " + edad);
+}
+
+// Recorrer pares clave-valor
+for (HashMap.Entry&lt;String, Integer&gt; entry : edades.entrySet()) {
+    System.out.println(entry.getKey() + " = " + entry.getValue());
+}</pre>
+                </div>
+
+                <h3>Ejemplo Práctico: Contador de Palabras</h3>
+                <div class="code-block">
+                    <pre>String texto = "hola mundo hola java mundo";
+String[] palabras = texto.split(" ");
+
+HashMap&lt;String, Integer&gt; contador = new HashMap&lt;&gt;();
+
+for (String palabra : palabras) {
+    if (contador.containsKey(palabra)) {
+        // Ya existe, incrementar contador
+        contador.put(palabra, contador.get(palabra) + 1);
+    } else {
+        // Primera vez, inicializar en 1
+        contador.put(palabra, 1);
+    }
+}
+
+// Resultado: {hola=2, mundo=2, java=1}
+System.out.println(contador);</pre>
+                </div>
+            </div>
+
+            <div class="content-section" id="genericos">
+                <h2><i class="fas fa-code"></i> Genéricos (Generics)</h2>
+                <p>
+                    Los <strong>genéricos</strong> permiten especificar el tipo de elementos que contendrá una colección. 
+                    Esto proporciona <strong>seguridad de tipos</strong> en tiempo de compilación.
+                </p>
+
+                <h3>Sin Genéricos (Forma antigua - NO recomendado)</h3>
+                <div class="code-block">
+                    <pre>ArrayList lista = new ArrayList();  // Sin tipo
+lista.add("Texto");
+lista.add(123);  // Acepta cualquier cosa
+
+String texto = (String) lista.get(0);  // Necesita cast
+// Peligro: puede dar error en ejecución</pre>
+                </div>
+
+                <h3>Con Genéricos (Forma correcta)</h3>
+                <div class="code-block">
+                    <pre>ArrayList&lt;String&gt; lista = new ArrayList&lt;&gt;();  // Solo Strings
+lista.add("Texto");
+// lista.add(123);  // ERROR de compilación
+
+String texto = lista.get(0);  // No necesita cast
+// Seguridad garantizada en compilación</pre>
+                </div>
+
+                <h3>Notación Diamante (<>)</h3>
+                <p>
+                    Desde Java 7, puedes usar <code>&lt;&gt;</code> (diamante) en el lado derecho para no repetir el tipo:
+                </p>
+                <div class="code-block">
+                    <pre>// Antes (verboso)
+ArrayList&lt;String&gt; nombres = new ArrayList&lt;String&gt;();
+
+// Ahora (más limpio)
+ArrayList&lt;String&gt; nombres = new ArrayList&lt;&gt;();</pre>
+                </div>
+
+                <h3>Genéricos con Tipos Primitivos</h3>
+                <p>
+                    Los genéricos solo funcionan con <strong>tipos de referencia</strong>, no con primitivos. 
+                    Usa las clases wrapper:
+                </p>
+                <div class="code-block">
+                    <pre>// MAL: No puedes usar primitivos
+// ArrayList&lt;int&gt; numeros = new ArrayList&lt;&gt;();  // ERROR
+
+// BIEN: Usa la clase wrapper
+ArrayList&lt;Integer&gt; numeros = new ArrayList&lt;&gt;();
+numeros.add(10);  // Autoboxing: convierte int a Integer automáticamente
+
+int valor = numeros.get(0);  // Unboxing automático
+
+// Wrappers para cada primitivo:
+// int    → Integer
+// double → Double
+// boolean → Boolean
+// char   → Character
+// etc.</pre>
+                </div>
+
+                <div class="warning-box">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Mejores Prácticas</h4>
+                    <ul>
+                        <li><strong>Siempre especifica el tipo genérico:</strong> ArrayList&lt;String&gt;, no ArrayList</li>
+                        <li><strong>Usa interfaces cuando declares:</strong> List&lt;String&gt; en vez de ArrayList&lt;String&gt;</li>
+                        <li><strong>Evita usar tipos raw:</strong> ArrayList sin &lt;&gt; es peligroso</li>
+                    </ul>
+                    <div class="code-block">
+                        <pre>// Mejor práctica: usa la interfaz
+List&lt;String&gt; nombres = new ArrayList&lt;&gt;();
+Set&lt;Integer&gt; numeros = new HashSet&lt;&gt;();
+Map&lt;String, Double&gt; precios = new HashMap&lt;&gt;();</pre>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            function changeActiveLink() {
+                let currentSection = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + currentSection) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

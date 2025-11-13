@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Índices y Rendimiento - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a MongoDB</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-database"></i> Índices</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#intro" class="active">¿Qué son los Índices?</a></li>
+                <li><a href="#crear">Crear Índices</a></li>
+                <li><a href="#tipos">Tipos de Índices</a></li>
+                <li><a href="#rendimiento">Optimización</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--mongodb-color);"><i class="fas fa-database"></i></div>
+                <h1 class="detail-title">6. Índices y Rendimiento</h1>
+                <p class="detail-subtitle">Optimizar consultas</p>
+            </div>
+            <div class="content-section" id="intro">
+                <h2><i class="fas fa-tachometer-alt"></i> ¿Qué son los Índices?</h2>
+                <p>Los <strong>índices</strong> aceleran las consultas creando estructuras de datos optimizadas. Sin índices, MongoDB escanea toda la colección.</p>
+                <div class="info-box">
+                    <p><strong>Ventaja:</strong> Consultas mucho más rápidas</p>
+                    <p><strong>Desventaja:</strong> Ocupan espacio y ralentizan inserciones/actualizaciones</p>
+                </div>
+            </div>
+            <div class="content-section" id="crear">
+                <h2><i class="fas fa-plus-circle"></i> Crear Índices</h2>
+                <div class="code-block"><pre>// Índice simple ascendente
+db.usuarios.createIndex({ email: 1 })
+
+// Índice descendente
+db.usuarios.createIndex({ edad: -1 })
+
+// Índice compuesto
+db.usuarios.createIndex({ ciudad: 1, edad: -1 })
+
+// Ver índices
+db.usuarios.getIndexes()
+
+// Eliminar índice
+db.usuarios.dropIndex("email_1")
+
+// Eliminar todos (excepto _id)
+db.usuarios.dropIndexes()</pre></div>
+            </div>
+            <div class="content-section" id="tipos">
+                <h2><i class="fas fa-list"></i> Tipos de Índices</h2>
+                <h3>Índice Único</h3>
+                <div class="code-block"><pre>db.usuarios.createIndex({ email: 1 }, { unique: true })</pre></div>
+                <h3>Índice de Texto</h3>
+                <div class="code-block"><pre>// Para búsquedas de texto completo
+db.articulos.createIndex({ titulo: "text", contenido: "text" })
+
+// Buscar
+db.articulos.find({ $text: { $search: "MongoDB tutorial" } })</pre></div>
+                <h3>Índice TTL (Time To Live)</h3>
+                <div class="code-block"><pre>// Eliminar documentos automáticamente después de X segundos
+db.sesiones.createIndex({ fechaCreacion: 1 }, { expireAfterSeconds: 3600 })</pre></div>
+                <h3>Índice Parcial</h3>
+                <div class="code-block"><pre>// Solo indexar documentos que cumplan condición
+db.usuarios.createIndex(
+  { email: 1 },
+  { partialFilterExpression: { activo: true } }
+)</pre></div>
+            </div>
+            <div class="content-section" id="rendimiento">
+                <h2><i class="fas fa-chart-line"></i> Análisis y Optimización</h2>
+                <h3>explain() - Analizar consultas</h3>
+                <div class="code-block"><pre>db.usuarios.find({ email: "ana@example.com" }).explain("executionStats")
+
+// Buscar:
+// - executionTimeMillis: Tiempo de ejecución
+// - totalDocsExamined: Documentos escaneados
+// - nReturned: Documentos devueltos</pre></div>
+                <h3>Consejos de Optimización</h3>
+                <ul>
+                    <li>Crear índices en campos de búsqueda frecuente</li>
+                    <li>Usar proyecciones para limitar campos devueltos</li>
+                    <li>Índices compuestos para consultas con múltiples campos</li>
+                    <li>Evitar índices innecesarios (ocupan espacio)</li>
+                    <li>Monitorear con <code>explain()</code></li>
+                </ul>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

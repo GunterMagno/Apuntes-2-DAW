@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Validación y Errores - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Spring Boot</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-leaf"></i> Validación</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#bean-validation" class="active">Bean Validation</a></li>
+                <li><a href="#anotaciones">Anotaciones</a></li>
+                <li><a href="#excepciones">Excepciones</a></li>
+                <li><a href="#controller-advice">@ControllerAdvice</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--spring-color);"><i class="fas fa-leaf"></i></div>
+                <h1 class="detail-title">5. Validación y Manejo de Errores</h1>
+                <p class="detail-subtitle">Validar datos y gestionar excepciones</p>
+            </div>
+            <div class="content-section" id="bean-validation">
+                <h2><i class="fas fa-check-circle"></i> Bean Validation</h2>
+                <p>Agregar dependencia:</p>
+                <div class="code-block"><pre>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-validation&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre></div>
+            </div>
+            <div class="content-section" id="anotaciones">
+                <h2><i class="fas fa-tags"></i> Anotaciones de Validación</h2>
+                <div class="code-block"><pre>public class User {
+    @NotNull(message = "El nombre no puede ser nulo")
+    @Size(min = 3, max = 50)
+    private String nombre;
+    
+    @Email(message = "Email inválido")
+    @NotBlank
+    private String email;
+    
+    @Min(18)
+    @Max(100)
+    private Integer edad;
+    
+    @Pattern(regexp = "^[0-9]{9}$")
+    private String telefono;
+}</pre></div>
+                <h3>Uso en Controller</h3>
+                <div class="code-block"><pre>@PostMapping
+public ResponseEntity<User> create(@Valid @RequestBody User user) {
+    User saved = userService.save(user);
+    return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+}</pre></div>
+            </div>
+            <div class="content-section" id="excepciones">
+                <h2><i class="fas fa-exclamation-triangle"></i> Excepciones Personalizadas</h2>
+                <div class="code-block"><pre>public class UserNotFoundException extends RuntimeException {
+    public UserNotFoundException(Long id) {
+        super("Usuario no encontrado con id: " + id);
+    }
+}
+
+// En el servicio
+public User findById(Long id) {
+    return userRepository.findById(id)
+        .orElseThrow(() -> new UserNotFoundException(id));
+}</pre></div>
+            </div>
+            <div class="content-section" id="controller-advice">
+                <h2><i class="fas fa-first-aid"></i> @ControllerAdvice</h2>
+                <p>Manejo global de excepciones</p>
+                <div class="code-block"><pre>@ControllerAdvice
+public class GlobalExceptionHandler {
+    
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(UserNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(
+            HttpStatus.NOT_FOUND.value(),
+            ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+    
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidation(
+        MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+            errors.put(error.getField(), error.getDefaultMessage())
+        );
+        return ResponseEntity.badRequest().body(errors);
+    }
+}</pre></div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

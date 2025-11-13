@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Módulos y NPM - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Node.js</a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-node-js"></i> Módulos y NPM</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#modulos" class="active">Sistema de Módulos</a></li>
+                <li><a href="#require">Require</a></li>
+                <li><a href="#import">Import/Export (ES6)</a></li>
+                <li><a href="#npm">NPM</a></li>
+                <li><a href="#package">package.json</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--node-color);"><i class="fab fa-node-js"></i></div>
+                <h1 class="detail-title">2. Módulos y NPM</h1>
+                <p class="detail-subtitle">Organizar y compartir código</p>
+            </div>
+
+            <div class="content-section" id="modulos">
+                <h2><i class="fas fa-cube"></i> Sistema de Módulos</h2>
+                <p>Node.js organiza el código en <strong>módulos</strong>. Cada archivo es un módulo independiente.</p>
+                <p><strong>Tipos de módulos:</strong></p>
+                <ul>
+                    <li><strong>Core modules:</strong> Incluidos en Node.js (fs, http, path)</li>
+                    <li><strong>Local modules:</strong> Tus propios archivos</li>
+                    <li><strong>Third-party modules:</strong> Instalados con NPM</li>
+                </ul>
+            </div>
+
+            <div class="content-section" id="require">
+                <h2><i class="fas fa-file-import"></i> CommonJS (require)</h2>
+                <div class="code-block"><pre>// math.js - Exportar
+function sumar(a, b) {
+    return a + b;
+}
+module.exports = { sumar };
+
+// app.js - Importar
+const math = require('./math');
+console.log(math.sumar(2, 3));  // 5
+
+// Módulos core
+const fs = require('fs');
+const path = require('path');</pre></div>
+            </div>
+
+            <div class="content-section" id="import">
+                <h2><i class="fas fa-file-export"></i> ES6 Modules (import/export)</h2>
+                <p>Para usar ES6, añade <code>"type": "module"</code> en package.json</p>
+                <div class="code-block"><pre>// math.js - Exportar
+export function sumar(a, b) {
+    return a + b;
+}
+export const PI = 3.14159;
+
+// app.js - Importar
+import { sumar, PI } from './math.js';
+console.log(sumar(2, 3));  // 5
+
+// Import por defecto
+export default function saludar() {
+    return 'Hola';
+}
+import saludar from './saludo.js';</pre></div>
+            </div>
+
+            <div class="content-section" id="npm">
+                <h2><i class="fas fa-box"></i> NPM (Node Package Manager)</h2>
+                <p>Gestor de paquetes para instalar librerías de terceros.</p>
+                <div class="code-block"><pre># Inicializar proyecto
+npm init
+npm init -y  # Con valores por defecto
+
+# Instalar paquete
+npm install express
+npm i express  # Atajo
+
+# Instalar como dependencia de desarrollo
+npm install --save-dev nodemon
+
+# Instalar globalmente
+npm install -g typescript
+
+# Desinstalar
+npm uninstall express
+
+# Actualizar paquetes
+npm update</pre></div>
+            </div>
+
+            <div class="content-section" id="package">
+                <h2><i class="fas fa-file-code"></i> package.json</h2>
+                <div class="code-block"><pre>{
+  "name": "mi-proyecto",
+  "version": "1.0.0",
+  "description": "Mi aplicación Node.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.0"
+  }
+}</pre></div>
+                <p><strong>Scripts:</strong> Ejecutar con <code>npm run dev</code></p>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

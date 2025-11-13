@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Introducción a Docker - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Docker</a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-docker"></i> Introducción</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#que-es" class="active">¿Qué es Docker?</a></li>
+                <li><a href="#ventajas">Ventajas</a></li>
+                <li><a href="#conceptos">Conceptos Clave</a></li>
+                <li><a href="#instalacion">Instalación</a></li>
+                <li><a href="#comandos">Comandos Básicos</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--docker-color);"><i class="fab fa-docker"></i></div>
+                <h1 class="detail-title">1. Introducción a Docker</h1>
+                <p class="detail-subtitle">Contenedorización de aplicaciones</p>
+            </div>
+
+            <div class="content-section" id="que-es">
+                <h2><i class="fas fa-question-circle"></i> ¿Qué es Docker?</h2>
+                <p>
+                    <strong>Docker</strong> es una plataforma que permite <strong>empaquetar aplicaciones</strong> 
+                    junto con todas sus dependencias en <strong>contenedores</strong>. Esto garantiza que la aplicación 
+                    funcione de la misma manera en cualquier entorno (desarrollo, testing, producción).
+                </p>
+                <p><strong>Analogía:</strong> Piensa en Docker como un contenedor de transporte marítimo. Dentro puedes 
+                meter cualquier cosa (tu aplicación, librerías, configuración), y ese contenedor se puede mover a 
+                cualquier lugar (servidor, cloud, laptop) funcionando exactamente igual.</p>
+            </div>
+
+            <div class="content-section" id="ventajas">
+                <h2><i class="fas fa-check-circle"></i> Ventajas de Docker</h2>
+                <ul>
+                    <li><strong>Portabilidad:</strong> Funciona igual en cualquier sistema operativo</li>
+                    <li><strong>Aislamiento:</strong> Cada contenedor es independiente</li>
+                    <li><strong>Ligero:</strong> Consume menos recursos que máquinas virtuales</li>
+                    <li><strong>Rapidez:</strong> Los contenedores inician en segundos</li>
+                    <li><strong>Versionado:</strong> Control de versiones de imágenes</li>
+                </ul>
+            </div>
+
+            <div class="content-section" id="conceptos">
+                <h2><i class="fas fa-sitemap"></i> Conceptos Clave</h2>
+                <p><strong>Imagen:</strong> Plantilla de solo lectura que contiene todo lo necesario para ejecutar una aplicación.</p>
+                <p><strong>Contenedor:</strong> Instancia ejecutable de una imagen. Es como un proceso aislado.</p>
+                <p><strong>Dockerfile:</strong> Archivo de texto con instrucciones para construir una imagen.</p>
+                <p><strong>Docker Hub:</strong> Repositorio público de imágenes de Docker.</p>
+                <p><strong>Volumen:</strong> Almacenamiento persistente para los datos del contenedor.</p>
+            </div>
+
+            <div class="content-section" id="instalacion">
+                <h2><i class="fas fa-download"></i> Instalación</h2>
+                <h3>Windows / Mac</h3>
+                <div class="code-block"><pre># Descargar Docker Desktop desde:
+https://www.docker.com/products/docker-desktop</pre></div>
+                <h3>Linux (Ubuntu)</h3>
+                <div class="code-block"><pre>sudo apt update
+sudo apt install docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Verificar instalación
+docker --version</pre></div>
+            </div>
+
+            <div class="content-section" id="comandos">
+                <h2><i class="fas fa-terminal"></i> Comandos Básicos</h2>
+                <div class="code-block"><pre># Ver versión
+docker --version
+
+# Listar imágenes descargadas
+docker images
+
+# Descargar imagen
+docker pull nginx
+
+# Listar contenedores en ejecución
+docker ps
+
+# Listar todos los contenedores (incluso parados)
+docker ps -a
+
+# Ejecutar un contenedor
+docker run nginx
+
+# Ejecutar en segundo plano
+docker run -d nginx
+
+# Parar contenedor
+docker stop &lt;container_id&gt;
+
+# Eliminar contenedor
+docker rm &lt;container_id&gt;
+
+# Eliminar imagen
+docker rmi &lt;image_name&gt;</pre></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Directivas - Angular</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-angular"></i> Directivas</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#introduccion" class="active">¿Qué son las Directivas?</a></li>
+                <li><a href="#estructurales">Directivas Estructurales</a></li>
+                <li><a href="#ngif">*ngIf</a></li>
+                <li><a href="#ngfor">*ngFor</a></li>
+                <li><a href="#ngswitch">ngSwitch</a></li>
+                <li><a href="#atributo">Directivas de Atributo</a></li>
+                <li><a href="#personalizadas">Directivas Personalizadas</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color:var(--angular-color)"><i class="fab fa-angular"></i></div>
+                <h1>3. Directivas en Angular</h1>
+                <p class="detail-subtitle">Modifican el comportamiento y apariencia del DOM dinámicamente</p>
+            </div>
+
+            <div class="content-section" id="introduccion">
+                <h2><i class="fas fa-magic"></i> ¿Qué son las Directivas?</h2>
+                <p>Las <strong>directivas</strong> son clases que añaden comportamiento adicional a elementos en el DOM de Angular. Son instrucciones que le dicen a Angular cómo transformar el DOM cuando encuentra un elemento específico.</p>
+
+                <div class="info-box">
+                    <p><strong>Angular tiene 3 tipos de directivas:</strong></p>
+                    <ul>
+                        <li><strong>Componentes:</strong> Directivas con template (las más comunes)</li>
+                        <li><strong>Directivas Estructurales:</strong> Modifican la estructura del DOM (agregan/eliminan elementos). Llevan asterisco (*)</li>
+                        <li><strong>Directivas de Atributo:</strong> Modifican apariencia o comportamiento de un elemento existente</li>
+                    </ul>
+                </div>
+
+                <h3>Diferencia entre directivas estructurales y de atributo:</h3>
+                <div class="code-block"><pre>// DIRECTIVAS ESTRUCTURALES - Modifican estructura del DOM
+// Agregan o eliminan elementos completos del DOM
+&lt;div *ngIf="mostrar"&gt;Visible solo si mostrar es true&lt;/div&gt;
+&lt;li *ngFor="let item of items"&gt;{{ item }}&lt;/li&gt;
+
+// DIRECTIVAS DE ATRIBUTO - Modifican elementos existentes
+// Cambian apariencia, estilos, clases, pero NO agregan/eliminan
+&lt;div [ngClass]="{'activo': estaActivo}"&gt;Cambia clase&lt;/div&gt;
+&lt;p [ngStyle]="{'color': colorTexto}"&gt;Cambia estilo&lt;/p&gt;</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Nota importante:</strong>
+                    <p>Las directivas estructurales llevan asterisco (*) porque Angular las transforma internamente en elementos <code>&lt;ng-template&gt;</code>. El asterisco es azúcar sintáctico que hace el código más legible.</p>
+                </div>
+            </div>
+
+            <div class="content-section" id="estructurales">
+                <h2><i class="fas fa-sitemap"></i> Directivas Estructurales</h2>
+                <p>Las <strong>directivas estructurales</strong> cambian la estructura del DOM agregando, eliminando o manipulando elementos. Angular incluye tres directivas estructurales principales: <code>*ngIf</code>, <code>*ngFor</code> y <code>ngSwitch</code>.</p>
+
+                <h3>Regla importante:</h3>
+                <div class="code-block"><pre>&lt;!-- ❌ NO puedes usar dos directivas estructurales en el mismo elemento --&gt;
+&lt;div *ngIf="condicion" *ngFor="let item of items"&gt;  &lt;!-- ERROR --&gt;
+
+&lt;!-- ✓ Solución: Usa elementos anidados o &lt;ng-container&gt; --&gt;
+&lt;div *ngIf="condicion"&gt;
+  &lt;div *ngFor="let item of items"&gt;{{ item }}&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- O usa ng-container (no crea elemento extra en el DOM) --&gt;
+&lt;ng-container *ngIf="condicion"&gt;
+  &lt;div *ngFor="let item of items"&gt;{{ item }}&lt;/div&gt;
+&lt;/ng-container&gt;</pre></div>
+            </div>
+
+            <div class="content-section" id="ngif">
+                <h2><i class="fas fa-question-circle"></i> *ngIf - Renderizado Condicional</h2>
+                <p><strong>*ngIf</strong> muestra u oculta elementos del DOM basándose en una condición booleana. Si la condición es <code>true</code>, el elemento se agrega al DOM; si es <code>false</code>, se elimina completamente (no solo se oculta).</p>
+
+                <h3>Uso básico de *ngIf:</h3>
+                <div class="code-block"><pre>// Componente
+export class AppComponent {
+  mostrarMensaje: boolean = true;
+  usuario: string = 'Ana García';
+  edad: number = 25;
+  isLoggedIn: boolean = false;
+}
+
+// Template
+&lt;div *ngIf="mostrarMensaje"&gt;
+  &lt;p&gt;Este mensaje se muestra porque mostrarMensaje es true&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p *ngIf="isLoggedIn"&gt;Bienvenido {{ usuario }}&lt;/p&gt;
+&lt;p *ngIf="!isLoggedIn"&gt;Por favor, inicia sesión&lt;/p&gt;
+
+&lt;div *ngIf="edad >= 18"&gt;Eres mayor de edad&lt;/div&gt;
+&lt;div *ngIf="edad < 18"&gt;Eres menor de edad&lt;/div&gt;</pre></div>
+
+                <h3>*ngIf con else:</h3>
+                <div class="code-block"><pre>// Template
+&lt;div *ngIf="isLoggedIn; else noAutenticado"&gt;
+  &lt;h2&gt;Bienvenido {{ usuario }}&lt;/h2&gt;
+  &lt;p&gt;Tienes acceso al panel&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;ng-template #noAutenticado&gt;
+  &lt;h2&gt;No has iniciado sesión&lt;/h2&gt;
+  &lt;button&gt;Iniciar sesión&lt;/button&gt;
+&lt;/ng-template&gt;</pre></div>
+
+                <h3>*ngIf con then y else:</h3>
+                <div class="code-block"><pre>// Template
+&lt;div *ngIf="loading; then cargando else contenido"&gt;&lt;/div&gt;
+
+&lt;ng-template #cargando&gt;
+  &lt;div class="spinner"&gt;
+    &lt;p&gt;Cargando datos...&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/ng-template&gt;
+
+&lt;ng-template #contenido&gt;
+  &lt;div class="datos"&gt;
+    &lt;h2&gt;Datos cargados&lt;/h2&gt;
+    &lt;!-- Contenido aquí --&gt;
+  &lt;/div&gt;
+&lt;/ng-template&gt;</pre></div>
+
+                <h3>*ngIf con variable as (capturar valor):</h3>
+                <div class="code-block"><pre>// Componente
+export class UsuarioComponent {
+  obtenerUsuario(): Usuario | null {
+    // Simula llamada asíncrona
+    return { nombre: 'Ana', email: 'ana@example.com' };
+  }
+}
+
+// Template - Evita llamar el método múltiples veces
+&lt;div *ngIf="obtenerUsuario() as usuario"&gt;
+  &lt;h2&gt;{{ usuario.nombre }}&lt;/h2&gt;
+  &lt;p&gt;{{ usuario.email }}&lt;/p&gt;
+&lt;/div&gt;
+
+// Especialmente útil con Observables
+&lt;div *ngIf="usuario$ | async as usuario"&gt;
+  &lt;h2&gt;{{ usuario.nombre }}&lt;/h2&gt;
+  &lt;p&gt;{{ usuario.email }}&lt;/p&gt;
+&lt;/div&gt;</pre></div>
+
+                <h3>Diferencia entre *ngIf y [hidden]:</h3>
+                <div class="code-block"><pre>// *ngIf - Elimina/agrega el elemento del DOM
+&lt;div *ngIf="mostrar"&gt;Contenido&lt;/div&gt;
+// Si mostrar = false, el elemento NO existe en el DOM
+
+// [hidden] - Solo oculta visualmente (display: none)
+&lt;div [hidden]="!mostrar"&gt;Contenido&lt;/div&gt;
+// Si !mostrar = true, el elemento EXISTE en el DOM pero está oculto
+
+// Usa *ngIf cuando:
+// ✓ El contenido es costoso de renderizar
+// ✓ Quieres evitar que código se ejecute
+// ✓ Es un cambio poco frecuente
+
+// Usa [hidden] cuando:
+// ✓ El toggle es muy frecuente
+// ✓ Quieres evitar el costo de crear/destruir</pre></div>
+            </div>
+
+            <div class="content-section" id="ngfor">
+                <h2><i class="fas fa-list"></i> *ngFor - Iteración de Listas</h2>
+                <p><strong>*ngFor</strong> repite un elemento del DOM por cada item en una colección (array). Es como un bucle <code>for</code> que genera HTML dinámicamente.</p>
+
+                <h3>Uso básico de *ngFor:</h3>
+                <div class="code-block"><pre>// Componente
+export class ListasComponent {
+  nombres: string[] = ['Ana', 'Luis', 'María', 'Pedro'];
+  
+  numeros: number[] = [1, 2, 3, 4, 5];
+  
+  usuarios: Usuario[] = [
+    { id: 1, nombre: 'Ana García', email: 'ana@example.com' },
+    { id: 2, nombre: 'Luis Pérez', email: 'luis@example.com' },
+    { id: 3, nombre: 'María López', email: 'maria@example.com' }
+  ];
+}
+
+// Template
+
+// Array simple de strings
+&lt;ul&gt;
+  &lt;li *ngFor="let nombre of nombres"&gt;{{ nombre }}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!-- Genera: Ana, Luis, María, Pedro --&gt;
+
+// Array de números
+&lt;div *ngFor="let num of numeros"&gt;
+  &lt;p&gt;Número: {{ num }}&lt;/p&gt;
+&lt;/div&gt;
+
+// Array de objetos
+&lt;div *ngFor="let usuario of usuarios"&gt;
+  &lt;div class="card"&gt;
+    &lt;h3&gt;{{ usuario.nombre }}&lt;/h3&gt;
+    &lt;p&gt;{{ usuario.email }}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+                <h3>Variables locales de *ngFor:</h3>
+                <div class="code-block"><pre>// *ngFor proporciona variables útiles:
+
+// index - Índice del item (comienza en 0)
+&lt;li *ngFor="let item of items; let i = index"&gt;
+  {{ i + 1 }}. {{ item }}
+&lt;/li&gt;
+
+// first - true si es el primer elemento
+&lt;div *ngFor="let item of items; let primero = first"&gt;
+  &lt;h3 [class.destacado]="primero"&gt;{{ item }}&lt;/h3&gt;
+&lt;/div&gt;
+
+// last - true si es el último elemento
+&lt;div *ngFor="let item of items; let ultimo = last"&gt;
+  &lt;p&gt;{{ item }}&lt;/p&gt;
+  &lt;hr *ngIf="!ultimo"&gt;  &lt;!-- Separador excepto en el último --&gt;
+&lt;/div&gt;
+
+// even - true si el índice es par
+&lt;tr *ngFor="let usuario of usuarios; let par = even" [class.fila-gris]="par"&gt;
+  &lt;td&gt;{{ usuario.nombre }}&lt;/td&gt;
+&lt;/tr&gt;
+
+// odd - true si el índice es impar
+&lt;div *ngFor="let item of items; let impar = odd" [class.destacado]="impar"&gt;
+  {{ item }}
+&lt;/div&gt;
+
+// Combinar múltiples variables
+&lt;li *ngFor="let item of items; let i = index; let primero = first; let ultimo = last"&gt;
+  &lt;span *ngIf="primero"&gt;🥇&lt;/span&gt;
+  {{ i + 1 }}. {{ item }}
+  &lt;span *ngIf="ultimo"&gt;(Último)&lt;/span&gt;
+&lt;/li&gt;</pre></div>
+
+                <h3>trackBy - Optimización de rendimiento:</h3>
+                <div class="code-block"><pre>// Componente
+export class ProductosComponent {
+  productos: Producto[] = [
+    { id: 1, nombre: 'Laptop', precio: 1200 },
+    { id: 2, nombre: 'Mouse', precio: 25 },
+    { id: 3, nombre: 'Teclado', precio: 75 }
+  ];
+  
+  // Función trackBy: le dice a Angular cómo identificar items únicos
+  trackByProductoId(index: number, producto: Producto): number {
+    return producto.id;  // Usa el ID como identificador único
+  }
+  
+  recargarProductos(): void {
+    // Simula obtener nuevos datos del servidor
+    this.productos = [
+      { id: 1, nombre: 'Laptop', precio: 1200 },  // Mismo ID
+      { id: 2, nombre: 'Mouse', precio: 25 },     // Mismo ID
+      { id: 4, nombre: 'Monitor', precio: 300 }   // Nuevo
+    ];
+    // Con trackBy, Angular solo actualizará el item con id: 4
+    // SIN trackBy, Angular re-renderizaría TODOS los elementos
+  }
+}
+
+// Template
+&lt;div *ngFor="let producto of productos; trackBy: trackByProductoId"&gt;
+  &lt;h3&gt;{{ producto.nombre }}&lt;/h3&gt;
+  &lt;p&gt;${{ producto.precio }}&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;button (click)="recargarProductos()"&gt;Recargar&lt;/button&gt;</pre></div>
+
+                <h3>*ngFor con objetos (usando keyvalue pipe):</h3>
+                <div class="code-block"><pre>// Componente
+export class ConfigComponent {
+  configuracion = {
+    tema: 'oscuro',
+    idioma: 'español',
+    notificaciones: true,
+    volumen: 80
+  };
+}
+
+// Template
+&lt;div *ngFor="let item of configuracion | keyvalue"&gt;
+  &lt;strong&gt;{{ item.key }}:&lt;/strong&gt; {{ item.value }}
+&lt;/div&gt;
+&lt;!-- Genera:
+  tema: oscuro
+  idioma: español
+  notificaciones: true
+  volumen: 80
+--&gt;</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Cuándo usar trackBy:</strong>
+                    <ul>
+                        <li>✓ Listas grandes (más de 10-20 items)</li>
+                        <li>✓ Listas que se actualizan frecuentemente</li>
+                        <li>✓ Items con IDs únicos (API responses)</li>
+                        <li>✓ Mejora rendimiento significativamente</li>
+                    </ul>
+                    <p><strong>Sin trackBy:</strong> Angular destruye y recrea TODOS los elementos del DOM cada vez que cambia el array.</p>
+                    <p><strong>Con trackBy:</strong> Angular solo actualiza los elementos que realmente cambiaron.</p>
+                </div>
+            </div>
+
+            <div class="content-section" id="ngswitch">
+                <h2><i class="fas fa-exchange-alt"></i> ngSwitch - Múltiples Condiciones</h2>
+                <p><strong>ngSwitch</strong> muestra uno de varios elementos posibles basándose en una condición de comparación. Es como un <code>switch</code> statement en TypeScript.</p>
+
+                <h3>Estructura de ngSwitch:</h3>
+                <div class="code-block"><pre>// Componente
+export class VistaComponent {
+  vistaActual: string = 'lista';
+  rol: string = 'admin';
+  estadoPedido: string = 'pendiente';
+}
+
+// Template
+&lt;div [ngSwitch]="vistaActual"&gt;
+  &lt;div *ngSwitchCase="'lista'"&gt;
+    &lt;h2&gt;Vista de Lista&lt;/h2&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Item 1&lt;/li&gt;
+      &lt;li&gt;Item 2&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+  
+  &lt;div *ngSwitchCase="'grid'"&gt;
+    &lt;h2&gt;Vista de Grid&lt;/h2&gt;
+    &lt;div class="grid"&gt;Cards aquí&lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;div *ngSwitchCase="'tabla'"&gt;
+    &lt;h2&gt;Vista de Tabla&lt;/h2&gt;
+    &lt;table&gt;...&lt;/table&gt;
+  &lt;/div&gt;
+  
+  &lt;div *ngSwitchDefault&gt;
+    &lt;h2&gt;Vista no encontrada&lt;/h2&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+                <h3>ngSwitch con roles de usuario:</h3>
+                <div class="code-block"><pre>// Componente
+export class DashboardComponent {
+  usuario = {
+    nombre: 'Ana García',
+    rol: 'admin'  // 'admin', 'editor', 'viewer'
+  };
+}
+
+// Template
+&lt;div [ngSwitch]="usuario.rol"&gt;
+  &lt;div *ngSwitchCase="'admin'"&gt;
+    &lt;h2&gt;Panel de Administrador&lt;/h2&gt;
+    &lt;button&gt;Gestionar usuarios&lt;/button&gt;
+    &lt;button&gt;Configuración&lt;/button&gt;
+    &lt;button&gt;Ver reportes&lt;/button&gt;
+  &lt;/div&gt;
+  
+  &lt;div *ngSwitchCase="'editor'"&gt;
+    &lt;h2&gt;Panel de Editor&lt;/h2&gt;
+    &lt;button&gt;Crear contenido&lt;/button&gt;
+    &lt;button&gt;Editar contenido&lt;/button&gt;
+  &lt;/div&gt;
+  
+  &lt;div *ngSwitchCase="'viewer'"&gt;
+    &lt;h2&gt;Panel de Visualización&lt;/h2&gt;
+    &lt;p&gt;Solo puedes ver el contenido&lt;/p&gt;
+  &lt;/div&gt;
+  
+  &lt;div *ngSwitchDefault&gt;
+    &lt;h2&gt;Rol no reconocido&lt;/h2&gt;
+    &lt;p&gt;Contacta al administrador&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+                <h3>ngSwitch vs múltiples *ngIf:</h3>
+                <div class="code-block"><pre>// Con *ngIf - Más verboso
+&lt;div *ngIf="estado === 'pendiente'"&gt;⏳ Pendiente&lt;/div&gt;
+&lt;div *ngIf="estado === 'procesando'"&gt;⚙️ Procesando&lt;/div&gt;
+&lt;div *ngIf="estado === 'completado'"&gt;✅ Completado&lt;/div&gt;
+&lt;div *ngIf="estado === 'error'"&gt;❌ Error&lt;/div&gt;
+
+// Con ngSwitch - Más limpio y eficiente
+&lt;div [ngSwitch]="estado"&gt;
+  &lt;div *ngSwitchCase="'pendiente'"&gt;⏳ Pendiente&lt;/div&gt;
+  &lt;div *ngSwitchCase="'procesando'"&gt;⚙️ Procesando&lt;/div&gt;
+  &lt;div *ngSwitchCase="'completado'"&gt;✅ Completado&lt;/div&gt;
+  &lt;div *ngSwitchCase="'error'"&gt;❌ Error&lt;/div&gt;
+  &lt;div *ngSwitchDefault&gt;❓ Estado desconocido&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+            </div>
+
+            <div class="content-section" id="atributo">
+                <h2><i class="fas fa-paint-brush"></i> Directivas de Atributo</h2>
+                <p>Las <strong>directivas de atributo</strong> modifican la apariencia o el comportamiento de un elemento existente. A diferencia de las estructurales, NO agregan ni eliminan elementos del DOM.</p>
+
+                <h3>ngClass - Agregar/quitar clases CSS:</h3>
+                <div class="code-block"><pre>// Componente
+export class EstilosComponent {
+  estaActivo: boolean = true;
+  tieneError: boolean = false;
+  esPremium: boolean = true;
+  puntuacion: number = 85;
+}
+
+// Template
+
+// Sintaxis de objeto (más común)
+&lt;div [ngClass]="{
+  'activo': estaActivo,
+  'error': tieneError,
+  'premium': esPremium,
+  'destacado': puntuacion > 80
+}"&gt;
+  Elemento con clases dinámicas
+&lt;/div&gt;
+
+// Sintaxis de string
+&lt;div [ngClass]="'activo premium'"&gt;Clases fijas&lt;/div&gt;
+
+// Sintaxis de array
+&lt;div [ngClass]="['activo', 'premium', tieneError ? 'error' : '']"&gt;
+  Clases dinámicas
+&lt;/div&gt;
+
+// Método que retorna el objeto
+&lt;div [ngClass]="obtenerClases()"&gt;Elemento&lt;/div&gt;
+
+// Componente
+obtenerClases() {
+  return {
+    'activo': this.estaActivo,
+    'premium': this.esPremium
+  };
+}</pre></div>
+
+                <h3>ngStyle - Estilos inline dinámicos:</h3>
+                <div class="code-block"><pre>// Componente
+export class ColorComponent {
+  colorFondo: string = '#3498db';
+  colorTexto: string = 'white';
+  tamañoFuente: number = 16;
+  estaVisible: boolean = true;
+  progreso: number = 75;
+}
+
+// Template
+
+// Sintaxis de objeto
+&lt;div [ngStyle]="{
+  'background-color': colorFondo,
+  'color': colorTexto,
+  'font-size': tamañoFuente + 'px',
+  'padding': '20px',
+  'border-radius': '8px'
+}"&gt;
+  Elemento estilizado
+&lt;/div&gt;
+
+// Estilos condicionales
+&lt;div [ngStyle]="{
+  'display': estaVisible ? 'block' : 'none',
+  'opacity': estaVisible ? 1 : 0,
+  'width': progreso + '%'
+}"&gt;
+  Barra de progreso
+&lt;/div&gt;
+
+// Método que retorna estilos
+&lt;div [ngStyle]="obtenerEstilos()"&gt;Elemento&lt;/div&gt;
+
+// Componente
+obtenerEstilos() {
+  return {
+    'background-color': this.colorFondo,
+    'color': this.colorTexto,
+    'font-size': this.tamañoFuente + 'px'
+  };
+}</pre></div>
+
+                <h3>ngModel - Two-way binding (ya visto antes):</h3>
+                <div class="code-block"><pre>// Requiere FormsModule
+import { FormsModule } from '@angular/forms';
+
+// Componente
+export class FormComponent {
+  nombre: string = '';
+  email: string = '';
+}
+
+// Template
+&lt;input [(ngModel)]="nombre" placeholder="Nombre"&gt;
+&lt;input [(ngModel)]="email" type="email" placeholder="Email"&gt;
+&lt;p&gt;Hola {{ nombre }}, tu email es {{ email }}&lt;/p&gt;</pre></div>
+            </div>
+
+            <div class="content-section" id="personalizadas">
+                <h2><i class="fas fa-tools"></i> Crear Directivas Personalizadas</h2>
+                <p>Puedes crear tus propias <strong>directivas personalizadas</strong> para encapsular comportamiento reutilizable que no involucra un template completo.</p>
+
+                <h3>Generar directiva con CLI:</h3>
+                <div class="code-block"><pre>ng generate directive highlight
+# O abreviado:
+ng g d highlight
+
+# Crea:
+# - highlight.directive.ts
+# - highlight.directive.spec.ts</pre></div>
+
+                <h3>Directiva de atributo simple (resaltar al hover):</h3>
+                <div class="code-block"><pre>// highlight.directive.ts
+import { Directive, ElementRef, HostListener } from '@angular/core';
+
+@Directive({
+  selector: '[appHighlight]'  // Se usa como atributo
+})
+export class HighlightDirective {
+  
+  constructor(private el: ElementRef) {
+    // ElementRef da acceso al elemento del DOM
+  }
+  
+  @HostListener('mouseenter') onMouseEnter() {
+    this.highlight('yellow');
+  }
+  
+  @HostListener('mouseleave') onMouseLeave() {
+    this.highlight('');
+  }
+  
+  private highlight(color: string) {
+    this.el.nativeElement.style.backgroundColor = color;
+  }
+}
+
+// Uso en template
+&lt;p appHighlight&gt;Pasa el mouse aquí para resaltar&lt;/p&gt;
+&lt;div appHighlight&gt;Este div también se resalta&lt;/div&gt;</pre></div>
+
+                <h3>Directiva con @Input (parametrizable):</h3>
+                <div class="code-block"><pre>// highlight.directive.ts
+import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+
+@Directive({
+  selector: '[appHighlight]'
+})
+export class HighlightDirective {
+  @Input() appHighlight: string = 'yellow';  // Color por defecto
+  @Input() defaultColor: string = '';
+  
+  constructor(private el: ElementRef) { }
+  
+  ngOnInit() {
+    this.el.nativeElement.style.backgroundColor = this.defaultColor;
+  }
+  
+  @HostListener('mouseenter') onMouseEnter() {
+    this.el.nativeElement.style.backgroundColor = this.appHighlight;
+  }
+  
+  @HostListener('mouseleave') onMouseLeave() {
+    this.el.nativeElement.style.backgroundColor = this.defaultColor;
+  }
+}
+
+// Uso en template
+&lt;p appHighlight&gt;Amarillo por defecto&lt;/p&gt;
+&lt;p appHighlight="lightblue"&gt;Azul claro al hover&lt;/p&gt;
+&lt;p [appHighlight]="'pink'" defaultColor="lightgray"&gt;Rosa con fondo gris&lt;/p&gt;</pre></div>
+
+                <h3>Directiva estructural personalizada:</h3>
+                <div class="code-block"><pre>// unless.directive.ts (lo opuesto a *ngIf)
+import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+
+@Directive({
+  selector: '[appUnless]'
+})
+export class UnlessDirective {
+  
+  constructor(
+    private templateRef: TemplateRef&lt;any&gt;,
+    private viewContainer: ViewContainerRef
+  ) { }
+  
+  @Input() set appUnless(condition: boolean) {
+    if (!condition) {
+      // Si la condición es FALSE, mostrar
+      this.viewContainer.createEmbeddedView(this.templateRef);
+    } else {
+      // Si la condición es TRUE, ocultar
+      this.viewContainer.clear();
+    }
+  }
+}
+
+// Uso en template
+&lt;div *appUnless="isLoggedIn"&gt;
+  &lt;p&gt;Por favor, inicia sesión&lt;/p&gt;
+&lt;/div&gt;
+&lt;!-- Se muestra solo si isLoggedIn es FALSE --&gt;</pre></div>
+
+                <h3>Directiva práctica: auto-focus</h3>
+                <div class="code-block"><pre>// auto-focus.directive.ts
+import { Directive, ElementRef, OnInit } from '@angular/core';
+
+@Directive({
+  selector: '[appAutoFocus]'
+})
+export class AutoFocusDirective implements OnInit {
+  
+  constructor(private el: ElementRef) { }
+  
+  ngOnInit() {
+    // Enfoca el elemento automáticamente al inicializar
+    this.el.nativeElement.focus();
+  }
+}
+
+// Uso
+&lt;input appAutoFocus type="text" placeholder="Este input se enfoca automáticamente"&gt;</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Cuándo crear directivas personalizadas:</strong>
+                    <ul>
+                        <li>✓ Comportamiento reutilizable que NO necesita template</li>
+                        <li>✓ Manipulación del DOM (tooltips, drag & drop, etc.)</li>
+                        <li>✓ Validators personalizados para formularios</li>
+                        <li>✓ Event listeners complejos</li>
+                        <li>❌ Si necesitas template → Usa un componente</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Buenas prácticas:</strong>
+                    <ul>
+                        <li>✓ Nombra directivas con prefijo <code>app</code> (evita conflictos)</li>
+                        <li>✓ Usa <code>Renderer2</code> en lugar de manipular <code>nativeElement</code> directamente (mejor para SSR)</li>
+                        <li>✓ Limpia recursos en <code>ngOnDestroy</code></li>
+                        <li>❌ No modifiques el DOM excesivamente (afecta rendimiento)</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

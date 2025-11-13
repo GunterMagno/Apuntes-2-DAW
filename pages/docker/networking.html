@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Redes Docker - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Docker</a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-docker"></i> Networking</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#intro" class="active">Introducción</a></li>
+                <li><a href="#tipos">Tipos de Redes</a></li>
+                <li><a href="#crear">Crear Redes</a></li>
+                <li><a href="#conectar">Conectar Contenedores</a></li>
+                <li><a href="#dns">DNS Interno</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--docker-color);"><i class="fab fa-docker"></i></div>
+                <h1 class="detail-title">6. Networking</h1>
+                <p class="detail-subtitle">Comunicación entre contenedores</p>
+            </div>
+
+            <div class="content-section" id="intro">
+                <h2><i class="fas fa-network-wired"></i> Introducción</h2>
+                <p>Las <strong>redes Docker</strong> permiten que los contenedores se comuniquen entre sí de forma segura. 
+                Por defecto, Docker crea una red bridge donde todos los contenedores pueden conectarse.</p>
+            </div>
+
+            <div class="content-section" id="tipos">
+                <h2><i class="fas fa-sitemap"></i> Tipos de Redes</h2>
+                <ul>
+                    <li><strong>bridge:</strong> Red por defecto. Contenedores en el mismo host</li>
+                    <li><strong>host:</strong> Usa la red del host directamente</li>
+                    <li><strong>none:</strong> Sin red (aislado)</li>
+                    <li><strong>overlay:</strong> Para Docker Swarm (múltiples hosts)</li>
+                </ul>
+            </div>
+
+            <div class="content-section" id="crear">
+                <h2><i class="fas fa-plus-circle"></i> Crear y Gestionar Redes</h2>
+                <div class="code-block"><pre># Listar redes
+docker network ls
+
+# Crear red personalizada
+docker network create mi-red
+
+# Inspeccionar red
+docker network inspect mi-red
+
+# Eliminar red
+docker network rm mi-red
+
+# Eliminar redes no usadas
+docker network prune</pre></div>
+            </div>
+
+            <div class="content-section" id="conectar">
+                <h2><i class="fas fa-link"></i> Conectar Contenedores</h2>
+                <p>Los contenedores en la misma red pueden comunicarse usando sus nombres como hostname.</p>
+                <div class="code-block"><pre># Crear red
+docker network create app-network
+
+# Ejecutar MongoDB en la red
+docker run -d \
+  --name mongodb \
+  --network app-network \
+  mongo:6
+
+# Ejecutar aplicación que se conecta a MongoDB
+docker run -d \
+  --name mi-app \
+  --network app-network \
+  -e MONGO_URL=mongodb://mongodb:27017/mydb \
+  mi-app-image
+
+# La app puede conectarse usando "mongodb" como hostname</pre></div>
+            </div>
+
+            <div class="content-section" id="dns">
+                <h2><i class="fas fa-server"></i> DNS Interno</h2>
+                <p>Docker proporciona un servidor DNS interno. Los contenedores pueden resolverse por nombre.</p>
+                <div class="code-block"><pre># En Docker Compose, se crea automáticamente una red
+version: '3.8'
+services:
+  web:
+    image: nginx
+  api:
+    image: node-app
+    environment:
+      - WEB_HOST=web  # Puede usar "web" como hostname
+  database:
+    image: postgres
+    
+# Los tres servicios están en la misma red y pueden comunicarse</pre></div>
+                <h3>Ejemplo Práctico</h3>
+                <div class="code-block"><pre># Desde el contenedor "api", puedes hacer:
+curl http://web:80
+# O conectarte a la base de datos:
+psql -h database -U postgres</pre></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

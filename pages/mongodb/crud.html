@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Operaciones CRUD - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a MongoDB</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-database"></i> CRUD</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#introduccion" class="active">Introducción a CRUD</a></li>
+                <li><a href="#create">Create (Insertar)</a></li>
+                <li><a href="#read">Read (Leer)</a></li>
+                <li><a href="#update">Update (Actualizar)</a></li>
+                <li><a href="#delete">Delete (Eliminar)</a></li>
+                <li><a href="#buenas-practicas">Buenas Prácticas</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--mongodb-color);"><i class="fas fa-database"></i></div>
+                <h1 class="detail-title">2. Operaciones CRUD en MongoDB</h1>
+                <p class="detail-subtitle">Create, Read, Update, Delete - Operaciones Fundamentales</p>
+            </div>
+
+            <div class="content-section" id="introduccion">
+                <h2><i class="fas fa-info-circle"></i> ¿Qué es CRUD?</h2>
+                <p><strong>CRUD</strong> es el acrónimo de las cuatro operaciones básicas que puedes realizar en cualquier sistema de gestión de datos:</p>
+                <ul>
+                    <li><strong>C</strong>reate (Crear): Insertar nuevos documentos en la base de datos</li>
+                    <li><strong>R</strong>ead (Leer): Consultar y recuperar documentos existentes</li>
+                    <li><strong>U</strong>pdate (Actualizar): Modificar documentos existentes</li>
+                    <li><strong>D</strong>elete (Eliminar): Borrar documentos de la base de datos</li>
+                </ul>
+
+                <p>Estas operaciones son la base de prácticamente cualquier aplicación que interactúe con una base de datos. En MongoDB, las operaciones CRUD son extremadamente poderosas y flexibles gracias a su modelo de documentos.</p>
+
+                <div class="info-box">
+                    <strong>💡 Sintaxis MongoDB vs SQL:</strong>
+                    <p>MongoDB utiliza métodos JavaScript en lugar de SQL para realizar operaciones:</p>
+                    <ul>
+                        <li><strong>SQL INSERT →</strong> MongoDB <code>insertOne() / insertMany()</code></li>
+                        <li><strong>SQL SELECT →</strong> MongoDB <code>find() / findOne()</code></li>
+                        <li><strong>SQL UPDATE →</strong> MongoDB <code>updateOne() / updateMany()</code></li>
+                        <li><strong>SQL DELETE →</strong> MongoDB <code>deleteOne() / deleteMany()</code></li>
+                    </ul>
+                </div>
+
+                <h3>Estructura Básica de una Operación CRUD</h3>
+                <p>Todas las operaciones CRUD en MongoDB siguen esta estructura general:</p>
+                <div class="code-block"><pre>// Patrón general:
+db.nombreColeccion.operacion(filtro, accion, opciones)
+
+// Ejemplo:
+db.usuarios.insertOne({ nombre: "Ana" })
+//  ^         ^          ^
+//  |         |          |
+// colección método    documento</pre></div>
+            </div>
+
+            <div class="content-section" id="create">
+                <h2><i class="fas fa-plus-circle"></i> Create - Insertar Documentos</h2>
+                <p>Las operaciones <strong>Create</strong> permiten añadir nuevos documentos a una colección. MongoDB ofrece varios métodos según cuántos documentos quieras insertar.</p>
+
+                <h3>insertOne() - Insertar un Documento</h3>
+                <p>El método <code>insertOne()</code> inserta un solo documento en una colección. Si la colección no existe, MongoDB la crea automáticamente.</p>
+
+                <div class="code-block"><pre>// Sintaxis básica:
+db.coleccion.insertOne(documento)
+
+// Ejemplo - Insertar un usuario:
+db.usuarios.insertOne({
+  nombre: "Ana García",
+  edad: 25,
+  email: "ana@example.com",
+  ciudad: "Madrid",
+  fechaRegistro: new Date(),
+  activo: true
+})
+
+// Respuesta exitosa:
+{
+  acknowledged: true,
+  insertedId: ObjectId("65a1b2c3d4e5f6789abcdef0")
+}</pre></div>
+
+                <p><strong>Características clave:</strong></p>
+                <ul>
+                    <li><strong>_id automático:</strong> Si no proporcionas un campo <code>_id</code>, MongoDB genera uno automáticamente como ObjectId</li>
+                    <li><strong>Creación de colección:</strong> Si la colección no existe, se crea al insertar el primer documento</li>
+                    <li><strong>Esquema flexible:</strong> No necesitas definir la estructura previamente</li>
+                    <li><strong>Atomicidad:</strong> La operación es atómica (se completa totalmente o falla totalmente)</li>
+                </ul>
+
+                <div class="code-block"><pre>// Insertar con _id personalizado:
+db.productos.insertOne({
+  _id: "PROD-001",  // String personalizado en lugar de ObjectId
+  nombre: "Teclado mecánico",
+  precio: 89.99,
+  stock: 50
+})
+
+// Insertar documento con datos embebidos:
+db.pedidos.insertOne({
+  numeroPedido: "ORD-12345",
+  cliente: {
+    nombre: "Carlos López",
+    email: "carlos@example.com",
+    direccion: {
+      calle: "Gran Vía 123",
+      ciudad: "Madrid",
+      codigoPostal: "28013"
+    }
+  },
+  productos: [
+    { id: "PROD-001", cantidad: 2, precio: 89.99 },
+    { id: "PROD-002", cantidad: 1, precio: 29.99 }
+  ],
+  total: 209.97,
+  fecha: new Date()
+})</pre></div>
+
+                <h3>insertMany() - Insertar Múltiples Documentos</h3>
+                <p>El método <code>insertMany()</code> inserta un array de documentos en una sola operación, lo cual es mucho más eficiente que insertar uno por uno.</p>
+
+                <div class="code-block"><pre>// Sintaxis:
+db.coleccion.insertMany([documento1, documento2, ...])
+
+// Ejemplo - Insertar varios usuarios:
+db.usuarios.insertMany([
+  { 
+    nombre: "Luis López", 
+    edad: 30, 
+    ciudad: "Barcelona",
+    profesion: "Ingeniero" 
+  },
+  { 
+    nombre: "María Sánchez", 
+    edad: 28, 
+    ciudad: "Valencia",
+    profesion: "Diseñadora"
+  },
+  { 
+    nombre: "Carlos Ruiz", 
+    edad: 35, 
+    ciudad: "Sevilla",
+    profesion: "Profesor"
+  }
+])
+
+// Respuesta:
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("65a1b2c3d4e5f6789abcdef1"),
+    '1': ObjectId("65a1b2c3d4e5f6789abcdef2"),
+    '2': ObjectId("65a1b2c3d4e5f6789abcdef3")
+  }
+}</pre></div>
+
+                <p><strong>Opciones de insertMany():</strong></p>
+                <div class="code-block"><pre>// Por defecto, si un documento falla, se detiene la inserción:
+db.usuarios.insertMany([
+  { _id: 1, nombre: "Ana" },
+  { _id: 1, nombre: "Luis" },  // ❌ Error: _id duplicado
+  { _id: 2, nombre: "María" }  // ❌ No se inserta
+])
+
+// Con ordered: false, continúa a pesar de errores:
+db.usuarios.insertMany([
+  { _id: 1, nombre: "Ana" },
+  { _id: 1, nombre: "Luis" },  // ❌ Error: _id duplicado
+  { _id: 2, nombre: "María" }  // ✅ Se inserta
+], { ordered: false })</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Errores comunes al insertar:</strong>
+                    <ul>
+                        <li><strong>_id duplicado:</strong> Intentar insertar un documento con un _id que ya existe causará error</li>
+                        <li><strong>Documento muy grande:</strong> El límite es 16MB por documento</li>
+                        <li><strong>Nombres de campo inválidos:</strong> No pueden empezar con $ ni contener puntos</li>
+                        <li><strong>Tipo de dato incorrecto:</strong> Aunque MongoDB es flexible, mantén consistencia en tus tipos</li>
+                    </ul>
+                </div>
+
+                <h3>insert() (Obsoleto)</h3>
+                <p>El método <code>insert()</code> es obsoleto desde MongoDB 3.2. Usa <code>insertOne()</code> o <code>insertMany()</code> en su lugar.</p>
+
+                <div class="code-block"><pre>// ❌ NO recomendado (obsoleto):
+db.usuarios.insert({ nombre: "Ana" })
+
+// ✅ Recomendado:
+db.usuarios.insertOne({ nombre: "Ana" })</pre></div>
+            </div>
+
+            <div class="content-section" id="read">
+                <h2><i class="fas fa-search"></i> Read - Consultar Documentos</h2>
+                <p>Las operaciones <strong>Read</strong> permiten consultar y recuperar documentos de una colección. MongoDB ofrece un sistema de consultas muy potente con múltiples operadores.</p>
+
+                <h3>find() - Buscar Documentos</h3>
+                <p>El método <code>find()</code> devuelve todos los documentos que coincidan con el filtro especificado. Devuelve un <strong>cursor</strong> (no todos los datos inmediatamente).</p>
+
+                <div class="code-block"><pre>// Sintaxis:
+db.coleccion.find(filtro, proyeccion)
+
+// Todos los documentos (sin filtro):
+db.usuarios.find()
+
+// Con filtro simple:
+db.usuarios.find({ ciudad: "Madrid" })
+
+// Múltiples condiciones (AND implícito):
+db.usuarios.find({ 
+  ciudad: "Madrid", 
+  edad: 25 
+})
+
+// Proyección (seleccionar campos específicos):
+db.usuarios.find(
+  { ciudad: "Madrid" },
+  { nombre: 1, email: 1, _id: 0 }  // 1 = incluir, 0 = excluir
+)
+// Resultado: solo nombre y email, sin _id</pre></div>
+
+                <h3>findOne() - Buscar un Documento</h3>
+                <p><code>findOne()</code> devuelve el primer documento que coincida con el filtro. Es útil cuando esperas un solo resultado.</p>
+
+                <div class="code-block"><pre>// Buscar por email único:
+db.usuarios.findOne({ email: "ana@example.com" })
+
+// Buscar por _id:
+db.usuarios.findOne({ _id: ObjectId("65a1b2c3d4e5f6789abcdef0") })
+
+// Si no encuentra nada, devuelve null:
+db.usuarios.findOne({ email: "noexiste@example.com" })
+// Resultado: null</pre></div>
+
+                <h3>Operadores de Comparación</h3>
+                <p>MongoDB proporciona operadores para realizar comparaciones complejas:</p>
+
+                <div class="code-block"><pre>// $eq - Igual (por defecto, no hace falta especificarlo)
+db.usuarios.find({ edad: { $eq: 25 } })
+db.usuarios.find({ edad: 25 })  // Equivalente
+
+// $ne - No igual
+db.usuarios.find({ ciudad: { $ne: "Madrid" } })
+
+// $gt - Mayor que
+db.usuarios.find({ edad: { $gt: 25 } })
+
+// $gte - Mayor o igual que
+db.usuarios.find({ edad: { $gte: 25 } })
+
+// $lt - Menor que
+db.usuarios.find({ edad: { $lt: 30 } })
+
+// $lte - Menor o igual que
+db.usuarios.find({ edad: { $lte: 30 } })
+
+// Combinar operadores (rango):
+db.usuarios.find({ 
+  edad: { $gte: 25, $lte: 35 } 
+})
+// Resultado: usuarios entre 25 y 35 años</pre></div>
+
+                <h3>Operadores de Coincidencia</h3>
+                <div class="code-block"><pre>// $in - Valor en array
+db.usuarios.find({ 
+  ciudad: { $in: ["Madrid", "Barcelona", "Valencia"] } 
+})
+
+// $nin - Valor NO en array
+db.usuarios.find({ 
+  ciudad: { $nin: ["Madrid", "Barcelona"] } 
+})
+
+// $exists - Campo existe
+db.usuarios.find({ email: { $exists: true } })
+
+// $type - Tipo de dato
+db.usuarios.find({ edad: { $type: "int" } })</pre></div>
+
+                <h3>Operadores Lógicos</h3>
+                <div class="code-block"><pre>// $and - Todas las condiciones deben cumplirse
+db.usuarios.find({
+  $and: [
+    { edad: { $gte: 25 } },
+    { ciudad: "Madrid" },
+    { activo: true }
+  ]
+})
+
+// $or - Al menos una condición debe cumplirse
+db.usuarios.find({
+  $or: [
+    { ciudad: "Madrid" },
+    { ciudad: "Barcelona" }
+  ]
+})
+
+// $nor - Ninguna condición debe cumplirse
+db.usuarios.find({
+  $nor: [
+    { edad: { $lt: 18 } },
+    { activo: false }
+  ]
+})
+
+// $not - Negación
+db.usuarios.find({
+  edad: { $not: { $gte: 30 } }
+})</pre></div>
+
+                <h3>Consultas en Arrays</h3>
+                <div class="code-block"><pre>// Documento de ejemplo:
+{
+  nombre: "Ana",
+  hobbies: ["lectura", "música", "natación"]
+}
+
+// Buscar si array contiene un valor:
+db.usuarios.find({ hobbies: "música" })
+
+// $all - Array contiene todos los valores:
+db.usuarios.find({ 
+  hobbies: { $all: ["lectura", "música"] } 
+})
+
+// $size - Array con tamaño específico:
+db.usuarios.find({ hobbies: { $size: 3 } })
+
+// $elemMatch - Elementos que cumplan múltiples condiciones:
+db.productos.find({
+  reviews: {
+    $elemMatch: { 
+      rating: { $gte: 4 },
+      verified: true 
+    }
+  }
+})</pre></div>
+
+                <h3>Métodos de Cursor</h3>
+                <p>El cursor devuelto por <code>find()</code> tiene métodos útiles para manipular resultados:</p>
+
+                <div class="code-block"><pre>// limit() - Limitar resultados:
+db.usuarios.find().limit(10)  // Primeros 10 usuarios
+
+// skip() - Saltar resultados (paginación):
+db.usuarios.find().skip(20).limit(10)  // Usuarios 21-30
+
+// sort() - Ordenar resultados:
+db.usuarios.find().sort({ edad: 1 })   // Ascendente (1)
+db.usuarios.find().sort({ edad: -1 })  // Descendente (-1)
+
+// Combinación (paginación completa):
+db.usuarios.find()
+  .sort({ fechaRegistro: -1 })  // Más recientes primero
+  .skip(0)                      // Página 1 (skip = (página - 1) * límite)
+  .limit(20)                    // 20 por página
+
+// count() - Contar documentos:
+db.usuarios.countDocuments({ ciudad: "Madrid" })
+
+// distinct() - Valores únicos:
+db.usuarios.distinct("ciudad")
+// Resultado: ["Madrid", "Barcelona", "Valencia"]</pre></div>
+
+                <h3>Consultas en Documentos Embebidos</h3>
+                <div class="code-block"><pre>// Documento de ejemplo:
+{
+  nombre: "Ana",
+  direccion: {
+    calle: "Gran Vía 123",
+    ciudad: "Madrid",
+    codigoPostal: "28013"
+  }
+}
+
+// Consultar campo embebido (notación de puntos):
+db.usuarios.find({ "direccion.ciudad": "Madrid" })
+
+// Consultar objeto completo (debe coincidir exactamente):
+db.usuarios.find({
+  direccion: {
+    calle: "Gran Vía 123",
+    ciudad: "Madrid",
+    codigoPostal: "28013"
+  }
+})</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Expresiones Regulares:</strong>
+                    <p>Puedes usar expresiones regulares para búsquedas de texto más flexibles:</p>
+                    <div class="code-block"><pre>// Buscar nombres que empiecen con "An":
+db.usuarios.find({ nombre: /^An/ })
+
+// Case-insensitive:
+db.usuarios.find({ nombre: /ana/i })
+
+// Contiene "garcía":
+db.usuarios.find({ nombre: /garcía/i })
+
+// Operador $regex:
+db.usuarios.find({ 
+  nombre: { 
+    $regex: "garcía", 
+    $options: "i" 
+  } 
+})</pre></div>
+                </div>
+            </div>
+
+            <div class="content-section" id="update">
+                <h2><i class="fas fa-edit"></i> Update - Actualizar Documentos</h2>
+                <p>Las operaciones <strong>Update</strong> permiten modificar documentos existentes. MongoDB ofrece operadores potentes para actualizar campos, arrays y documentos embebidos.</p>
+
+                <h3>updateOne() - Actualizar un Documento</h3>
+                <p><code>updateOne()</code> actualiza el primer documento que coincida con el filtro.</p>
+
+                <div class="code-block"><pre>// Sintaxis:
+db.coleccion.updateOne(filtro, actualizacion, opciones)
+
+// Ejemplo básico con $set:
+db.usuarios.updateOne(
+  { email: "ana@example.com" },  // Filtro
+  { $set: { edad: 26 } }         // Actualización
+)
+
+// Respuesta:
+{
+  acknowledged: true,
+  matchedCount: 1,   // Documentos que coincidieron con el filtro
+  modifiedCount: 1   // Documentos que se modificaron
+}</pre></div>
+
+                <h3>updateMany() - Actualizar Múltiples Documentos</h3>
+                <p><code>updateMany()</code> actualiza todos los documentos que coincidan con el filtro.</p>
+
+                <div class="code-block"><pre>// Actualizar todos los usuarios de Madrid:
+db.usuarios.updateMany(
+  { ciudad: "Madrid" },
+  { $set: { pais: "España" } }
+)
+
+// Respuesta:
+{
+  acknowledged: true,
+  matchedCount: 15,
+  modifiedCount: 15
+}</pre></div>
+
+                <h3>Operadores de Actualización</h3>
+                <p>MongoDB proporciona numerosos operadores para realizar actualizaciones complejas:</p>
+
+                <h4>$set - Establecer Valor</h4>
+                <p>Establece el valor de un campo. Si el campo no existe, lo crea.</p>
+                <div class="code-block"><pre>// Actualizar un campo:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { $set: { ciudad: "Barcelona" } }
+)
+
+// Actualizar múltiples campos:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { 
+    $set: { 
+      ciudad: "Barcelona",
+      edad: 27,
+      ultimaActualizacion: new Date()
+    } 
+  }
+)
+
+// Actualizar campo embebido:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { $set: { "direccion.ciudad": "Valencia" } }
+)</pre></div>
+
+                <h4>$unset - Eliminar Campo</h4>
+                <div class="code-block"><pre>// Eliminar el campo "email":
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { $unset: { email: "" } }  // El valor no importa
+)
+
+// Eliminar múltiples campos:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { $unset: { email: "", telefono: "" } }
+)</pre></div>
+
+                <h4>$inc - Incrementar/Decrementar</h4>
+                <div class="code-block"><pre>// Incrementar edad en 1:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { $inc: { edad: 1 } }
+)
+
+// Decrementar (número negativo):
+db.productos.updateOne(
+  { _id: "PROD-001" },
+  { $inc: { stock: -5 } }  // Restar 5 del stock
+)
+
+// Incrementar múltiples campos:
+db.estadisticas.updateOne(
+  { _id: "daily" },
+  { 
+    $inc: { 
+      visitas: 1,
+      ventasTotal: 99.99
+    } 
+  }
+)</pre></div>
+
+                <h4>$mul - Multiplicar</h4>
+                <div class="code-block"><pre>// Multiplicar precio por 1.1 (aumentar 10%):
+db.productos.updateMany(
+  { categoria: "electrónica" },
+  { $mul: { precio: 1.1 } }
+)</pre></div>
+
+                <h4>$rename - Renombrar Campo</h4>
+                <div class="code-block"><pre>// Renombrar campo "nombre" a "nombreCompleto":
+db.usuarios.updateMany(
+  {},
+  { $rename: { "nombre": "nombreCompleto" } }
+)</pre></div>
+
+                <h4>$min / $max - Actualizar si es Menor/Mayor</h4>
+                <div class="code-block"><pre>// Actualizar solo si el nuevo valor es menor:
+db.productos.updateOne(
+  { _id: "PROD-001" },
+  { $min: { precio: 79.99 } }  // Solo actualiza si 79.99 < precio actual
+)
+
+// Actualizar solo si el nuevo valor es mayor:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { $max: { mejorPuntuacion: 95 } }  // Solo si 95 > mejorPuntuacion actual
+)</pre></div>
+
+                <h3>Operadores de Array</h3>
+                <p>MongoDB tiene operadores específicos para manipular arrays dentro de documentos:</p>
+
+                <h4>$push - Añadir Elemento al Array</h4>
+                <div class="code-block"><pre>// Añadir un hobby:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { $push: { hobbies: "fotografía" } }
+)
+
+// Añadir múltiples elementos con $each:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { 
+    $push: { 
+      hobbies: { 
+        $each: ["pintura", "cine", "viajar"] 
+      } 
+    } 
+  }
+)
+
+// Añadir al inicio con $position:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { 
+    $push: { 
+      hobbies: { 
+        $each: ["programación"],
+        $position: 0  // Al inicio del array
+      } 
+    } 
+  }
+)
+
+// Limitar tamaño del array con $slice:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { 
+    $push: { 
+      ultimasCompras: {
+        $each: [{ producto: "X", fecha: new Date() }],
+        $slice: -10  // Mantener solo las últimas 10
+      }
+    } 
+  }
+)</pre></div>
+
+                <h4>$pull - Eliminar Elementos del Array</h4>
+                <div class="code-block"><pre>// Eliminar un valor específico:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { $pull: { hobbies: "natación" } }
+)
+
+// Eliminar múltiples valores:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { $pull: { hobbies: { $in: ["natación", "lectura"] } } }
+)
+
+// Eliminar elementos que cumplan condición:
+db.productos.updateOne(
+  { _id: "PROD-001" },
+  { 
+    $pull: { 
+      reviews: { rating: { $lt: 3 } }  // Eliminar reviews con rating < 3
+    } 
+  }
+)</pre></div>
+
+                <h4>$pop - Eliminar Primer/Último Elemento</h4>
+                <div class="code-block"><pre>// Eliminar último elemento:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { $pop: { hobbies: 1 } }  // 1 = último, -1 = primero
+)
+
+// Eliminar primer elemento:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { $pop: { hobbies: -1 } }
+)</pre></div>
+
+                <h4>$addToSet - Añadir si No Existe</h4>
+                <div class="code-block"><pre>// Añadir solo si no existe (evita duplicados):
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { $addToSet: { hobbies: "música" } }
+)
+
+// Con $each:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { 
+    $addToSet: { 
+      hobbies: { 
+        $each: ["música", "cine", "lectura"] 
+      } 
+    } 
+  }
+)</pre></div>
+
+                <h3>replaceOne() - Reemplazar Documento Completo</h3>
+                <p><code>replaceOne()</code> reemplaza todo el documento (excepto _id) por uno nuevo.</p>
+
+                <div class="code-block"><pre>// Reemplazar documento completo:
+db.usuarios.replaceOne(
+  { _id: ObjectId("...") },
+  {
+    nombre: "Ana García Renovada",
+    edad: 26,
+    email: "ana.nueva@example.com",
+    ciudad: "Barcelona"
+  }
+)
+// CUIDADO: Todos los campos anteriores se pierden (excepto _id)</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Diferencia importante:</strong>
+                    <ul>
+                        <li><code>updateOne()</code> con <code>$set</code>: Modifica solo los campos especificados</li>
+                        <li><code>replaceOne()</code>: Reemplaza TODO el documento (excepto _id)</li>
+                    </ul>
+                </div>
+
+                <h3>Opciones de Update</h3>
+                <div class="code-block"><pre>// upsert: Insertar si no existe
+db.usuarios.updateOne(
+  { email: "nuevo@example.com" },
+  { 
+    $set: { 
+      nombre: "Usuario Nuevo",
+      edad: 30 
+    } 
+  },
+  { upsert: true }  // Si no existe, lo crea
+)
+
+// arrayFilters: Actualizar elementos específicos de array
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { $set: { "compras.$[elem].descuento": 10 } },
+  { 
+    arrayFilters: [{ "elem.total": { $gt: 100 } }]  // Solo compras > 100€
+  }
+)</pre></div>
+            </div>
+
+            <div class="content-section" id="delete">
+                <h2><i class="fas fa-trash"></i> Delete - Eliminar Documentos</h2>
+                <p>Las operaciones <strong>Delete</strong> permiten eliminar documentos de una colección. Usa estas operaciones con precaución, especialmente <code>deleteMany()</code>.</p>
+
+                <h3>deleteOne() - Eliminar un Documento</h3>
+                <p><code>deleteOne()</code> elimina el primer documento que coincida con el filtro.</p>
+
+                <div class="code-block"><pre>// Sintaxis:
+db.coleccion.deleteOne(filtro)
+
+// Eliminar por _id:
+db.usuarios.deleteOne({ _id: ObjectId("65a1b2c3d4e5f6789abcdef0") })
+
+// Eliminar por email:
+db.usuarios.deleteOne({ email: "ana@example.com" })
+
+// Respuesta:
+{
+  acknowledged: true,
+  deletedCount: 1  // Número de documentos eliminados
+}</pre></div>
+
+                <h3>deleteMany() - Eliminar Múltiples Documentos</h3>
+                <p><code>deleteMany()</code> elimina todos los documentos que coincidan con el filtro.</p>
+
+                <div class="code-block"><pre>// Eliminar usuarios inactivos:
+db.usuarios.deleteMany({ activo: false })
+
+// Eliminar usuarios de una ciudad:
+db.usuarios.deleteMany({ ciudad: "Madrid" })
+
+// Eliminar usuarios mayores de 60:
+db.usuarios.deleteMany({ edad: { $gt: 60 } })
+
+// Respuesta:
+{
+  acknowledged: true,
+  deletedCount: 15  // Número de documentos eliminados
+}</pre></div>
+
+                <h3>Eliminar Todos los Documentos</h3>
+                <div class="code-block"><pre>// ⚠️ CUIDADO: Elimina TODOS los documentos de la colección
+db.usuarios.deleteMany({})
+
+// Respuesta:
+{
+  acknowledged: true,
+  deletedCount: 1523  // Todos los documentos eliminados
+}</pre></div>
+
+                <h3>drop() - Eliminar Colección Completa</h3>
+                <p><code>drop()</code> elimina la colección completa (estructura y datos).</p>
+
+                <div class="code-block"><pre>// Eliminar colección completa:
+db.usuarios.drop()
+
+// Respuesta:
+true  // Se eliminó correctamente
+
+// Verificar (ya no existe):
+show collections  // "usuarios" ya no aparece</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ PRECAUCIÓN con Delete:</strong>
+                    <ul>
+                        <li><strong>Sin papelera de reciclaje:</strong> Los datos eliminados no se pueden recuperar (a menos que tengas backups)</li>
+                        <li><strong>Doble verificación:</strong> Siempre ejecuta el <code>find()</code> con el mismo filtro antes de <code>deleteMany()</code></li>
+                        <li><strong>Backups:</strong> Asegúrate de tener backups antes de operaciones masivas de eliminación</li>
+                        <li><strong>Soft deletes:</strong> Considera marcar documentos como "eliminados" en lugar de borrarlos físicamente</li>
+                    </ul>
+                </div>
+
+                <h3>Patrón Soft Delete (Eliminación Lógica)</h3>
+                <p>En lugar de eliminar físicamente documentos, puedes marcarlos como eliminados:</p>
+
+                <div class="code-block"><pre>// En lugar de:
+db.usuarios.deleteOne({ _id: ObjectId("...") })
+
+// Hacer soft delete:
+db.usuarios.updateOne(
+  { _id: ObjectId("...") },
+  { 
+    $set: { 
+      eliminado: true,
+      fechaEliminacion: new Date()
+    } 
+  }
+)
+
+// Consultar solo no eliminados:
+db.usuarios.find({ eliminado: { $ne: true } })
+
+// O con índice parcial:
+db.usuarios.createIndex(
+  { eliminado: 1 },
+  { partialFilterExpression: { eliminado: true } }
+)</pre></div>
+            </div>
+
+            <div class="content-section" id="buenas-practicas">
+                <h2><i class="fas fa-check-circle"></i> Buenas Prácticas CRUD</h2>
+                <p>Sigue estas recomendaciones para trabajar eficientemente con operaciones CRUD en MongoDB:</p>
+
+                <h3>1. Usa Proyecciones para Optimizar Consultas</h3>
+                <div class="code-block"><pre>// ❌ Devuelve todos los campos (ineficiente):
+db.usuarios.find({ ciudad: "Madrid" })
+
+// ✅ Devuelve solo lo necesario:
+db.usuarios.find(
+  { ciudad: "Madrid" },
+  { nombre: 1, email: 1, _id: 0 }
+)</pre></div>
+
+                <h3>2. Crea Índices para Consultas Frecuentes</h3>
+                <div class="code-block"><pre>// Si consultas frecuentemente por email:
+db.usuarios.createIndex({ email: 1 }, { unique: true })
+
+// Si filtras por ciudad y edad:
+db.usuarios.createIndex({ ciudad: 1, edad: 1 })</pre></div>
+
+                <h3>3. Valida Datos Antes de Insertar</h3>
+                <div class="code-block"><pre>// ❌ Sin validación:
+db.usuarios.insertOne({ nombre: "Ana" })
+
+// ✅ Con validación (ejemplo en aplicación):
+function insertarUsuario(datos) {
+  if (!datos.nombre || !datos.email || !datos.edad) {
+    throw new Error("Faltan campos obligatorios");
+  }
+  if (!datos.email.includes("@")) {
+    throw new Error("Email inválido");
+  }
+  return db.usuarios.insertOne(datos);
+}</pre></div>
+
+                <h3>4. Usa Transacciones para Operaciones Críticas</h3>
+                <div class="code-block"><pre>// Para operaciones que deben ser atómicas:
+const session = db.getMongo().startSession();
+session.startTransaction();
+
+try {
+  db.cuentas.updateOne(
+    { _id: "cuenta1" },
+    { $inc: { saldo: -100 } },
+    { session }
+  );
+  db.cuentas.updateOne(
+    { _id: "cuenta2" },
+    { $inc: { saldo: 100 } },
+    { session }
+  );
+  session.commitTransaction();
+} catch (error) {
+  session.abortTransaction();
+  throw error;
+} finally {
+  session.endSession();
+}</pre></div>
+
+                <h3>5. Limita Resultados para Evitar Sobrecarga</h3>
+                <div class="code-block"><pre>// ❌ Puede devolver millones de documentos:
+db.logs.find()
+
+// ✅ Limita resultados:
+db.logs.find().sort({ fecha: -1 }).limit(100)</pre></div>
+
+                <h3>6. Maneja Errores Correctamente</h3>
+                <div class="code-block"><pre>// En aplicación Node.js:
+try {
+  const result = await db.usuarios.insertOne({ 
+    nombre: "Ana",
+    email: "ana@example.com"
+  });
+  console.log("Insertado:", result.insertedId);
+} catch (error) {
+  if (error.code === 11000) {
+    console.error("Email duplicado");
+  } else {
+    console.error("Error al insertar:", error);
+  }
+}</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Resumen CRUD:</strong>
+                    <ul>
+                        <li><strong>Create:</strong> <code>insertOne()</code>, <code>insertMany()</code></li>
+                        <li><strong>Read:</strong> <code>find()</code>, <code>findOne()</code> + operadores de consulta</li>
+                        <li><strong>Update:</strong> <code>updateOne()</code>, <code>updateMany()</code> + operadores ($set, $inc, $push, etc.)</li>
+                        <li><strong>Delete:</strong> <code>deleteOne()</code>, <code>deleteMany()</code>, <code>drop()</code></li>
+                        <li><strong>Siempre:</strong> Valida datos, usa índices, proyecciones y maneja errores</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

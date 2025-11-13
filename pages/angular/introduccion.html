@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Introducción a Angular - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Angular</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-angular"></i> Introducción</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#que-es" class="active">¿Qué es Angular?</a></li>
+                <li><a href="#typescript">TypeScript</a></li>
+                <li><a href="#cli">Angular CLI</a></li>
+                <li><a href="#estructura">Estructura</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--angular-color);"><i class="fab fa-angular"></i></div>
+                <h1 class="detail-title">1. Introducción a Angular</h1>
+                <p class="detail-subtitle">Framework para aplicaciones web</p>
+            </div>
+            <div class="content-section" id="que-es">
+                <h2><i class="fas fa-question-circle"></i> ¿Qué es Angular?</h2>
+                <p><strong>Angular</strong> es un framework completo de TypeScript desarrollado por Google para construir aplicaciones web robustas, escalables y mantenibles.</p>
+
+                <div class="info-box">
+                    <p><strong>Características principales:</strong></p>
+                    <ul>
+                        <li><strong>Framework completo:</strong> Soluciones integradas (routing, forms, HTTP, testing)</li>
+                        <li><strong>TypeScript:</strong> Tipado estático, mejor IDE support, menos bugs</li>
+                        <li><strong>Arquitectura MVC:</strong> Separación clara de responsabilidades</li>
+                        <li><strong>Two-way data binding:</strong> Sincronización automática modelo-vista</li>
+                        <li><strong>Dependency Injection:</strong> Gestión profesional de dependencias</li>
+                        <li><strong>RxJS:</strong> Programación reactiva con Observables</li>
+                    </ul>
+                </div>
+
+                <h3>¿Por qué Angular?</h3>
+                <ul>
+                    <li><strong>Empresarial:</strong> Usado por Google, Microsoft, Forbes, Samsung</li>
+                    <li><strong>Completo:</strong> No necesitas buscar librerías externas</li>
+                    <li><strong>Escalable:</strong> Arquitectura modular para proyectos grandes</li>
+                    <li><strong>Mantenible:</strong> Estructura y convenciones estrictas</li>
+                    <li><strong>Performance:</strong> Change Detection optimizado, Lazy Loading</li>
+                </ul>
+
+                <h3>Angular vs otros frameworks:</h3>
+                <div class="code-block"><pre>Angular:  Framework COMPLETO, opinado, TypeScript obligatorio
+React:    Biblioteca (solo vista), muy flexible, JavaScript/TypeScript
+Vue:      Framework progresivo, fácil de aprender, flexible
+Svelte:   Compilador, sin virtual DOM, muy rápido</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Angular vs AngularJS:</strong>
+                    <ul>
+                        <li><strong>AngularJS:</strong> Versión antigua (1.x), basada en JavaScript, obsoleta</li>
+                        <li><strong>Angular:</strong> Versión moderna (2+), basada en TypeScript, totalmente reescrita</li>
+                    </ul>
+                    <p>En este curso nos referimos a <strong>Angular</strong> (versión moderna).</p>
+                </div>
+
+                <h3>Versiones de Angular:</h3>
+                <div class="code-block"><pre>Angular 2  (2016) → Reescritura completa, TypeScript
+Angular 4  (2017) → Saltearon versión 3
+Angular 8  (2019) → Ivy renderer (preview)
+Angular 9  (2020) → Ivy por defecto
+Angular 12 (2021) → Ivy optimizado
+Angular 14 (2022) → Standalone components
+Angular 17 (2023) → Nuevo control flow, signals
+Angular 18 (2024) → Versión actual</pre></div>
+            </div>
+
+            <div class="content-section" id="typescript">
+                <h2><i class="fas fa-code"></i> TypeScript</h2>
+                <p><strong>TypeScript</strong> es un superset de JavaScript que añade tipado estático. Es OBLIGATORIO en Angular.</p>
+
+                <h3>Tipos básicos:</h3>
+                <div class="code-block"><pre>// Primitivos
+let nombre: string = "Ana García";
+let edad: number = 25;
+let activo: boolean = true;
+let nulo: null = null;
+let indefinido: undefined = undefined;
+
+// Arrays
+let numeros: number[] = [1, 2, 3, 4, 5];
+let nombres: string[] = ["Ana", "Luis", "María"];
+let mixto: (number | string)[] = [1, "dos", 3];
+
+// Tuplas (arrays con tipos fijos)
+let persona: [string, number] = ["Ana", 25];
+
+// Any (evitar en lo posible)
+let cualquierCosa: any = "texto";
+cualquierCosa = 42;  // OK pero pierde type safety
+
+// Unknown (más seguro que any)
+let desconocido: unknown = "texto";
+if (typeof desconocido === "string") {
+  console.log(desconocido.toUpperCase());  // OK dentro del if
+}</pre></div>
+
+                <h3>Interfaces y Tipos:</h3>
+                <div class="code-block"><pre>// Interface
+interface Usuario {
+  id: number;
+  nombre: string;
+  email: string;
+  activo?: boolean;  // Opcional
+  readonly createdAt: Date;  // Solo lectura
+}
+
+const user: Usuario = {
+  id: 1,
+  nombre: "Ana García",
+  email: "ana@example.com",
+  createdAt: new Date()
+};
+
+// user.createdAt = new Date();  // ❌ Error: readonly
+
+// Type Alias (alternativa a interface)
+type Producto = {
+  id: number;
+  nombre: string;
+  precio: number;
+};
+
+// Union types
+type Estado = "pendiente" | "aprobado" | "rechazado";
+let estadoPedido: Estado = "pendiente";
+
+// Intersection types
+type Admin = Usuario & { permisos: string[] };
+const admin: Admin = {
+  id: 1,
+  nombre: "Admin",
+  email: "admin@example.com",
+  createdAt: new Date(),
+  permisos: ["crear", "editar", "eliminar"]
+};</pre></div>
+
+                <h3>Funciones con tipos:</h3>
+                <div class="code-block"><pre>// Parámetros y retorno tipados
+function sumar(a: number, b: number): number {
+  return a + b;
+}
+
+// Parámetros opcionales
+function saludar(nombre: string, apellido?: string): string {
+  return apellido ? `Hola ${nombre} ${apellido}` : `Hola ${nombre}`;
+}
+
+// Parámetros por defecto
+function crear(nombre: string, activo: boolean = true): void {
+  console.log(`${nombre} - Activo: ${activo}`);
+}
+
+// Arrow functions
+const multiplicar = (a: number, b: number): number => a * b;
+
+// Funciones como parámetros
+function procesar(datos: number[], callback: (n: number) => number): number[] {
+  return datos.map(callback);
+}
+
+const resultado = procesar([1, 2, 3], n => n * 2);  // [2, 4, 6]</pre></div>
+
+                <h3>Clases:</h3>
+                <div class="code-block"><pre>class Persona {
+  // Propiedades
+  nombre: string;
+  edad: number;
+  private email: string;  // Solo accesible dentro de la clase
+  protected direccion: string;  // Accesible en subclases
+  readonly id: number;  // Solo lectura
+  
+  // Constructor
+  constructor(nombre: string, edad: number, email: string) {
+    this.nombre = nombre;
+    this.edad = edad;
+    this.email = email;
+    this.id = Date.now();
+  }
+  
+  // Métodos
+  presentarse(): string {
+    return `Hola, soy ${this.nombre} y tengo ${this.edad} años`;
+  }
+  
+  // Getter
+  get emailPublico(): string {
+    return this.email.replace(/@.*/, '@***');
+  }
+  
+  // Setter
+  set nuevaEdad(edad: number) {
+    if (edad > 0) {
+      this.edad = edad;
+    }
+  }
+}
+
+// Uso
+const persona = new Persona("Ana", 25, "ana@example.com");
+console.log(persona.presentarse());
+console.log(persona.emailPublico);  // ana@***
+
+// Herencia
+class Empleado extends Persona {
+  salario: number;
+  
+  constructor(nombre: string, edad: number, email: string, salario: number) {
+    super(nombre, edad, email);  // Llamar constructor padre
+    this.salario = salario;
+  }
+  
+  presentarse(): string {
+    return `${super.presentarse()} y soy empleado`;
+  }
+}</pre></div>
+
+                <h3>Generics (genéricos):</h3>
+                <div class="code-block"><pre>// Función genérica
+function obtenerPrimero<T>(array: T[]): T {
+  return array[0];
+}
+
+const primerNumero = obtenerPrimero([1, 2, 3]);  // number
+const primerNombre = obtenerPrimero(["Ana", "Luis"]);  // string
+
+// Clase genérica
+class Almacen<T> {
+  private items: T[] = [];
+  
+  agregar(item: T): void {
+    this.items.push(item);
+  }
+  
+  obtener(index: number): T {
+    return this.items[index];
+  }
+}
+
+const numerosAlmacen = new Almacen<number>();
+numerosAlmacen.agregar(10);
+
+const usuariosAlmacen = new Almacen<Usuario>();
+usuariosAlmacen.agregar({ id: 1, nombre: "Ana", email: "ana@example.com", createdAt: new Date() });</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Ventajas de TypeScript:</strong>
+                    <ul>
+                        <li>✓ Detección de errores en tiempo de desarrollo (no en runtime)</li>
+                        <li>✓ Autocompletado inteligente en el IDE</li>
+                        <li>✓ Refactoring más seguro</li>
+                        <li>✓ Documentación implícita (los tipos son documentación)</li>
+                        <li>✓ Mejor para proyectos grandes en equipo</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="cli">
+                <h2><i class="fas fa-terminal"></i> Angular CLI</h2>
+                <p><strong>Angular CLI</strong> (Command Line Interface) es la herramienta oficial para crear y gestionar proyectos Angular.</p>
+
+                <h3>Instalación global:</h3>
+                <div class="code-block"><pre># Instalar Angular CLI globalmente
+npm install -g @angular/cli
+
+# Verificar versión
+ng version
+ng v
+
+# Actualizar CLI
+npm update -g @angular/cli</pre></div>
+
+                <h3>Crear nuevo proyecto:</h3>
+                <div class="code-block"><pre># Crear proyecto (modo interactivo)
+ng new mi-proyecto
+
+# Opciones que pregunta:
+# - ¿Routing? (Sí/No)
+# - ¿Estilo? (CSS/SCSS/SASS/LESS)
+
+# Crear proyecto con opciones
+ng new mi-proyecto --routing --style=scss --skip-git
+
+# Sin test files
+ng new mi-proyecto --skip-tests</pre></div>
+
+                <h3>Servir aplicación (desarrollo):</h3>
+                <div class="code-block"><pre># Iniciar servidor de desarrollo
+ng serve
+
+# Puerto personalizado
+ng serve --port 4300
+
+# Abrir navegador automáticamente
+ng serve --open
+ng serve -o
+
+# Host personalizado (acceder desde red local)
+ng serve --host 0.0.0.0
+
+# Se abre en: http://localhost:4200</pre></div>
+
+                <h3>Generar código (schematics):</h3>
+                <div class="code-block"><pre># Componente
+ng generate component nombre
+ng g c nombre
+
+# Componente en carpeta específica
+ng g c pages/home
+
+# Componente sin archivos de test
+ng g c nombre --skip-tests
+
+# Servicio
+ng g service services/usuario
+ng g s services/usuario
+
+# Módulo
+ng generate module nombre
+ng g m nombre
+
+# Directiva
+ng g directive directives/highlight
+
+# Pipe
+ng g pipe pipes/capitalize
+
+# Guard (proteger rutas)
+ng g guard guards/auth
+
+# Interface
+ng g interface models/usuario
+
+# Enum
+ng g enum enums/estado</pre></div>
+
+                <h3>Build (producción):</h3>
+                <div class="code-block"><pre># Build de producción
+ng build
+
+# Build optimizado
+ng build --configuration production
+ng build --prod
+
+# Output en carpeta dist/
+# Archivos minificados, optimizados, ofuscados</pre></div>
+
+                <h3>Otros comandos útiles:</h3>
+                <div class="code-block"><pre># Ejecutar tests
+ng test
+
+# Tests end-to-end
+ng e2e
+
+# Lint (revisar código)
+ng lint
+
+# Analizar bundle size
+ng build --stats-json
+npx webpack-bundle-analyzer dist/mi-proyecto/stats.json
+
+# Actualizar Angular
+ng update @angular/cli @angular/core
+
+# Ver ayuda
+ng help
+ng g --help</pre></div>
+            </div>
+
+            <div class="content-section" id="estructura">
+                <h2><i class="fas fa-folder-tree"></i> Estructura del Proyecto</h2>
+
+                <h3>Estructura creada por ng new:</h3>
+                <div class="code-block"><pre>mi-proyecto/
+├── node_modules/           # Dependencias (no tocar)
+├── src/                    # Código fuente
+│   ├── app/                # Aplicación Angular
+│   │   ├── app.component.ts      # Componente raíz
+│   │   ├── app.component.html    # Template
+│   │   ├── app.component.css     # Estilos
+│   │   ├── app.component.spec.ts # Tests
+│   │   ├── app.module.ts         # Módulo raíz
+│   │   └── app-routing.module.ts # Rutas (si elegiste routing)
+│   ├── assets/             # Recursos estáticos (imágenes, fonts)
+│   ├── environments/       # Configuraciones de entorno
+│   │   ├── environment.ts        # Desarrollo
+│   │   └── environment.prod.ts   # Producción
+│   ├── index.html          # HTML principal
+│   ├── main.ts             # Punto de entrada
+│   ├── styles.css          # Estilos globales
+│   └── polyfills.ts        # Compatibilidad navegadores
+├── angular.json            # Configuración Angular CLI
+├── package.json            # Dependencias npm
+├── tsconfig.json           # Configuración TypeScript
+├── tsconfig.app.json       # Config TS para la app
+└── tsconfig.spec.json      # Config TS para tests</pre></div>
+
+                <h3>Archivo principal: src/main.ts</h3>
+                <div class="code-block"><pre>import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { AppModule } from './app/app.module';
+
+platformBrowserDynamic().bootstrapModule(AppModule)
+  .catch(err => console.error(err));
+
+// Inicia la aplicación cargando AppModule</pre></div>
+
+                <h3>Módulo raíz: src/app/app.module.ts</h3>
+                <div class="code-block"><pre>import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [
+    AppComponent  // Componentes, directivas, pipes
+  ],
+  imports: [
+    BrowserModule,       // Módulos necesarios
+    AppRoutingModule
+  ],
+  providers: [],         // Servicios
+  bootstrap: [AppComponent]  // Componente raíz
+})
+export class AppModule { }</pre></div>
+
+                <h3>Componente raíz: src/app/app.component.ts</h3>
+                <div class="code-block"><pre>import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',  // Tag HTML donde se renderiza
+  templateUrl: './app.component.html',  // Template externo
+  styleUrls: ['./app.component.css']    // Estilos
+})
+export class AppComponent {
+  title = 'mi-proyecto';  // Propiedad del componente
+  
+  // Métodos
+  saludar(): void {
+    alert(`Hola desde ${this.title}!`);
+  }
+}</pre></div>
+
+                <h3>Template: src/app/app.component.html</h3>
+                <div class="code-block"><pre>&lt;div class="app-container"&gt;
+  &lt;h1&gt;{{ title }}&lt;/h1&gt;  &lt;!-- Interpolación --&gt;
+  &lt;button (click)="saludar()"&gt;Saludar&lt;/button&gt;  &lt;!-- Event binding --&gt;
+  &lt;router-outlet&gt;&lt;/router-outlet&gt;  &lt;!-- Rutas se renderizan aquí --&gt;
+&lt;/div&gt;</pre></div>
+
+                <h3>HTML principal: src/index.html</h3>
+                <div class="code-block"><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;Mi Proyecto&lt;/title&gt;
+  &lt;base href="/"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;app-root&gt;&lt;/app-root&gt;  &lt;!-- Angular se monta aquí --&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></div>
+
+                <h3>Estructura recomendada a medida que crece:</h3>
+                <div class="code-block"><pre>src/app/
+├── core/                   # Servicios singleton, guards
+│   ├── services/
+│   │   ├── auth.service.ts
+│   │   └── api.service.ts
+│   ├── guards/
+│   │   └── auth.guard.ts
+│   └── interceptors/
+│       └── http-error.interceptor.ts
+├── shared/                 # Componentes, pipes, directivas reutilizables
+│   ├── components/
+│   │   ├── header/
+│   │   ├── footer/
+│   │   └── loading/
+│   ├── pipes/
+│   │   └── capitalize.pipe.ts
+│   └── directives/
+│       └── highlight.directive.ts
+├── features/               # Módulos de funcionalidades
+│   ├── usuarios/
+│   │   ├── usuarios.module.ts
+│   │   ├── usuarios-routing.module.ts
+│   │   ├── pages/
+│   │   │   ├── lista/
+│   │   │   └── detalle/
+│   │   └── components/
+│   └── productos/
+│       └── ...
+├── models/                 # Interfaces y tipos
+│   ├── usuario.interface.ts
+│   └── producto.interface.ts
+├── app.component.ts
+├── app.module.ts
+└── app-routing.module.ts</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Convenciones de Angular:</strong>
+                    <ul>
+                        <li>Archivos en <strong>kebab-case</strong>: <code>usuario-detalle.component.ts</code></li>
+                        <li>Clases en <strong>PascalCase</strong>: <code>UsuarioDetalleComponent</code></li>
+                        <li>Sufijos descriptivos: <code>.component.ts</code>, <code>.service.ts</code>, <code>.module.ts</code></li>
+                        <li>Un componente = 4 archivos: <code>.ts</code>, <code>.html</code>, <code>.css</code>, <code>.spec.ts</code></li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Introducción a Node.js - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Node.js</a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-node-js"></i> Introducción</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#que-es" class="active">¿Qué es Node.js?</a></li>
+                <li><a href="#event-loop">Event Loop</a></li>
+                <li><a href="#asincronia">Asincronía</a></li>
+                <li><a href="#diferencias">vs JavaScript Navegador</a></li>
+                <li><a href="#instalacion">Instalación</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--node-color);"><i class="fab fa-node-js"></i></div>
+                <h1 class="detail-title">1. Introducción a Node.js</h1>
+                <p class="detail-subtitle">JavaScript del lado del servidor</p>
+            </div>
+
+            <div class="content-section" id="que-es">
+                <h2><i class="fas fa-question-circle"></i> ¿Qué es Node.js?</h2>
+                <p><strong>Node.js</strong> es un entorno de ejecución de JavaScript construido sobre el motor V8 de Chrome. 
+                Permite ejecutar JavaScript <strong>fuera del navegador</strong>, en el servidor.</p>
+                <div class="info-box">
+                    <p><strong>Características principales:</strong></p>
+                    <ul>
+                        <li>JavaScript en el backend</li>
+                        <li>No bloqueante (asíncrono)</li>
+                        <li>Basado en eventos</li>
+                        <li>NPM (gestor de paquetes)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="event-loop">
+                <h2><i class="fas fa-sync-alt"></i> Event Loop</h2>
+                <p>El <strong>Event Loop</strong> es el corazón de Node.js. Permite manejar múltiples operaciones sin bloquear el hilo principal.</p>
+                <p><strong>Funcionamiento:</strong></p>
+                <ol>
+                    <li>Ejecuta código síncrono</li>
+                    <li>Registra callbacks de operaciones asíncronas</li>
+                    <li>Cuando termina una operación, ejecuta su callback</li>
+                    <li>Repite el ciclo</li>
+                </ol>
+            </div>
+
+            <div class="content-section" id="asincronia">
+                <h2><i class="fas fa-clock"></i> Asincronía</h2>
+                <p>Node.js es <strong>no bloqueante</strong>. Las operaciones I/O (lectura de archivos, peticiones HTTP) se ejecutan en segundo plano.</p>
+                <div class="code-block"><pre>// Código bloqueante (mal)
+const data = fs.readFileSync('archivo.txt');
+console.log(data);
+console.log('Siguiente línea');
+
+// Código no bloqueante (bien)
+fs.readFile('archivo.txt', (err, data) => {
+    console.log(data);
+});
+console.log('Siguiente línea');  // Se ejecuta primero</pre></div>
+            </div>
+
+            <div class="content-section" id="diferencias">
+                <h2><i class="fas fa-exchange-alt"></i> Node.js vs JavaScript del Navegador</h2>
+                <p><strong>En el navegador:</strong></p>
+                <ul>
+                    <li>Tienes acceso al DOM (document, window)</li>
+                    <li>APIs del navegador (fetch, localStorage)</li>
+                </ul>
+                <p><strong>En Node.js:</strong></p>
+                <ul>
+                    <li>NO hay DOM</li>
+                    <li>Acceso al sistema de archivos</li>
+                    <li>Módulos del sistema (fs, http, path)</li>
+                    <li>Variables globales: __dirname, __filename, process</li>
+                </ul>
+            </div>
+
+            <div class="content-section" id="instalacion">
+                <h2><i class="fas fa-download"></i> Instalación</h2>
+                <div class="code-block"><pre># Descargar desde: https://nodejs.org
+
+# Verificar instalación
+node --version
+npm --version
+
+# Ejecutar archivo
+node app.js
+
+# Modo interactivo (REPL)
+node</pre></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Introducción a Spring Boot - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Spring Boot</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-leaf"></i> Introducción</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#que-es" class="active">¿Qué es Spring Boot?</a></li>
+                <li><a href="#initializr">Spring Initializr</a></li>
+                <li><a href="#estructura">Estructura del Proyecto</a></li>
+                <li><a href="#configuracion">Configuración</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--spring-color);"><i class="fas fa-leaf"></i></div>
+                <h1 class="detail-title">1. Introducción a Spring Boot</h1>
+                <p class="detail-subtitle">Framework para aplicaciones Java</p>
+            </div>
+            <div class="content-section" id="que-es">
+                <h2><i class="fas fa-question-circle"></i> ¿Qué es Spring Boot?</h2>
+                <p><strong>Spring Boot</strong> facilita la creación de aplicaciones Spring listas para producción con <strong>configuración mínima</strong>.</p>
+                <div class="info-box">
+                    <p><strong>Ventajas:</strong></p>
+                    <ul>
+                        <li>Configuración automática</li>
+                        <li>Servidor embebido (Tomcat)</li>
+                        <li>Sin XML, solo anotaciones</li>
+                        <li>Producción lista</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content-section" id="initializr">
+                <h2><i class="fas fa-rocket"></i> Spring Initializr</h2>
+                <p>Genera proyectos Spring Boot desde <strong>https://start.spring.io</strong></p>
+                <div class="code-block"><pre>Seleccionar:
+- Maven/Gradle
+- Java version
+- Dependencies: Spring Web, Spring Data JPA, H2 Database</pre></div>
+            </div>
+            <div class="content-section" id="estructura">
+                <h2><i class="fas fa-folder-tree"></i> Estructura del Proyecto</h2>
+                <div class="code-block"><pre>src/
+  main/
+    java/
+      com.example.demo/
+        DemoApplication.java
+        controller/
+        service/
+        repository/
+        model/
+    resources/
+      application.properties
+      static/
+      templates/
+  test/</pre></div>
+            </div>
+            <div class="content-section" id="configuracion">
+                <h2><i class="fas fa-cog"></i> Configuración</h2>
+                <h3>application.properties</h3>
+                <div class="code-block"><pre>server.port=8080
+spring.application.name=MiApp
+
+# Base de datos
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.username=sa
+spring.datasource.password=
+
+# JPA
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update</pre></div>
+                <h3>Clase Principal</h3>
+                <div class="code-block"><pre>@SpringBootApplication
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}</pre></div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

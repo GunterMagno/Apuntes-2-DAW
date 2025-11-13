@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen Spring Boot - Wiki 2º DAW</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-md) 0;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .command-table th {
+            background-color: var(--spring-color);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .command-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .command-table tr:last-child td {
+            border-bottom: none;
+        }
+        .command-table tr:hover {
+            background-color: rgba(106, 173, 61, 0.05);
+        }
+        .command-table code {
+            background-color: rgba(106, 173, 61, 0.15);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+        </div>
+    </nav>
+
+    <div class="topics-page">
+        <div class="topics-header">
+            <div class="topics-icon" style="color: var(--spring-color);">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <h1 class="topics-title">Resumen Spring Boot</h1>
+            <p class="topics-subtitle">Anotaciones y comandos esenciales</p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-terminal"></i> Comandos Maven</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Parámetros</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>mvn spring-boot:run</code></td>
+                        <td>-</td>
+                        <td>Ejecuta la aplicación Spring Boot</td>
+                    </tr>
+                    <tr>
+                        <td><code>mvn clean install</code></td>
+                        <td>-</td>
+                        <td>Limpia, compila y genera el JAR</td>
+                    </tr>
+                    <tr>
+                        <td><code>mvn clean package</code></td>
+                        <td>-</td>
+                        <td>Compila y empaqueta sin instalar</td>
+                    </tr>
+                    <tr>
+                        <td><code>mvn test</code></td>
+                        <td>-</td>
+                        <td>Ejecuta los tests</td>
+                    </tr>
+                    <tr>
+                        <td><code>mvn dependency:tree</code></td>
+                        <td>-</td>
+                        <td>Muestra árbol de dependencias</td>
+                    </tr>
+                    <tr>
+                        <td><code>java -jar</code></td>
+                        <td><code>app.jar</code></td>
+                        <td>Ejecuta el JAR generado</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-at"></i> Anotaciones Principales</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Anotación</th>
+                        <th>Uso</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>@SpringBootApplication</code></td>
+                        <td>Clase principal</td>
+                        <td>Habilita configuración automática y escaneo de componentes</td>
+                    </tr>
+                    <tr>
+                        <td><code>@RestController</code></td>
+                        <td>Clase</td>
+                        <td>Controlador REST que retorna JSON directamente</td>
+                    </tr>
+                    <tr>
+                        <td><code>@Controller</code></td>
+                        <td>Clase</td>
+                        <td>Controlador MVC que retorna vistas</td>
+                    </tr>
+                    <tr>
+                        <td><code>@Service</code></td>
+                        <td>Clase</td>
+                        <td>Marca clase como servicio de lógica de negocio</td>
+                    </tr>
+                    <tr>
+                        <td><code>@Repository</code></td>
+                        <td>Interfaz/Clase</td>
+                        <td>Marca clase como repositorio de datos</td>
+                    </tr>
+                    <tr>
+                        <td><code>@Autowired</code></td>
+                        <td>Campo/Constructor</td>
+                        <td>Inyección automática de dependencias</td>
+                    </tr>
+                    <tr>
+                        <td><code>@Entity</code></td>
+                        <td>Clase</td>
+                        <td>Marca clase como entidad JPA (tabla BD)</td>
+                    </tr>
+                    <tr>
+                        <td><code>@Table</code></td>
+                        <td>Clase</td>
+                        <td>Especifica nombre de tabla en BD</td>
+                    </tr>
+                    <tr>
+                        <td><code>@Id</code></td>
+                        <td>Campo</td>
+                        <td>Marca campo como clave primaria</td>
+                    </tr>
+                    <tr>
+                        <td><code>@GeneratedValue</code></td>
+                        <td>Campo</td>
+                        <td>Generación automática de ID</td>
+                    </tr>
+                    <tr>
+                        <td><code>@Column</code></td>
+                        <td>Campo</td>
+                        <td>Configura columna de BD</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-route"></i> Anotaciones de Mapping (REST)</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Anotación</th>
+                        <th>Ejemplo</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>@GetMapping</code></td>
+                        <td><code>@GetMapping("/users")</code></td>
+                        <td>Maneja peticiones GET</td>
+                    </tr>
+                    <tr>
+                        <td><code>@PostMapping</code></td>
+                        <td><code>@PostMapping("/users")</code></td>
+                        <td>Maneja peticiones POST</td>
+                    </tr>
+                    <tr>
+                        <td><code>@PutMapping</code></td>
+                        <td><code>@PutMapping("/users/{id}")</code></td>
+                        <td>Maneja peticiones PUT (actualizar)</td>
+                    </tr>
+                    <tr>
+                        <td><code>@DeleteMapping</code></td>
+                        <td><code>@DeleteMapping("/users/{id}")</code></td>
+                        <td>Maneja peticiones DELETE</td>
+                    </tr>
+                    <tr>
+                        <td><code>@PatchMapping</code></td>
+                        <td><code>@PatchMapping("/users/{id}")</code></td>
+                        <td>Maneja peticiones PATCH (actualización parcial)</td>
+                    </tr>
+                    <tr>
+                        <td><code>@RequestMapping</code></td>
+                        <td><code>@RequestMapping("/api")</code></td>
+                        <td>Mapeo genérico de rutas (nivel clase o método)</td>
+                    </tr>
+                    <tr>
+                        <td><code>@PathVariable</code></td>
+                        <td><code>@PathVariable Long id</code></td>
+                        <td>Captura variable de la URL</td>
+                    </tr>
+                    <tr>
+                        <td><code>@RequestBody</code></td>
+                        <td><code>@RequestBody User user</code></td>
+                        <td>Recibe objeto JSON del body</td>
+                    </tr>
+                    <tr>
+                        <td><code>@RequestParam</code></td>
+                        <td><code>@RequestParam String name</code></td>
+                        <td>Captura parámetro de query (?name=valor)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-database"></i> Métodos JPA Repository</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Ejemplo</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>save()</code></td>
+                        <td><code>repository.save(entity)</code></td>
+                        <td>Guarda o actualiza entidad</td>
+                    </tr>
+                    <tr>
+                        <td><code>findById()</code></td>
+                        <td><code>repository.findById(id)</code></td>
+                        <td>Busca por ID</td>
+                    </tr>
+                    <tr>
+                        <td><code>findAll()</code></td>
+                        <td><code>repository.findAll()</code></td>
+                        <td>Obtiene todas las entidades</td>
+                    </tr>
+                    <tr>
+                        <td><code>deleteById()</code></td>
+                        <td><code>repository.deleteById(id)</code></td>
+                        <td>Elimina por ID</td>
+                    </tr>
+                    <tr>
+                        <td><code>existsById()</code></td>
+                        <td><code>repository.existsById(id)</code></td>
+                        <td>Verifica si existe por ID</td>
+                    </tr>
+                    <tr>
+                        <td><code>count()</code></td>
+                        <td><code>repository.count()</code></td>
+                        <td>Cuenta total de registros</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Wiki 2º DAW - Tu repositorio de conocimiento en desarrollo web</p>
+    </footer>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

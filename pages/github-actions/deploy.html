@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Deploy en GitHub Pages - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="./index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver
+            </a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-github"></i> Deploy GitHub Pages</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#introduccion" class="active">Introducción</a></li>
+                <li><a href="#configuracion">Configuración Inicial</a></li>
+                <li>
+                    <a href="#workflow">Crear el Workflow</a>
+                    <ul class="sidebar-subnav">
+                        <li><a href="#estructura">Estructura del Archivo</a></li>
+                        <li><a href="#permisos">Permisos Necesarios</a></li>
+                    </ul>
+                </li>
+                <li><a href="#despliegue">Proceso de Despliegue</a></li>
+                <li><a href="#verificacion">Verificación</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--github-actions-color);">
+                    <i class="fab fa-github"></i>
+                </div>
+                <h1 class="detail-title">6. Despliegue en GitHub Pages</h1>
+                <p class="detail-subtitle">Automatiza el despliegue de tu sitio web con GitHub Actions</p>
+            </div>
+
+            <!-- Introducción -->
+            <div class="content-section" id="introduccion">
+                <h2><i class="fas fa-rocket"></i> ¿Qué es GitHub Pages?</h2>
+                <p>
+                    <strong>GitHub Pages</strong> es un servicio gratuito de hospedaje de sitios web estáticos 
+                    ofrecido por GitHub. Te permite publicar páginas HTML, CSS y JavaScript directamente desde 
+                    tu repositorio de GitHub, sin necesidad de un servidor web separado.
+                </p>
+                <p>
+                    <strong>Características principales:</strong>
+                </p>
+                <ul>
+                    <li><strong>Gratuito:</strong> No tiene costo para repositorios públicos</li>
+                    <li><strong>HTTPS automático:</strong> Tu sitio tiene certificado SSL gratis</li>
+                    <li><strong>Dominio personalizado:</strong> Puedes usar tu propio dominio</li>
+                    <li><strong>Integración con Git:</strong> Se actualiza automáticamente con cada commit</li>
+                    <li><strong>URL predecible:</strong> <code>https://usuario.github.io/repositorio/</code></li>
+                </ul>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-lightbulb"></i> ¿Cuándo usar GitHub Pages?</h4>
+                    <p>GitHub Pages es ideal para:</p>
+                    <ul>
+                        <li>Documentación de proyectos</li>
+                        <li>Páginas de aterrizaje (landing pages)</li>
+                        <li>Blogs personales o técnicos</li>
+                        <li>Portafolios de desarrolladores</li>
+                        <li>Sitios de proyectos open source</li>
+                    </ul>
+                    <p>
+                        <strong>Limitación:</strong> Solo sirve contenido estático (HTML/CSS/JS). 
+                        No puedes ejecutar código del servidor como PHP, Python o Node.js.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Configuración Inicial -->
+            <div class="content-section" id="configuracion">
+                <h2><i class="fas fa-cog"></i> Configuración Inicial de GitHub Pages</h2>
+                <p>
+                    Antes de crear el workflow, debes configurar GitHub Pages en tu repositorio. 
+                    Este es un proceso que solo necesitas hacer <strong>una vez</strong>.
+                </p>
+
+                <h3><i class="fas fa-list-ol"></i> Pasos de Configuración</h3>
+                
+                <h4>1. Habilitar GitHub Pages</h4>
+                <p>
+                    Ve a tu repositorio en GitHub y sigue estos pasos:
+                </p>
+                <ol>
+                    <li>Haz clic en <strong>Settings</strong> (Configuración) en la parte superior</li>
+                    <li>En el menú lateral izquierdo, busca <strong>Pages</strong></li>
+                    <li>En la sección <strong>Source</strong>, selecciona <strong>"GitHub Actions"</strong></li>
+                </ol>
+                <p>
+                    <strong>¿Por qué "GitHub Actions"?</strong> Antes, GitHub Pages se configuraba para 
+                    desplegar desde una rama específica (como <code>gh-pages</code>). Ahora, con GitHub Actions, 
+                    tienes control total sobre el proceso de despliegue mediante workflows personalizados.
+                </p>
+
+                <h4>2. Configurar Permisos del Workflow</h4>
+                <p>
+                    Para que GitHub Actions pueda desplegar tu sitio, necesita permisos específicos:
+                </p>
+                <ol>
+                    <li>En <strong>Settings</strong>, ve a <strong>Actions</strong> → <strong>General</strong></li>
+                    <li>Baja hasta <strong>Workflow permissions</strong></li>
+                    <li>Selecciona: <strong>"Read and write permissions"</strong></li>
+                    <li>Marca: <strong>"Allow GitHub Actions to create and approve pull requests"</strong></li>
+                    <li>Guarda los cambios</li>
+                </ol>
+                <p>
+                    <strong>¿Por qué estos permisos?</strong>
+                </p>
+                <ul>
+                    <li><strong>Read permissions:</strong> Para leer los archivos de tu repositorio</li>
+                    <li><strong>Write permissions:</strong> Para crear el despliegue y actualizar GitHub Pages</li>
+                    <li><strong>Create PRs:</strong> Útil si quieres que el workflow cree pull requests automáticamente</li>
+                </ul>
+            </div>
+
+            <!-- Crear el Workflow -->
+            <div class="content-section" id="workflow">
+                <h2><i class="fas fa-code"></i> Crear el Workflow de Despliegue</h2>
+                <p>
+                    Un <strong>workflow</strong> es un archivo YAML que define el proceso automatizado. 
+                    Para GitHub Pages, crearemos un workflow que se ejecute cada vez que hagas push a la rama principal.
+                </p>
+
+                <h3 id="estructura"><i class="fas fa-file-code"></i> Estructura del Archivo</h3>
+                <p>
+                    Crea el archivo <code>.github/workflows/deploy.yml</code> en tu repositorio con el siguiente contenido:
+                </p>
+
+                <div class="code-block">
+                    <pre>name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4</pre>
+                </div>
+
+                <h3>Explicación línea por línea:</h3>
+
+                <h4><code>name: Deploy to GitHub Pages</code></h4>
+                <p>
+                    Define el <strong>nombre del workflow</strong>. Aparecerá en la pestaña "Actions" de GitHub. 
+                    Usa un nombre descriptivo para identificarlo fácilmente.
+                </p>
+
+                <h4><code>on:</code></h4>
+                <p>
+                    Define <strong>cuándo se ejecutará</strong> el workflow:
+                </p>
+                <ul>
+                    <li>
+                        <code>push: branches: [ main ]</code> - Se ejecuta cada vez que haces push a la rama <code>main</code>. 
+                        Cambia esto si tu rama principal se llama diferente (ej: <code>master</code>).
+                    </li>
+                    <li>
+                        <code>workflow_dispatch:</code> - Permite ejecutar el workflow manualmente desde la interfaz de GitHub. 
+                        Ve a Actions → selecciona el workflow → "Run workflow".
+                    </li>
+                </ul>
+
+                <h4 id="permisos"><code>permissions:</code></h4>
+                <p>
+                    Define los <strong>permisos</strong> que necesita el workflow:
+                </p>
+                <ul>
+                    <li><code>contents: read</code> - Permiso para leer archivos del repositorio</li>
+                    <li><code>pages: write</code> - Permiso para escribir en GitHub Pages (crear despliegues)</li>
+                    <li><code>id-token: write</code> - Permiso para generar tokens de identidad (necesario para el despliegue seguro)</li>
+                </ul>
+                <p>
+                    Estos permisos son específicos para este workflow y son más restrictivos que los permisos generales del repositorio.
+                </p>
+
+                <h4><code>jobs: deploy:</code></h4>
+                <p>
+                    Define un <strong>job</strong> llamado "deploy". Un workflow puede tener múltiples jobs que se ejecutan 
+                    en paralelo o secuencialmente.
+                </p>
+                <ul>
+                    <li>
+                        <code>environment: name: github-pages</code> - Indica que este job se despliega en el entorno 
+                        de GitHub Pages. Esto permite configurar protecciones específicas.
+                    </li>
+                    <li>
+                        <code>url: ${{ steps.deployment.outputs.page_url }}</code> - Captura la URL donde se desplegó 
+                        el sitio para mostrarla en el resumen del workflow.
+                    </li>
+                    <li>
+                        <code>runs-on: ubuntu-latest</code> - Especifica que el job se ejecutará en una máquina virtual 
+                        con Ubuntu (el sistema operativo más común para workflows).
+                    </li>
+                </ul>
+
+                <h4><code>steps:</code></h4>
+                <p>
+                    Los <strong>steps</strong> son las tareas individuales que se ejecutan en orden:
+                </p>
+
+                <h5>Step 1: Checkout</h5>
+                <div class="code-block">
+                    <pre>- name: Checkout
+  uses: actions/checkout@v4</pre>
+                </div>
+                <p>
+                    <strong>¿Qué hace?</strong> Clona tu repositorio en la máquina virtual del runner. Sin este paso, 
+                    el workflow no tendría acceso a tus archivos.
+                </p>
+                <p>
+                    <code>actions/checkout@v4</code> es una <strong>action</strong> predefinida creada por GitHub. 
+                    La versión <code>@v4</code> indica que estamos usando la versión 4 de esta action.
+                </p>
+
+                <h5>Step 2: Setup Pages</h5>
+                <div class="code-block">
+                    <pre>- name: Setup Pages
+  uses: actions/configure-pages@v4</pre>
+                </div>
+                <p>
+                    <strong>¿Qué hace?</strong> Configura el entorno para GitHub Pages. Prepara las variables necesarias 
+                    y verifica que todo esté listo para el despliegue.
+                </p>
+
+                <h5>Step 3: Upload artifact</h5>
+                <div class="code-block">
+                    <pre>- name: Upload artifact
+  uses: actions/upload-pages-artifact@v3
+  with:
+    path: '.'</pre>
+                </div>
+                <p>
+                    <strong>¿Qué hace?</strong> Empaqueta todos los archivos de tu proyecto (indicados por <code>path: '.'</code>) 
+                    y los sube como un "artefacto". Un artefacto es un archivo comprimido que GitHub almacena temporalmente.
+                </p>
+                <p>
+                    <code>path: '.'</code> significa "todos los archivos del directorio actual". Si solo quieres desplegar 
+                    una carpeta específica (ej: <code>dist/</code> o <code>build/</code>), cámbialo:
+                </p>
+                <div class="code-block">
+                    <pre>with:
+  path: 'dist'  # Solo despliega la carpeta dist</pre>
+                </div>
+
+                <h5>Step 4: Deploy to GitHub Pages</h5>
+                <div class="code-block">
+                    <pre>- name: Deploy to GitHub Pages
+  id: deployment
+  uses: actions/deploy-pages@v4</pre>
+                </div>
+                <p>
+                    <strong>¿Qué hace?</strong> Toma el artefacto subido y lo despliega en GitHub Pages. 
+                    Este es el paso que hace que tu sitio esté disponible públicamente.
+                </p>
+                <p>
+                    <code>id: deployment</code> asigna un ID a este step, permitiendo que otros steps accedan a sus outputs 
+                    (como la URL del sitio desplegado).
+                </p>
+            </div>
+
+            <!-- Proceso de Despliegue -->
+            <div class="content-section" id="despliegue">
+                <h2><i class="fas fa-upload"></i> Proceso de Despliegue</h2>
+                <p>
+                    Una vez configurado el workflow, el proceso de despliegue es automático. Veamos qué sucede paso a paso:
+                </p>
+
+                <h3><i class="fas fa-timeline"></i> Timeline del Despliegue</h3>
+                <ol>
+                    <li>
+                        <strong>Haces cambios en tu código local</strong><br>
+                        Editas archivos HTML, CSS, JavaScript, etc.
+                    </li>
+                    <li>
+                        <strong>Commiteas y pusheas a GitHub</strong>
+                        <div class="code-block">
+                            <pre>git add .
+git commit -m "Actualizar contenido"
+git push origin main</pre>
+                        </div>
+                    </li>
+                    <li>
+                        <strong>GitHub detecta el push</strong><br>
+                        El evento <code>push</code> activa automáticamente el workflow.
+                    </li>
+                    <li>
+                        <strong>Se inicia el workflow</strong><br>
+                        GitHub asigna una máquina virtual (runner) para ejecutar el job.
+                    </li>
+                    <li>
+                        <strong>Se ejecutan los steps</strong><br>
+                        Checkout → Setup → Upload → Deploy (tarda ~1-2 minutos)
+                    </li>
+                    <li>
+                        <strong>El sitio se actualiza</strong><br>
+                        Tu sitio en <code>https://usuario.github.io/repositorio/</code> muestra los nuevos cambios.
+                    </li>
+                </ol>
+
+                <div class="warning-box">
+                    <h4><i class="fas fa-clock"></i> Tiempo de Propagación</h4>
+                    <p>
+                        Aunque el workflow termine exitosamente, los cambios pueden tardar hasta 
+                        <strong>10 minutos</strong> en propagarse completamente debido a:
+                    </p>
+                    <ul>
+                        <li><strong>CDN de GitHub:</strong> Los servidores distribuidos necesitan sincronizarse</li>
+                        <li><strong>Caché del navegador:</strong> Tu navegador puede estar mostrando una versión antigua</li>
+                    </ul>
+                    <p>
+                        Si no ves los cambios inmediatamente, refresca la página con <code>Ctrl + Shift + R</code> 
+                        (fuerza una recarga sin caché).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Verificación -->
+            <div class="content-section" id="verificacion">
+                <h2><i class="fas fa-check-circle"></i> Verificar el Despliegue</h2>
+                <p>
+                    Después de hacer push, puedes verificar que el despliegue fue exitoso:
+                </p>
+
+                <h3><i class="fas fa-eye"></i> Ver el Estado del Workflow</h3>
+                <ol>
+                    <li>Ve a tu repositorio en GitHub</li>
+                    <li>Haz clic en la pestaña <strong>Actions</strong></li>
+                    <li>Verás una lista de ejecuciones del workflow</li>
+                    <li>La más reciente debería mostrar:
+                        <ul>
+                            <li>✅ Verde con check = Exitoso</li>
+                            <li>🟡 Amarillo con reloj = En progreso</li>
+                            <li>❌ Rojo con X = Falló</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3><i class="fas fa-bug"></i> Revisar Logs en Caso de Error</h3>
+                <p>
+                    Si el workflow falla:
+                </p>
+                <ol>
+                    <li>Haz clic en el workflow fallido</li>
+                    <li>Haz clic en el job "deploy"</li>
+                    <li>Expande el step que tiene el error (marcado en rojo)</li>
+                    <li>Lee el mensaje de error en los logs</li>
+                </ol>
+
+                <h4>Errores Comunes:</h4>
+                <ul>
+                    <li>
+                        <strong>"Permission denied"</strong><br>
+                        Solución: Verifica los permisos en Settings → Actions → General
+                    </li>
+                    <li>
+                        <strong>"Artifact not found"</strong><br>
+                        Solución: Asegúrate de que el <code>path</code> en el step Upload apunte a archivos existentes
+                    </li>
+                    <li>
+                        <strong>"Pages deployment failed"</strong><br>
+                        Solución: Verifica que GitHub Pages esté habilitado y configurado como "GitHub Actions"
+                    </li>
+                </ul>
+
+                <h3><i class="fas fa-link"></i> Acceder a Tu Sitio</h3>
+                <p>
+                    Una vez desplegado exitosamente, tu sitio estará disponible en:
+                </p>
+                <div class="code-block">
+                    <pre>https://[tu-usuario].github.io/[nombre-repositorio]/
+
+Ejemplo:
+https://guntermagno.github.io/Apuntes-2-DAW/</pre>
+                </div>
+                <p>
+                    Puedes encontrar la URL exacta en:
+                </p>
+                <ul>
+                    <li>Settings → Pages (aparece en la parte superior)</li>
+                    <li>En el log del workflow, al final del step "Deploy to GitHub Pages"</li>
+                    <li>En la pestaña "Environments" del repositorio</li>
+                </ul>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-star"></i> Mejores Prácticas</h4>
+                    <ul>
+                        <li>
+                            <strong>Prueba localmente:</strong> Antes de hacer push, verifica que tu sitio funcione 
+                            correctamente en local
+                        </li>
+                        <li>
+                            <strong>Commits descriptivos:</strong> Usa mensajes de commit claros para identificar 
+                            fácilmente qué cambió en cada despliegue
+                        </li>
+                        <li>
+                            <strong>Revisa antes de pushear:</strong> El despliegue es automático, asegúrate de que 
+                            todo esté listo antes de hacer push
+                        </li>
+                        <li>
+                            <strong>Usa branches para desarrollo:</strong> Desarrolla en una rama separada y solo 
+                            mergea a <code>main</code> cuando esté listo para desplegar
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let currentSection = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + currentSection) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

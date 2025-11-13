@@ -1,104 +1,217 @@
-# Wiki Personal - 2º DAW
+# Wiki Personal - Apuntes 2º DAW
 
-## 📚 Descripción
+Repositorio personal de conocimiento y apuntes para el curso de **Desarrollo de Aplicaciones Web (2º DAW)**. Una wiki moderna con tema oscuro diseñada para facilitar el estudio y consulta rápida de todas las tecnologías del curso.
 
-Wiki personal moderna con diseño oscuro (dark mode) para consultar y aprender todos los apuntes del curso de **Desarrollo de Aplicaciones Web de segundo curso**. Esta página está diseñada para organizar toda la documentación, código, ejemplos y comandos necesarios para el estudio.
+## 🚀 Tecnologías Incluidas
 
-## 🚀 Tecnologías incluidas
+Esta wiki contiene documentación completa, resúmenes de comandos y ejemplos prácticos de:
 
-La wiki contiene documentación completa y detallada sobre las siguientes tecnologías:
-
-- **Java** - Lenguaje de programación orientado a objetos
-- **Spring Boot** - Framework para aplicaciones Java empresariales
-- **Angular** - Framework completo para aplicaciones web SPA
-- **Node.js** - Entorno de ejecución JavaScript del lado del servidor
-- **MongoDB** - Base de datos NoSQL orientada a documentos
-- **Express.js** - Framework web minimalista para Node.js
-- **React** - Librería para construir interfaces de usuario
-- **Docker** - Plataforma de contenedores
+- **☕ Java** - Lenguaje de programación orientado a objetos
+- **🍃 Spring Boot** - Framework empresarial de Java con Maven, JPA, Lombok
+- **🅰️ Angular** - Framework completo para aplicaciones web SPA con TypeScript
+- **📦 Node.js** - Entorno de ejecución JavaScript del lado del servidor
+- **🍃 MongoDB** - Base de datos NoSQL orientada a documentos
+- **⚡ Express.js** - Framework web minimalista para Node.js
+- **⚛️ React** - Librería para construir interfaces de usuario interactivas
+- **🐳 Docker** - Plataforma de contenedores para desarrollo y despliegue
+- **🔄 GitHub Actions** - Automatización CI/CD integrada en GitHub
 
 ## ✨ Características
 
-- ✅ **Diseño oscuro moderno** y responsive
-- ✅ **Navegación intuitiva** con menú responsive
-- ✅ **Tarjetas interactivas** para cada tecnología
-- ✅ **Resumen de comandos** desplegable en cada tarjeta
-- ✅ **Páginas detalladas** para cada tecnología con:
-  - Definiciones y conceptos básicos
-  - Funcionamiento interno
-  - Arquitectura
-  - Ejemplos prácticos completos
-  - Comandos útiles explicados
-  - Recursos y enlaces adicionales
-- ✅ **Código bien comentado** y fácil de ampliar
-- ✅ **Animaciones suaves** y efectos visuales
-- ✅ **Optimizado para estudio** y consulta rápida
+- 🎨 **Tema Oscuro Moderno** - Esquema de colores grises elegante y cómodo para la vista
+- 📱 **Totalmente Responsive** - Adaptado para móviles, tablets y desktop
+- 🎯 **Navegación Intuitiva** - Estructura organizada por tecnologías
+- 📊 **Páginas de Resumen** - Tablas de comandos esenciales para cada tecnología
+- 📖 **Páginas Detalladas** - Contenido explicativo con ejemplos y conceptos
+- 🔍 **Sidebar de Navegación** - En cada tecnología para acceso rápido a temas
+- 🌈 **Colores por Tecnología** - Cada tecnología tiene su color identificativo
+- ⚡ **Animaciones Suaves** - Transiciones y efectos visuales agradables
+- 📦 **Estructura Organizada** - Archivos agrupados por carpetas de tecnología
 
-## 📁 Estructura del proyecto
+## 📚 Estructura del Proyecto
 
 ```
 Apuntes-2-DAW/
-├── index.html              # Página principal
+├── index.html                      # Página principal con grid de tecnologías
 ├── css/
-│   └── styles.css          # Estilos globales (tema oscuro)
+│   └── styles.css                  # Estilos globales (tema oscuro con grises)
 ├── js/
-│   └── main.js             # JavaScript funcionalidad
-├── pages/                  # Páginas detalladas
-│   ├── java.html
-│   ├── spring-boot.html
-│   ├── angular.html
-│   ├── nodejs.html
-│   ├── mongodb.html
-│   ├── express.html
-│   ├── react.html
-│   └── docker.html
-└── README.md               # Este archivo
+│   └── main.js                     # JavaScript para interactividad
+├── pages/                          # Contenido organizado por tecnología
+│   ├── java/
+│   │   ├── index.html             # Temario principal de Java
+│   │   ├── resumen.html           # Tabla de comandos y conceptos clave
+│   │   ├── introduccion.html
+│   │   ├── sintaxis-basica.html
+│   │   ├── poo.html
+│   │   ├── colecciones.html
+│   │   ├── excepciones.html
+│   │   └── streams.html
+│   ├── spring/
+│   │   ├── index.html
+│   │   ├── resumen.html           # Comandos Maven, anotaciones, JPA
+│   │   ├── introduccion.html
+│   │   ├── inyeccion-dependencias.html
+│   │   ├── jpa.html
+│   │   ├── rest-controllers.html
+│   │   ├── seguridad.html
+│   │   └── validacion.html
+│   ├── angular/
+│   │   ├── index.html
+│   │   ├── resumen.html           # Angular CLI, decoradores, directivas
+│   │   ├── introduccion.html
+│   │   ├── componentes.html
+│   │   ├── directivas.html
+│   │   ├── servicios.html
+│   │   ├── routing.html
+│   │   └── forms.html
+│   ├── nodejs/
+│   │   ├── index.html
+│   │   ├── resumen.html           # NPM, módulos core, async/await
+│   │   ├── introduccion.html
+│   │   ├── modulos.html
+│   │   ├── async.html
+│   │   ├── filesystem.html
+│   │   ├── http.html
+│   │   └── eventos.html
+│   ├── mongodb/
+│   │   ├── index.html
+│   │   ├── resumen.html           # CRUD, operadores, consultas
+│   │   ├── introduccion.html
+│   │   ├── crud.html
+│   │   ├── consultas.html
+│   │   ├── agregacion.html
+│   │   ├── indices.html
+│   │   └── mongoose.html
+│   ├── express/
+│   │   ├── index.html
+│   │   ├── resumen.html           # HTTP methods, middleware, Router
+│   │   ├── introduccion.html
+│   │   ├── routing.html
+│   │   ├── middleware.html
+│   │   ├── rest-api.html
+│   │   ├── autenticacion.html
+│   │   └── validacion.html
+│   ├── react/
+│   │   ├── index.html
+│   │   ├── resumen.html           # Hooks, JSX, React Router
+│   │   ├── introduccion.html
+│   │   ├── componentes.html
+│   │   ├── estado.html
+│   │   ├── hooks.html
+│   │   ├── routing.html
+│   │   └── apis.html
+│   ├── docker/
+│   │   ├── index.html
+│   │   ├── resumen.html           # Comandos Docker, Compose, Dockerfile
+│   │   ├── introduccion.html
+│   │   ├── imagenes.html
+│   │   ├── contenedores.html
+│   │   ├── volumenes.html
+│   │   ├── networking.html
+│   │   └── compose.html
+│   └── github-actions/
+│       ├── resumen.html           # Workflows, eventos, sintaxis YAML
+│       ├── introduccion.html
+│       ├── workflows.html
+│       ├── actions.html
+│       ├── secrets.html
+│       ├── ci-cd.html
+│       └── deploy.html
+├── DEPLOYMENT.md                   # Guía de despliegue en GitHub Pages
+└── README.md                       # Este archivo
 ```
 
-## 🌐 Cómo usar la wiki
+## 💻 Desarrollo Local
 
-### Opción 1: Abrir directamente (recomendado para desarrollo)
-
-1. Abre el archivo `index.html` directamente en tu navegador
-2. Navega por las diferentes secciones
-
-### Opción 2: Servidor local (recomendado)
+### Opción 1: Servidor HTTP Simple
 
 ```bash
 # Con Python 3
 python -m http.server 8000
 
-# Con Node.js (si tienes http-server instalado)
+# Con Node.js
 npx http-server -p 8000
 
-# Acceder desde el navegador
-http://localhost:8000
+# Con PHP
+php -S localhost:8000
 ```
 
-### Opción 3: Usando Live Server (VS Code)
+Luego abre `http://localhost:8000` en tu navegador.
 
-1. Instala la extensión "Live Server" en VS Code
-2. Click derecho en `index.html` → "Open with Live Server"
-3. Se abrirá automáticamente en tu navegador
+### Opción 2: VS Code Live Server
 
-## 🎨 Personalización
+1. Instala la extensión **Live Server** en VS Code
+2. Click derecho en `index.html` → **"Open with Live Server"**
+3. Se abrirá automáticamente en `http://127.0.0.1:5500`
 
-### Cambiar colores del tema
+### Opción 3: Abrir Directamente
 
-Edita las variables CSS en `css/styles.css`:
+Simplemente abre `index.html` en tu navegador favorito (funciona sin servidor).
+
+## � Despliegue en GitHub Pages
+
+Esta wiki puede desplegarse automáticamente en GitHub Pages. Consulta `DEPLOYMENT.md` para instrucciones completas.
+
+**Resumen rápido:**
+1. Habilita GitHub Pages en Settings → Pages
+2. Selecciona "GitHub Actions" como source
+3. Haz push a la rama `main`
+4. Tu sitio estará en: `https://[usuario].github.io/Apuntes-2-DAW/`
+
+## 🎨 Paleta de Colores (Tema Oscuro)
 
 ```css
-:root {
-    --bg-primary: #0d1117;        /* Fondo principal */
-    --accent-primary: #58a6ff;    /* Color de acento */
-    --text-primary: #e6edf3;      /* Color de texto */
-    /* ... más variables */
-}
+/* Fondos - Grises Oscuros */
+--bg-primary: #2a2d35      /* Fondo principal */
+--bg-secondary: #1f2228    /* Fondo secundario */
+--bg-card: #32353d         /* Tarjetas */
+--bg-tertiary: #363940     /* Bordes y elementos terciarios */
+
+/* Textos - Grises Claros */
+--text-primary: #e8eaed    /* Texto principal */
+--text-secondary: #b8bcc4  /* Texto secundario */
+--text-tertiary: #8f94a0   /* Texto terciario */
+
+/* Acentos - Púrpura/Índigo */
+--accent-primary: #6366f1  /* Índigo principal */
+--accent-secondary: #818cf8 /* Índigo claro */
 ```
 
-### Añadir nueva tecnología
+## 📖 Contenido de las Páginas
 
-1. **Añadir tarjeta en index.html:**
+### Páginas `index.html` (Temarios)
+- Listado completo de temas de la tecnología
+- Navegación con sidebar
+- Enlaces a páginas detalladas
+
+### Páginas `resumen.html` (Comandos)
+- Tablas de comandos esenciales
+- Parámetros y sintaxis
+- Descripciones concisas
+- Ideal para consulta rápida
+
+### Páginas de Temas
+- Contenido educativo detallado
+- Ejemplos prácticos
+- Explicaciones conceptuales
+- Código comentado
+
+## �️ Tecnologías Utilizadas
+
+- **HTML5** - Estructura semántica moderna
+- **CSS3** - Variables CSS, Grid, Flexbox, animaciones
+- **JavaScript ES6+** - Interactividad y funcionalidad
+- **Font Awesome 6.4.0** - Iconografía
+- **Google Fonts (Inter)** - Tipografía moderna
+
+## 🎯 Cómo Añadir Contenido
+
+### Añadir Nueva Tecnología
+
+1. Crea carpeta en `pages/nombre-tecnologia/`
+2. Crea `index.html` (temario) y `resumen.html` (comandos)
+3. Añade tarjeta en `index.html` principal:
 ```html
 <div class="tech-card" data-tech="nombre">
     <div class="tech-icon">
@@ -106,58 +219,45 @@ Edita las variables CSS en `css/styles.css`:
     </div>
     <h3 class="tech-title">Nombre</h3>
     <p class="tech-description">Descripción...</p>
-    <!-- ... resto del código -->
+    <div class="tech-actions">
+        <a href="pages/nombre/index.html" class="btn-primary">Ver Temario</a>
+        <a href="pages/nombre/resumen.html" class="btn-secondary">Ver Resumen</a>
+    </div>
 </div>
 ```
+4. Añade color en `styles.css`:
+```css
+--nombre-color: #hexcolor;
+.tech-card[data-tech="nombre"] .tech-icon { color: var(--nombre-color); }
+```
 
-2. **Crear página detallada** en `pages/nombre.html` usando las páginas existentes como plantilla
+### Añadir Nuevo Tema
 
-3. **Añadir color personalizado** en `styles.css` si lo deseas
+1. Crea archivo HTML en la carpeta de la tecnología
+2. Usa plantilla de páginas existentes
+3. Añade enlace en el sidebar del `index.html` de esa tecnología
 
-## 📖 Contenido de cada página
+## 🔄 Próximas Mejoras
 
-Cada página de tecnología incluye:
-
-1. **Introducción completa** - ¿Qué es y para qué sirve?
-2. **Funcionamiento interno** - Cómo funciona por debajo
-3. **Conceptos clave** - Términos y definiciones importantes
-4. **Arquitectura** - Estructura y organización (cuando aplica)
-5. **Ejemplos prácticos** - Código real, funcional y comentado
-6. **Comandos esenciales** - Lista de comandos más utilizados con explicaciones
-7. **Recursos adicionales** - Enlaces a documentación oficial y tutoriales
-
-## 🔧 Tecnologías usadas en la wiki
-
-- **HTML5** - Estructura semántica
-- **CSS3** - Diseño responsive y animaciones
-- **JavaScript ES6** - Interactividad y funcionalidad
-- **Font Awesome** - Iconos
-
-## 📝 Notas importantes
-
-- Esta wiki es una herramienta de **aprendizaje personal** diseñada para facilitar el estudio
-- El contenido está pensado para ser **ampliado y modificado** según tus necesidades
-- Puedes añadir tus propios apuntes, ejemplos, PDFs y recursos
-- Todo el código está **bien comentado** para facilitar la comprensión
-
-## 🎯 Próximas mejoras sugeridas
-
-- [ ] Añadir búsqueda global por contenido
-- [ ] Incluir sección de ejercicios prácticos
-- [ ] Añadir modo claro/oscuro toggle
-- [ ] Incluir enlaces a proyectos personales
-- [ ] Añadir sección de cheatsheets descargables
-- [ ] Integrar tabla de contenidos en páginas largas
-- [ ] Añadir sistema de favoritos
+- [ ] Sistema de búsqueda global
+- [ ] Toggle tema claro/oscuro
+- [ ] Cheatsheets descargables en PDF
+- [ ] Ejercicios prácticos interactivos
+- [ ] Sistema de favoritos/marcadores
+- [ ] Modo offline (PWA)
+- [ ] Integración con API de StackOverflow
 
 ## 📄 Licencia
 
-Este proyecto es de uso personal educativo. Siéntete libre de modificarlo y adaptarlo a tus necesidades.
+Este proyecto es de uso personal y educativo. Libre para modificar y adaptar.
 
 ## 👨‍💻 Autor
 
-Creado para el curso de 2º DAW - Desarrollo de Aplicaciones Web
+**Desarrollado para:** 2º DAW - Desarrollo de Aplicaciones Web  
+**Última actualización:** Noviembre 2025
 
 ---
 
-**¡Feliz aprendizaje! 🚀**
+💡 **Tip:** Usa `Ctrl + F` en cada página de resumen para buscar comandos específicos rápidamente.
+
+🚀 **¡Feliz aprendizaje!**

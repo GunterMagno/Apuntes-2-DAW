@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Introducción a GitHub Actions</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-github"></i> Introducción</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#que-es" class="active">¿Qué es?</a></li>
+                <li><a href="#cicd">CI/CD</a></li>
+                <li><a href="#ventajas">Ventajas</a></li>
+                <li><a href="#conceptos">Conceptos</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color:var(--github-color)"><i class="fab fa-github"></i></div>
+                <h1>1. Introducción a GitHub Actions</h1>
+                <p class="detail-subtitle">Automatización en GitHub</p>
+            </div>
+            <div class="content-section" id="que-es">
+                <h2>¿Qué es GitHub Actions?</h2>
+                <p>GitHub Actions es una plataforma de integración y entrega continua (CI/CD) que permite automatizar tu pipeline de desarrollo.</p>
+                <div class="info-box">
+                    <strong>Características:</strong>
+                    <ul>
+                        <li>Integrado nativamente en GitHub</li>
+                        <li>Ejecuta workflows automáticos</li>
+                        <li>Múltiples runners (Linux, Windows, macOS)</li>
+                        <li>Marketplace de actions reutilizables</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content-section" id="cicd">
+                <h2>CI/CD</h2>
+                <p><strong>Continuous Integration (CI):</strong> Integrar cambios de código frecuentemente.</p>
+                <p><strong>Continuous Deployment (CD):</strong> Desplegar automáticamente a producción.</p>
+            </div>
+            <div class="content-section" id="ventajas">
+                <h2>Ventajas</h2>
+                <ul>
+                    <li>Automatización de tests</li>
+                    <li>Despliegue automático</li>
+                    <li>Detección temprana de errores</li>
+                    <li>Feedback rápido</li>
+                </ul>
+            </div>
+            <div class="content-section" id="conceptos">
+                <h2>Conceptos Básicos</h2>
+                <ul>
+                    <li><strong>Workflow:</strong> Proceso automatizado</li>
+                    <li><strong>Job:</strong> Conjunto de steps</li>
+                    <li><strong>Step:</strong> Tarea individual</li>
+                    <li><strong>Action:</strong> Comando reutilizable</li>
+                    <li><strong>Runner:</strong> Servidor que ejecuta workflows</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let cur='';sections.forEach(s=>{if(window.pageYOffset>=s.offsetTop-100)cur=s.id});navLinks.forEach(l=>{l.classList.remove('active');if(l.getAttribute('href')==='#'+cur)l.classList.add('active')});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>

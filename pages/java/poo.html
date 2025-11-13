@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>POO en Java - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="./index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver a Java
+            </a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-java"></i> POO en Java</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#introduccion" class="active">Introducción a POO</a></li>
+                <li>
+                    <a href="#encapsulacion">Encapsulación</a>
+                    <ul class="sidebar-subnav">
+                        <li><a href="#modificadores">Modificadores de Acceso</a></li>
+                        <li><a href="#getters-setters">Getters y Setters</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#herencia">Herencia</a>
+                    <ul class="sidebar-subnav">
+                        <li><a href="#extends">Palabra clave extends</a></li>
+                        <li><a href="#super">Super y Sobrescritura</a></li>
+                    </ul>
+                </li>
+                <li><a href="#polimorfismo">Polimorfismo</a></li>
+                <li><a href="#abstraccion">Abstracción</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--java-color);">
+                    <i class="fab fa-java"></i>
+                </div>
+                <h1 class="detail-title">3. Programación Orientada a Objetos</h1>
+                <p class="detail-subtitle">Los 4 pilares fundamentales de la POO en Java</p>
+            </div>
+
+            <!-- Introducción -->
+            <div class="content-section" id="introduccion">
+                <h2><i class="fas fa-cube"></i> ¿Qué es la Programación Orientada a Objetos?</h2>
+                <p>
+                    La <strong>Programación Orientada a Objetos (POO)</strong> es un paradigma de programación que organiza 
+                    el código en torno a <strong>objetos</strong> en lugar de funciones y lógica. Un objeto es una entidad 
+                    que combina datos (atributos) y comportamientos (métodos) relacionados.
+                </p>
+                <p>
+                    <strong>¿Por qué es importante?</strong> La POO nos permite modelar conceptos del mundo real de forma más 
+                    natural. Por ejemplo, si estás creando un sistema de gestión de una biblioteca, puedes crear objetos como 
+                    "Libro", "Usuario", "Préstamo", cada uno con sus propias propiedades y acciones.
+                </p>
+                <p>
+                    Java se basa en <strong>4 pilares fundamentales</strong>:
+                </p>
+                <ul>
+                    <li><strong>Encapsulación:</strong> Ocultar los detalles internos y exponer solo lo necesario</li>
+                    <li><strong>Herencia:</strong> Crear nuevas clases basadas en clases existentes</li>
+                    <li><strong>Polimorfismo:</strong> Un objeto puede tomar muchas formas</li>
+                    <li><strong>Abstracción:</strong> Enfocarse en lo esencial, ignorando detalles irrelevantes</li>
+                </ul>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-lightbulb"></i> Concepto: Clase vs Objeto</h4>
+                    <p>
+                        Una <strong>clase</strong> es como un "plano" o "molde" que define cómo será un objeto. 
+                        Por ejemplo, el plano de una casa define habitaciones, puertas, ventanas.
+                    </p>
+                    <p>
+                        Un <strong>objeto</strong> es una instancia concreta de esa clase. Siguiendo el ejemplo, 
+                        tu casa específica es un objeto creado a partir del plano.
+                    </p>
+                    <p>
+                        <code>Clase = Plano de una casa</code><br>
+                        <code>Objeto = Tu casa construida</code>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Encapsulación -->
+            <div class="content-section" id="encapsulacion">
+                <h2><i class="fas fa-lock"></i> 1. Encapsulación</h2>
+                <p>
+                    La <strong>encapsulación</strong> es el principio de ocultar los detalles internos de un objeto y 
+                    permitir el acceso solo a través de métodos públicos. Es como una cápsula que protege los datos.
+                </p>
+                <p>
+                    <strong>¿Para qué sirve?</strong>
+                </p>
+                <ul>
+                    <li><strong>Protección de datos:</strong> Evita que se modifiquen los datos de forma incorrecta</li>
+                    <li><strong>Control:</strong> Puedes validar datos antes de asignarlos</li>
+                    <li><strong>Flexibilidad:</strong> Puedes cambiar la implementación interna sin afectar el código que usa la clase</li>
+                </ul>
+
+                <h3 id="modificadores"><i class="fas fa-key"></i> Modificadores de Acceso</h3>
+                <p>
+                    Java ofrece 4 niveles de acceso para controlar quién puede ver y usar tu código:
+                </p>
+                <ul>
+                    <li>
+                        <strong>private:</strong> Solo accesible dentro de la misma clase. Usa esto para atributos que no 
+                        quieres que nadie modifique directamente.
+                    </li>
+                    <li>
+                        <strong>default (sin modificador):</strong> Accesible solo dentro del mismo paquete. Útil para 
+                        clases auxiliares que solo usas internamente.
+                    </li>
+                    <li>
+                        <strong>protected:</strong> Accesible en el mismo paquete y en clases hijas (herencia). 
+                        Útil cuando quieres que las subclases accedan al atributo.
+                    </li>
+                    <li>
+                        <strong>public:</strong> Accesible desde cualquier lugar. Usa esto solo para métodos que forman 
+                        parte de la "interfaz pública" de tu clase.
+                    </li>
+                </ul>
+
+                <div class="code-block">
+                    <pre>public class CuentaBancaria {
+    // Private: Nadie puede acceder directamente
+    private double saldo;
+    private String numeroCuenta;
+    
+    // Public: Método público para acceder
+    public double getSaldo() {
+        return saldo;
+    }
+    
+    // Public: Método con validación
+    public boolean depositar(double cantidad) {
+        if (cantidad > 0) {
+            saldo += cantidad;
+            return true;
+        }
+        return false; // Rechaza cantidades negativas
+    }
+}</pre>
+                </div>
+
+                <p>
+                    <strong>Explicación del ejemplo:</strong> El atributo <code>saldo</code> es privado. Nadie puede 
+                    hacer <code>cuenta.saldo = -1000</code> directamente. Solo pueden usar el método <code>depositar()</code>, 
+                    que valida que la cantidad sea positiva antes de modificar el saldo.
+                </p>
+
+                <h3 id="getters-setters"><i class="fas fa-exchange-alt"></i> Getters y Setters</h3>
+                <p>
+                    Los <strong>getters</strong> y <strong>setters</strong> son métodos especiales para acceder y modificar 
+                    atributos privados de forma controlada.
+                </p>
+                <ul>
+                    <li><strong>Getter:</strong> Método que devuelve el valor de un atributo (get + NombreAtributo)</li>
+                    <li><strong>Setter:</strong> Método que establece el valor de un atributo (set + NombreAtributo)</li>
+                </ul>
+
+                <div class="code-block">
+                    <pre>public class Persona {
+    private String nombre;
+    private int edad;
+    
+    // Constructor
+    public Persona(String nombre, int edad) {
+        this.nombre = nombre;
+        setEdad(edad); // Usa el setter para validar
+    }
+    
+    // Getter para nombre
+    public String getNombre() {
+        return nombre;
+    }
+    
+    // Setter para nombre
+    public void setNombre(String nombre) {
+        if (nombre != null && !nombre.trim().isEmpty()) {
+            this.nombre = nombre;
+        }
+    }
+    
+    // Getter para edad
+    public int getEdad() {
+        return edad;
+    }
+    
+    // Setter para edad con validación
+    public void setEdad(int edad) {
+        if (edad >= 0 && edad <= 150) {
+            this.edad = edad;
+        } else {
+            System.out.println("Edad inválida");
+        }
+    }
+}</pre>
+                </div>
+
+                <p>
+                    <strong>Ventajas de usar getters/setters:</strong>
+                </p>
+                <ul>
+                    <li>Puedes validar los datos antes de asignarlos (edad entre 0-150)</li>
+                    <li>Puedes hacer transformaciones (convertir a mayúsculas, limpiar espacios)</li>
+                    <li>Puedes añadir logs o notificaciones cuando cambia un valor</li>
+                    <li>Puedes hacer algunos atributos de solo lectura (getter sin setter)</li>
+                </ul>
+            </div>
+
+            <!-- Herencia -->
+            <div class="content-section" id="herencia">
+                <h2><i class="fas fa-sitemap"></i> 2. Herencia</h2>
+                <p>
+                    La <strong>herencia</strong> permite crear nuevas clases basándose en clases existentes. La nueva clase 
+                    (clase hija o subclase) hereda los atributos y métodos de la clase existente (clase padre o superclase).
+                </p>
+                <p>
+                    <strong>¿Para qué sirve?</strong>
+                </p>
+                <ul>
+                    <li><strong>Reutilización de código:</strong> No tienes que reescribir código que ya funciona</li>
+                    <li><strong>Jerarquías lógicas:</strong> Modela relaciones "es un" (un Gato "es un" Animal)</li>
+                    <li><strong>Especialización:</strong> Añade características específicas a clases generales</li>
+                </ul>
+
+                <p>
+                    <strong>Ejemplo del mundo real:</strong> Imagina que tienes una clase <code>Vehículo</code> con 
+                    propiedades comunes (marca, modelo, velocidad). Luego puedes crear clases más específicas:
+                </p>
+                <ul>
+                    <li><code>Coche</code> hereda de <code>Vehículo</code> y añade número de puertas</li>
+                    <li><code>Moto</code> hereda de <code>Vehículo</code> y añade si tiene sidecar</li>
+                </ul>
+
+                <h3 id="extends"><i class="fas fa-code"></i> Palabra clave extends</h3>
+                <p>
+                    En Java, usas la palabra <code>extends</code> para crear una herencia:
+                </p>
+
+                <div class="code-block">
+                    <pre>// Clase padre (superclase)
+public class Animal {
+    protected String nombre;
+    protected int edad;
+    
+    public Animal(String nombre, int edad) {
+        this.nombre = nombre;
+        this.edad = edad;
+    }
+    
+    public void comer() {
+        System.out.println(nombre + " está comiendo");
+    }
+    
+    public void dormir() {
+        System.out.println(nombre + " está durmiendo");
+    }
+}
+
+// Clase hija (subclase)
+public class Perro extends Animal {
+    private String raza;
+    
+    public Perro(String nombre, int edad, String raza) {
+        super(nombre, edad); // Llama al constructor del padre
+        this.raza = raza;
+    }
+    
+    // Método específico de Perro
+    public void ladrar() {
+        System.out.println(nombre + " está ladrando: ¡Guau!");
+    }
+}
+
+// Uso
+Perro miPerro = new Perro("Max", 3, "Golden Retriever");
+miPerro.comer();    // Heredado de Animal
+miPerro.dormir();   // Heredado de Animal
+miPerro.ladrar();   // Específico de Perro</pre>
+                </div>
+
+                <p>
+                    <strong>Puntos clave:</strong>
+                </p>
+                <ul>
+                    <li><code>Perro extends Animal</code> significa que Perro hereda todo lo público y protegido de Animal</li>
+                    <li>Los atributos de Animal son <code>protected</code> para que las clases hijas puedan acceder</li>
+                    <li><code>super()</code> se usa para llamar al constructor de la clase padre</li>
+                    <li>Perro puede tener métodos adicionales propios (ladrar)</li>
+                </ul>
+
+                <h3 id="super"><i class="fas fa-arrow-up"></i> Super y Sobrescritura (@Override)</h3>
+                <p>
+                    <strong>Super:</strong> La palabra <code>super</code> se refiere a la clase padre. Tiene dos usos principales:
+                </p>
+                <ul>
+                    <li><code>super()</code>: Llama al constructor del padre</li>
+                    <li><code>super.metodo()</code>: Llama a un método del padre</li>
+                </ul>
+
+                <p>
+                    <strong>Sobrescritura (@Override):</strong> Puedes redefinir un método heredado para darle un 
+                    comportamiento específico en la clase hija:
+                </p>
+
+                <div class="code-block">
+                    <pre>public class Gato extends Animal {
+    
+    public Gato(String nombre, int edad) {
+        super(nombre, edad);
+    }
+    
+    // Sobrescribe el método comer
+    @Override
+    public void comer() {
+        System.out.println(nombre + " está comiendo pescado");
+    }
+    
+    // Método específico
+    public void maullar() {
+        System.out.println(nombre + " dice: ¡Miau!");
+    }
+}
+
+// Uso
+Gato miGato = new Gato("Luna", 2);
+miGato.comer();  // Imprime: Luna está comiendo pescado</pre>
+                </div>
+
+                <p>
+                    El <code>@Override</code> no es obligatorio, pero es una buena práctica porque:
+                </p>
+                <ul>
+                    <li>El compilador verifica que realmente estás sobrescribiendo un método existente</li>
+                    <li>Si te equivocas en el nombre o parámetros, te avisará con un error</li>
+                    <li>Hace el código más legible (indica claramente la intención)</li>
+                </ul>
+            </div>
+
+            <!-- Polimorfismo -->
+            <div class="content-section" id="polimorfismo">
+                <h2><i class="fas fa-shapes"></i> 3. Polimorfismo</h2>
+                <p>
+                    El <strong>polimorfismo</strong> significa "muchas formas". En POO, permite que un objeto pueda ser 
+                    tratado como si fuera de un tipo más general. Por ejemplo, un Perro puede ser tratado como un Animal.
+                </p>
+                <p>
+                    <strong>¿Para qué sirve?</strong>
+                </p>
+                <ul>
+                    <li><strong>Flexibilidad:</strong> Puedes escribir código que funcione con cualquier tipo de Animal</li>
+                    <li><strong>Extensibilidad:</strong> Puedes añadir nuevos tipos sin modificar código existente</li>
+                    <li><strong>Código limpio:</strong> Evitas repetir código para cada tipo específico</li>
+                </ul>
+
+                <div class="code-block">
+                    <pre>// Método que acepta cualquier Animal
+public void alimentarAnimal(Animal animal) {
+    animal.comer(); // Llamará al método apropiado según el tipo real
+}
+
+// Uso con polimorfismo
+Animal miPerro = new Perro("Max", 3, "Labrador");
+Animal miGato = new Gato("Luna", 2);
+
+alimentarAnimal(miPerro); // Imprime: Max está comiendo
+alimentarAnimal(miGato);  // Imprime: Luna está comiendo pescado
+
+// Array polimórfico
+Animal[] animales = {
+    new Perro("Rex", 5, "Pastor"),
+    new Gato("Mimi", 3),
+    new Perro("Toby", 2, "Beagle")
+};
+
+for (Animal animal : animales) {
+    animal.comer(); // Cada uno usa su versión de comer()
+}</pre>
+                </div>
+
+                <p>
+                    <strong>Lo interesante:</strong> Aunque declaramos <code>Animal miPerro</code>, en tiempo de ejecución 
+                    Java sabe que es un Perro y llama al método correspondiente. Esto se llama <strong>vinculación dinámica</strong> 
+                    o <strong>late binding</strong>.
+                </p>
+            </div>
+
+            <!-- Abstracción -->
+            <div class="content-section" id="abstraccion">
+                <h2><i class="fas fa-layer-group"></i> 4. Abstracción</h2>
+                <p>
+                    La <strong>abstracción</strong> consiste en enfocarse en lo esencial de un objeto, ocultando los detalles 
+                    complejos de implementación. Es como conducir un coche: usas el volante y los pedales sin necesitar saber 
+                    cómo funciona el motor internamente.
+                </p>
+                <p>
+                    En Java, la abstracción se logra mediante:
+                </p>
+                <ul>
+                    <li><strong>Clases abstractas:</strong> Clases que no pueden instanciarse directamente</li>
+                    <li><strong>Interfaces:</strong> Contratos que definen qué métodos debe implementar una clase</li>
+                </ul>
+
+                <h3><i class="fas fa-file-code"></i> Clases Abstractas</h3>
+                <p>
+                    Una <strong>clase abstracta</strong> es una clase incompleta que sirve como plantilla. No puedes crear 
+                    objetos directamente de ella, solo de sus clases hijas. Usa la palabra <code>abstract</code>:
+                </p>
+
+                <div class="code-block">
+                    <pre>public abstract class Figura {
+    protected String color;
+    
+    public Figura(String color) {
+        this.color = color;
+    }
+    
+    // Método abstracto (sin implementación)
+    public abstract double calcularArea();
+    
+    // Método concreto (con implementación)
+    public void mostrarColor() {
+        System.out.println("Color: " + color);
+    }
+}
+
+public class Circulo extends Figura {
+    private double radio;
+    
+    public Circulo(String color, double radio) {
+        super(color);
+        this.radio = radio;
+    }
+    
+    // Obligatorio implementar el método abstracto
+    @Override
+    public double calcularArea() {
+        return Math.PI * radio * radio;
+    }
+}
+
+// Uso
+Circulo circulo = new Circulo("Rojo", 5.0);
+System.out.println("Área: " + circulo.calcularArea());
+circulo.mostrarColor();</pre>
+                </div>
+
+                <p>
+                    <strong>Características de clases abstractas:</strong>
+                </p>
+                <ul>
+                    <li>Pueden tener métodos abstractos (sin implementación) y concretos (con implementación)</li>
+                    <li>Las clases hijas DEBEN implementar todos los métodos abstractos</li>
+                    <li>No puedes hacer <code>new Figura()</code>, solo <code>new Circulo()</code></li>
+                    <li>Pueden tener constructores, atributos y métodos normales</li>
+                </ul>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-graduation-cap"></i> Resumen de los 4 Pilares</h4>
+                    <ul>
+                        <li><strong>Encapsulación:</strong> Protege los datos con private y controla el acceso con getters/setters</li>
+                        <li><strong>Herencia:</strong> Reutiliza código creando clases hijas con <code>extends</code></li>
+                        <li><strong>Polimorfismo:</strong> Un objeto puede tomar muchas formas (Animal puede ser Perro o Gato)</li>
+                        <li><strong>Abstracción:</strong> Oculta detalles complejos con clases abstractas e interfaces</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let currentSection = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        currentSection = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + currentSection) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

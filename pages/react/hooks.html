@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Hooks - React</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-react"></i> Hooks</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#introduccion" class="active">¿Qué son los Hooks?</a></li>
+                <li><a href="#usestate">useState</a></li>
+                <li><a href="#useeffect">useEffect</a></li>
+                <li><a href="#usecontext">useContext</a></li>
+                <li><a href="#otros-hooks">Otros Hooks</a></li>
+                <li><a href="#custom">Custom Hooks</a></li>
+                <li><a href="#reglas">Reglas de los Hooks</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color:var(--react-color)"><i class="fab fa-react"></i></div>
+                <h1>3. Hooks en React</h1>
+                <p class="detail-subtitle">Estado y efectos en componentes funcionales</p>
+            </div>
+
+            <div class="content-section" id="introduccion">
+                <h2><i class="fas fa-fish"></i> ¿Qué son los Hooks?</h2>
+                <p><strong>Hooks</strong> son funciones especiales que permiten "enganchar" funcionalidades de React (estado, ciclo de vida, contexto) en componentes funcionales.</p>
+
+                <div class="info-box">
+                    <p><strong>Antes de Hooks (React &lt; 16.8):</strong></p>
+                    <ul>
+                        <li>Para usar estado necesitabas Class Components</li>
+                        <li>Ciclo de vida solo en clases (componentDidMount, etc.)</li>
+                        <li>Lógica compleja difícil de reutilizar</li>
+                    </ul>
+                    <p><strong>Con Hooks (React 16.8+):</strong></p>
+                    <ul>
+                        <li>Estado en componentes funcionales</li>
+                        <li>Efectos secundarios fáciles de manejar</li>
+                        <li>Lógica reutilizable con custom hooks</li>
+                        <li>Código más limpio y fácil de entender</li>
+                    </ul>
+                </div>
+
+                <h3>Hooks principales:</h3>
+                <div class="code-block"><pre>useState     → Manejo de estado
+useEffect    → Efectos secundarios (APIs, suscripciones, etc.)
+useContext   → Consumir contexto (estado global)
+useRef       → Referencias a elementos DOM
+useReducer   → Estado complejo (alternativa a useState)
+useMemo      → Memoización de valores (optimización)
+useCallback  → Memoización de funciones (optimización)</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Hooks solo funcionan en:</strong>
+                    <ul>
+                        <li>✓ Componentes funcionales de React</li>
+                        <li>✓ Custom Hooks (funciones que empiezan con "use")</li>
+                        <li>❌ Clases, funciones normales, bucles, condicionales</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="usestate">
+                <h2><i class="fas fa-database"></i> useState - Manejo de Estado</h2>
+                <p><strong>useState</strong> permite añadir estado a componentes funcionales. Devuelve un array con [valor, función para actualizar].</p>
+
+                <h3>Sintaxis básica:</h3>
+                <div class="code-block"><pre>import { useState } from 'react';
+
+function Contador() {
+  // [estado, función setter] = useState(valor inicial)
+  const [count, setCount] = useState(0);
+  
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Contador: {count}&lt;/p&gt;
+      &lt;button onClick={() => setCount(count + 1)}&gt;Incrementar&lt;/button&gt;
+      &lt;button onClick={() => setCount(count - 1)}&gt;Decrementar&lt;/button&gt;
+      &lt;button onClick={() => setCount(0)}&gt;Resetear&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <h3>Tipos de estado:</h3>
+                <div class="code-block"><pre>// Número
+const [edad, setEdad] = useState(0);
+
+// String
+const [nombre, setNombre] = useState('');
+
+// Boolean
+const [activo, setActivo] = useState(false);
+
+// Array
+const [items, setItems] = useState([]);
+
+// Objeto
+const [usuario, setUsuario] = useState({ nombre: '', email: '' });
+
+// Función (para inicialización costosa)
+const [datos, setDatos] = useState(() => {
+  // Solo se ejecuta en el primer render
+  return calcularDatosComplejos();
+});</pre></div>
+
+                <h3>Actualizar estado de objetos y arrays:</h3>
+                <div class="code-block"><pre>// ❌ INCORRECTO: Mutación directa
+function App() {
+  const [usuario, setUsuario] = useState({ nombre: 'Ana', edad: 25 });
+  
+  const cumpleanios = () => {
+    usuario.edad++; // ❌ Esto NO funciona!
+    setUsuario(usuario);
+  };
+}
+
+// ✓ CORRECTO: Crear nuevo objeto/array
+function App() {
+  const [usuario, setUsuario] = useState({ nombre: 'Ana', edad: 25 });
+  
+  const cumpleanios = () => {
+    setUsuario({ ...usuario, edad: usuario.edad + 1 });
+  };
+  
+  const cambiarNombre = (nuevoNombre) => {
+    setUsuario({ ...usuario, nombre: nuevoNombre });
+  };
+}
+
+// Arrays
+function ListaTareas() {
+  const [tareas, setTareas] = useState([]);
+  
+  // Agregar
+  const agregarTarea = (tarea) => {
+    setTareas([...tareas, tarea]);
+  };
+  
+  // Eliminar
+  const eliminarTarea = (id) => {
+    setTareas(tareas.filter(t => t.id !== id));
+  };
+  
+  // Modificar
+  const completarTarea = (id) => {
+    setTareas(tareas.map(t => 
+      t.id === id ? { ...t, completada: true } : t
+    ));
+  };
+}</pre></div>
+
+                <h3>Formularios con useState:</h3>
+                <div class="code-block"><pre>function FormularioRegistro() {
+  const [form, setForm] = useState({
+    nombre: '',
+    email: '',
+    password: ''
+  });
+  
+  // Manejar cambios en cualquier campo
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Datos:', form);
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input 
+        name="nombre"
+        value={form.nombre}
+        onChange={handleChange}
+        placeholder="Nombre"
+      /&gt;
+      &lt;input 
+        name="email"
+        value={form.email}
+        onChange={handleChange}
+        placeholder="Email"
+      /&gt;
+      &lt;input 
+        name="password"
+        type="password"
+        value={form.password}
+        onChange={handleChange}
+        placeholder="Contraseña"
+      /&gt;
+      &lt;button type="submit"&gt;Registrar&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre></div>
+
+                <h3>Estado basado en estado anterior:</h3>
+                <div class="code-block"><pre>// ❌ Puede causar bugs en actualizaciones múltiples
+const incrementar = () => {
+  setCount(count + 1);
+};
+
+// ✓ CORRECTO: Usa función con estado previo
+const incrementar = () => {
+  setCount(prevCount => prevCount + 1);
+};
+
+// Ejemplo: múltiples actualizaciones
+const incrementarTresVeces = () => {
+  setCount(prevCount => prevCount + 1);
+  setCount(prevCount => prevCount + 1);
+  setCount(prevCount => prevCount + 1);
+  // Incrementa 3 veces correctamente
+};</pre></div>
+            </div>
+
+            <div class="content-section" id="useeffect">
+                <h2><i class="fas fa-sync"></i> useEffect - Efectos Secundarios</h2>
+                <p><strong>useEffect</strong> permite ejecutar código después del render: llamadas a APIs, suscripciones, timers, manipulación del DOM...</p>
+
+                <h3>Sintaxis básica:</h3>
+                <div class="code-block"><pre>import { useEffect } from 'react';
+
+function Component() {
+  useEffect(() => {
+    // Código del efecto (se ejecuta después del render)
+    console.log('Componente renderizado');
+    
+    // Cleanup opcional (se ejecuta antes de desmontar o re-ejecutar)
+    return () => {
+      console.log('Limpieza');
+    };
+  }, []); // Array de dependencias
+}</pre></div>
+
+                <h3>Casos de uso del array de dependencias:</h3>
+                <div class="code-block"><pre>// 1. Sin array: Se ejecuta después de CADA render
+useEffect(() => {
+  console.log('Cada render');
+});
+
+// 2. Array vacío []: Solo al MONTAR (componentDidMount)
+useEffect(() => {
+  console.log('Solo una vez al montar');
+  
+  return () => {
+    console.log('Solo al desmontar');
+  };
+}, []);
+
+// 3. Con dependencias: Cuando cambien las dependencias
+useEffect(() => {
+  console.log('Cuando count cambie');
+}, [count]);
+
+// 4. Múltiples dependencias
+useEffect(() => {
+  console.log('Cuando count o nombre cambien');
+}, [count, nombre]);</pre></div>
+
+                <h3>Ejemplo: Llamada a API</h3>
+                <div class="code-block"><pre>function PerfilUsuario({ userId }) {
+  const [usuario, setUsuario] = useState(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    // Resetear al cambiar userId
+    setCargando(true);
+    setError(null);
+    
+    fetch(`https://api.example.com/users/${userId}`)
+      .then(res => res.json())
+      .then(data => {
+        setUsuario(data);
+        setCargando(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setCargando(false);
+      });
+  }, [userId]); // Re-ejecuta cuando userId cambie
+  
+  if (cargando) return &lt;p&gt;Cargando...&lt;/p&gt;;
+  if (error) return &lt;p&gt;Error: {error}&lt;/p&gt;;
+  
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{usuario.nombre}&lt;/h2&gt;
+      &lt;p&gt;{usuario.email}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <h3>Cleanup: Limpiar recursos</h3>
+                <div class="code-block"><pre>// Timer
+function Temporizador() {
+  const [segundos, setSegundos] = useState(0);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSegundos(s => s + 1);
+    }, 1000);
+    
+    // Limpiar interval al desmontar
+    return () => clearInterval(interval);
+  }, []);
+  
+  return &lt;p&gt;{segundos} segundos&lt;/p&gt;;
+}
+
+// Event listeners
+function Component() {
+  useEffect(() => {
+    const handleResize = () => {
+      console.log('Ventana redimensionada');
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    // Limpiar listener
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+}
+
+// Suscripciones WebSocket
+function Chat() {
+  useEffect(() => {
+    const socket = new WebSocket('ws://...');
+    
+    socket.onmessage = (event) => {
+      console.log(event.data);
+    };
+    
+    // Cerrar conexión al desmontar
+    return () => {
+      socket.close();
+    };
+  }, []);
+}</pre></div>
+
+                <h3>Ejemplo completo: Buscador con debounce</h3>
+                <div class="code-block"><pre>function Buscador() {
+  const [termino, setTermino] = useState('');
+  const [resultados, setResultados] = useState([]);
+  
+  useEffect(() => {
+    // No buscar si está vacío
+    if (termino === '') {
+      setResultados([]);
+      return;
+    }
+    
+    // Debounce: esperar 500ms antes de buscar
+    const timer = setTimeout(() => {
+      fetch(`/api/buscar?q=${termino}`)
+        .then(res => res.json())
+        .then(data => setResultados(data));
+    }, 500);
+    
+    // Cancelar búsqueda anterior si el usuario sigue escribiendo
+    return () => clearTimeout(timer);
+  }, [termino]);
+  
+  return (
+    &lt;div&gt;
+      &lt;input 
+        value={termino}
+        onChange={e => setTermino(e.target.value)}
+        placeholder="Buscar..."
+      /&gt;
+      &lt;ul&gt;
+        {resultados.map(r => &lt;li key={r.id}&gt;{r.nombre}&lt;/li&gt;)}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Errores comunes con useEffect:</strong>
+                    <ul>
+                        <li>❌ Olvidar el array de dependencias (causa re-renders infinitos)</li>
+                        <li>❌ No limpiar suscripciones/timers (memory leaks)</li>
+                        <li>❌ Llamar a setState en useEffect sin condición (loop infinito)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="usecontext">
+                <h2><i class="fas fa-share-alt"></i> useContext - Estado Global</h2>
+                <p><strong>useContext</strong> permite consumir contexto sin prop drilling (pasar props a través de muchos niveles).</p>
+
+                <h3>Crear y usar contexto:</h3>
+                <div class="code-block"><pre>import { createContext, useContext, useState } from 'react';
+
+// 1. Crear contexto
+const UserContext = createContext();
+
+// 2. Provider (componente que provee el contexto)
+function App() {
+  const [user, setUser] = useState({ nombre: 'Ana', rol: 'admin' });
+  
+  return (
+    &lt;UserContext.Provider value={{ user, setUser }}&gt;
+      &lt;Navbar /&gt;
+      &lt;Main /&gt;
+      &lt;Footer /&gt;
+    &lt;/UserContext.Provider&gt;
+  );
+}
+
+// 3. Consumir contexto con useContext
+function Navbar() {
+  const { user } = useContext(UserContext);
+  
+  return (
+    &lt;nav&gt;
+      &lt;p&gt;Bienvenido, {user.nombre}&lt;/p&gt;
+    &lt;/nav&gt;
+  );
+}
+
+function Profile() {
+  const { user, setUser } = useContext(UserContext);
+  
+  const logout = () => {
+    setUser(null);
+  };
+  
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{user.nombre}&lt;/h2&gt;
+      &lt;p&gt;Rol: {user.rol}&lt;/p&gt;
+      &lt;button onClick={logout}&gt;Cerrar sesión&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <h3>Contexto en archivo separado:</h3>
+                <div class="code-block"><pre>// context/AuthContext.js
+import { createContext, useContext, useState } from 'react';
+
+const AuthContext = createContext();
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  
+  const login = async (email, password) => {
+    setLoading(true);
+    // Lógica de login...
+    setUser({ email, nombre: 'Ana' });
+    setLoading(false);
+  };
+  
+  const logout = () => {
+    setUser(null);
+  };
+  
+  const value = { user, loading, login, logout };
+  
+  return (
+    &lt;AuthContext.Provider value={value}&gt;
+      {children}
+    &lt;/AuthContext.Provider&gt;
+  );
+}
+
+// Custom hook para usar el contexto
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth debe usarse dentro de AuthProvider');
+  }
+  return context;
+}
+
+// App.js
+import { AuthProvider } from './context/AuthContext';
+
+function App() {
+  return (
+    &lt;AuthProvider&gt;
+      &lt;Navbar /&gt;
+      &lt;Main /&gt;
+    &lt;/AuthProvider&gt;
+  );
+}
+
+// Cualquier componente
+import { useAuth } from './context/AuthContext';
+
+function LoginButton() {
+  const { user, login, logout } = useAuth();
+  
+  if (user) {
+    return &lt;button onClick={logout}&gt;Logout&lt;/button&gt;;
+  }
+  
+  return (
+    &lt;button onClick={() => login('ana@email.com', '123')}&gt;
+      Login
+    &lt;/button&gt;
+  );
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="otros-hooks">
+                <h2><i class="fas fa-toolbox"></i> Otros Hooks Útiles</h2>
+
+                <h3>useRef - Referencias</h3>
+                <div class="code-block"><pre>import { useRef, useEffect } from 'react';
+
+function Component() {
+  const inputRef = useRef(null);
+  
+  useEffect(() => {
+    // Focus automático al montar
+    inputRef.current.focus();
+  }, []);
+  
+  return &lt;input ref={inputRef} /&gt;;
+}
+
+// Almacenar valores que no causan re-render
+function Timer() {
+  const intervalRef = useRef(null);
+  
+  const start = () => {
+    intervalRef.current = setInterval(() => {
+      console.log('tick');
+    }, 1000);
+  };
+  
+  const stop = () => {
+    clearInterval(intervalRef.current);
+  };
+  
+  return (
+    &lt;div&gt;
+      &lt;button onClick={start}&gt;Iniciar&lt;/button&gt;
+      &lt;button onClick={stop}&gt;Parar&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <h3>useMemo - Memoización de valores</h3>
+                <div class="code-block"><pre>import { useMemo, useState } from 'react';
+
+function Component({ items }) {
+  const [count, setCount] = useState(0);
+  
+  // Cálculo costoso solo cuando items cambie
+  const total = useMemo(() => {
+    console.log('Calculando...');
+    return items.reduce((sum, item) => sum + item.precio, 0);
+  }, [items]);
+  
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Total: ${total}&lt;/p&gt;
+      &lt;button onClick={() => setCount(count + 1)}&gt;{count}&lt;/button&gt;
+      {/* count cambia pero total NO se recalcula */}
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <h3>useCallback - Memoización de funciones</h3>
+                <div class="code-block"><pre>import { useCallback, useState } from 'react';
+
+function Parent() {
+  const [count, setCount] = useState(0);
+  
+  // Sin useCallback, se crea nueva función en cada render
+  const handleClick = useCallback(() => {
+    console.log('Clicked');
+  }, []); // Función estable
+  
+  return (
+    &lt;div&gt;
+      &lt;Child onClick={handleClick} /&gt;
+      &lt;button onClick={() => setCount(count + 1)}&gt;{count}&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="custom">
+                <h2><i class="fas fa-magic"></i> Custom Hooks</h2>
+                <p><strong>Custom Hooks</strong> permiten extraer lógica reutilizable en funciones personalizadas.</p>
+
+                <h3>Ejemplo: useFetch</h3>
+                <div class="code-block"><pre>// hooks/useFetch.js
+import { useState, useEffect } from 'react';
+
+function useFetch(url) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    setLoading(true);
+    
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [url]);
+  
+  return { data, loading, error };
+}
+
+export default useFetch;
+
+// Uso en componente
+import useFetch from './hooks/useFetch';
+
+function Usuarios() {
+  const { data, loading, error } = useFetch('/api/usuarios');
+  
+  if (loading) return &lt;p&gt;Cargando...&lt;/p&gt;;
+  if (error) return &lt;p&gt;Error: {error}&lt;/p&gt;;
+  
+  return (
+    &lt;ul&gt;
+      {data.map(user => &lt;li key={user.id}&gt;{user.nombre}&lt;/li&gt;)}
+    &lt;/ul&gt;
+  );
+}</pre></div>
+
+                <h3>Ejemplo: useLocalStorage</h3>
+                <div class="code-block"><pre>function useLocalStorage(key, initialValue) {
+  const [value, setValue] = useState(() => {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : initialValue;
+  });
+  
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+  
+  return [value, setValue];
+}
+
+// Uso
+function App() {
+  const [nombre, setNombre] = useLocalStorage('nombre', '');
+  
+  return (
+    &lt;input 
+      value={nombre}
+      onChange={e => setNombre(e.target.value)}
+    /&gt;
+  );
+  // Se guarda automáticamente en localStorage
+}</pre></div>
+
+                <h3>Ejemplo: useToggle</h3>
+                <div class="code-block"><pre>function useToggle(initialValue = false) {
+  const [value, setValue] = useState(initialValue);
+  
+  const toggle = () => setValue(v => !v);
+  
+  return [value, toggle];
+}
+
+// Uso
+function Modal() {
+  const [isOpen, toggleOpen] = useToggle(false);
+  
+  return (
+    &lt;div&gt;
+      &lt;button onClick={toggleOpen}&gt;Abrir Modal&lt;/button&gt;
+      {isOpen && (
+        &lt;div className="modal"&gt;
+          &lt;p&gt;Contenido del modal&lt;/p&gt;
+          &lt;button onClick={toggleOpen}&gt;Cerrar&lt;/button&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="reglas">
+                <h2><i class="fas fa-gavel"></i> Reglas de los Hooks</h2>
+
+                <div class="warning-box">
+                    <strong>🚫 Reglas OBLIGATORIAS:</strong>
+                    <ol>
+                        <li><strong>Solo llamar Hooks en el nivel superior</strong>
+                            <ul>
+                                <li>❌ No dentro de loops, condiciones o funciones anidadas</li>
+                                <li>✓ Siempre en el mismo orden en cada render</li>
+                            </ul>
+                        </li>
+                        <li><strong>Solo llamar Hooks desde funciones React</strong>
+                            <ul>
+                                <li>✓ Componentes funcionales</li>
+                                <li>✓ Custom Hooks</li>
+                                <li>❌ Funciones JavaScript normales</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+                <h3>Ejemplos de errores comunes:</h3>
+                <div class="code-block"><pre>// ❌ INCORRECTO: Hook dentro de condicional
+function Component() {
+  if (someCondition) {
+    const [count, setCount] = useState(0); // ❌ Error!
+  }
+}
+
+// ✓ CORRECTO: Condicional dentro del Hook
+function Component() {
+  const [count, setCount] = useState(0);
+  
+  if (someCondition) {
+    // Usar count aquí
+  }
+}
+
+// ❌ INCORRECTO: Hook dentro de loop
+function Component() {
+  for (let i = 0; i < 5; i++) {
+    useEffect(() => {}); // ❌ Error!
+  }
+}
+
+// ❌ INCORRECTO: Hook en función normal
+function calcular() {
+  const [value, setValue] = useState(0); // ❌ Error!
+}
+
+// ✓ CORRECTO: Custom Hook
+function useCalcular() {
+  const [value, setValue] = useState(0); // ✓ OK (nombre empieza con "use")
+  return value;
+}</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 ESLint plugin:</strong>
+                    <p>Instala <code>eslint-plugin-react-hooks</code> para detectar automáticamente errores con hooks:</p>
+                    <div class="code-block"><pre>npm install eslint-plugin-react-hooks --save-dev</pre></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

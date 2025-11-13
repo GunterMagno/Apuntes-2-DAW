@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Componentes - React</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-react"></i> Componentes</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#que-son" class="active">¿Qué son los Componentes?</a></li>
+                <li><a href="#function">Function Components</a></li>
+                <li><a href="#props">Props</a></li>
+                <li><a href="#children">Children</a></li>
+                <li><a href="#composicion">Composición</a></li>
+                <li><a href="#buenas-practicas">Buenas Prácticas</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color:var(--react-color)"><i class="fab fa-react"></i></div>
+                <h1>2. Componentes en React</h1>
+                <p class="detail-subtitle">Bloques de construcción reutilizables para interfaces de usuario</p>
+            </div>
+
+            <div class="content-section" id="que-son">
+                <h2><i class="fas fa-cubes"></i> ¿Qué son los Componentes?</h2>
+                <p><strong>Los componentes</strong> son piezas independientes y reutilizables de la interfaz. Piensa en ellos como bloques de LEGO que se pueden combinar para construir aplicaciones completas.</p>
+
+                <div class="info-box">
+                    <p><strong>Características de los componentes:</strong></p>
+                    <ul>
+                        <li><strong>Reutilizables:</strong> Un botón puede usarse en múltiples lugares</li>
+                        <li><strong>Independientes:</strong> Cada componente tiene su propia lógica</li>
+                        <li><strong>Componibles:</strong> Se pueden anidar unos dentro de otros</li>
+                        <li><strong>Aislados:</strong> Los cambios en un componente no afectan a otros</li>
+                    </ul>
+                </div>
+
+                <h3>Ejemplo conceptual:</h3>
+                <div class="code-block"><pre>// Una aplicación React es como un árbol de componentes:
+
+App
+├── Header
+│   ├── Logo
+│   └── Navigation
+│       ├── MenuItem
+│       └── MenuItem
+├── Main
+│   ├── Sidebar
+│   │   └── FilterButton (x5)
+│   └── Content
+│       └── Card (x20)
+│           ├── CardImage
+│           ├── CardTitle
+│           └── CardButton
+└── Footer
+    └── SocialLinks (x4)</pre></div>
+
+                <h3>Tipos de componentes (evolución histórica):</h3>
+                <div class="code-block"><pre>// 1. Class Components (antiguo, antes de Hooks)
+class Welcome extends React.Component {
+  render() {
+    return &lt;h1&gt;Hola!&lt;/h1&gt;;
+  }
+}
+
+// 2. Function Components (moderno, desde React 16.8)
+function Welcome() {
+  return &lt;h1&gt;Hola!&lt;/h1&gt;;
+}
+
+// Arrow function (también válido)
+const Welcome = () => &lt;h1&gt;Hola!&lt;/h1&gt;;</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Nota importante:</strong> Los <strong>Function Components</strong> son el estándar actual. Los Class Components son legacy (código antiguo) pero aún se ven en proyectos viejos.
+                </div>
+            </div>
+
+            <div class="content-section" id="function">
+                <h2><i class="fas fa-code"></i> Function Components</h2>
+                <p>Los <strong>Function Components</strong> son funciones JavaScript que devuelven JSX.</p>
+
+                <h3>Sintaxis básica:</h3>
+                <div class="code-block"><pre>// Función normal
+function Welcome() {
+  return &lt;h1&gt;¡Bienvenido!&lt;/h1&gt;;
+}
+
+// Arrow function
+const Welcome = () => {
+  return &lt;h1&gt;¡Bienvenido!&lt;/h1&gt;;
+};
+
+// Arrow function con return implícito (una línea)
+const Welcome = () => &lt;h1&gt;¡Bienvenido!&lt;/h1&gt;;
+
+// Con múltiples líneas JSX
+const Welcome = () => (
+  &lt;div&gt;
+    &lt;h1&gt;¡Bienvenido!&lt;/h1&gt;
+    &lt;p&gt;Gracias por visitarnos&lt;/p&gt;
+  &lt;/div&gt;
+);</pre></div>
+
+                <h3>Componente con lógica:</h3>
+                <div class="code-block"><pre>function Saludo() {
+  // Lógica del componente
+  const nombre = 'Ana';
+  const hora = new Date().getHours();
+  const saludo = hora &lt; 12 ? 'Buenos días' : 'Buenas tardes';
+  
+  // Return del JSX
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;{saludo}, {nombre}!&lt;/h1&gt;
+      &lt;p&gt;Son las {hora}:00&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Uso del componente
+function App() {
+  return &lt;Saludo /&gt;;
+}</pre></div>
+
+                <h3>Componente con evento:</h3>
+                <div class="code-block"><pre>function Boton() {
+  // Función que maneja el click
+  const manejarClick = () => {
+    alert('¡Botón presionado!');
+  };
+
+  return (
+    &lt;button onClick={manejarClick}&gt;
+      Presióname
+    &lt;/button&gt;
+  );
+}
+
+// Versión inline
+function Boton() {
+  return (
+    &lt;button onClick={() => alert('¡Click!')}&gt;
+      Presióname
+    &lt;/button&gt;
+  );
+}</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Reglas de los componentes:</strong>
+                    <ul>
+                        <li>El nombre DEBE empezar con mayúscula: <code>Boton</code>, no <code>boton</code></li>
+                        <li>Debe devolver un solo elemento raíz (o usar Fragment <code>&lt;&gt;&lt;/&gt;</code>)</li>
+                        <li>Puede devolver <code>null</code> si no quieres renderizar nada</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="props">
+                <h2><i class="fas fa-exchange-alt"></i> Props (Propiedades)</h2>
+                <p><strong>Props</strong> son argumentos que se pasan a los componentes. Son como los parámetros de una función.</p>
+
+                <h3>Props básicas:</h3>
+                <div class="code-block"><pre>// Componente que recibe props
+function Saludo(props) {
+  return &lt;h1&gt;Hola, {props.nombre}!&lt;/h1&gt;;
+}
+
+// Uso (pasando props)
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;Saludo nombre="Ana" /&gt;
+      &lt;Saludo nombre="Luis" /&gt;
+      &lt;Saludo nombre="María" /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Resultado:
+// Hola, Ana!
+// Hola, Luis!
+// Hola, María!</pre></div>
+
+                <h3>Destructuring de props (recomendado):</h3>
+                <div class="code-block"><pre>// Destructuring en parámetros
+function Tarjeta({ titulo, descripcion, precio }) {
+  return (
+    &lt;div className="tarjeta"&gt;
+      &lt;h2&gt;{titulo}&lt;/h2&gt;
+      &lt;p&gt;{descripcion}&lt;/p&gt;
+      &lt;span&gt;${precio}&lt;/span&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Uso
+&lt;Tarjeta 
+  titulo="Laptop" 
+  descripcion="Potente laptop gaming"
+  precio={1200}
+/&gt;</pre></div>
+
+                <h3>Props con valores por defecto:</h3>
+                <div class="code-block"><pre>function Boton({ texto = 'Click aquí', tipo = 'primary' }) {
+  return &lt;button className={tipo}&gt;{texto}&lt;/button&gt;;
+}
+
+// Usos
+&lt;Boton /&gt;  {/* Usa valores por defecto */}
+&lt;Boton texto="Enviar" /&gt;
+&lt;Boton texto="Cancelar" tipo="danger" /&gt;</pre></div>
+
+                <h3>Props de diferentes tipos:</h3>
+                <div class="code-block"><pre>function PerfilUsuario({ 
+  nombre,           // String
+  edad,             // Number
+  estaActivo,       // Boolean
+  hobbies,          // Array
+  direccion,        // Object
+  onSaludar         // Function
+}) {
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{nombre} ({edad} años)&lt;/h2&gt;
+      &lt;p&gt;Estado: {estaActivo ? 'Activo' : 'Inactivo'}&lt;/p&gt;
+      &lt;ul&gt;
+        {hobbies.map((hobby, index) => (
+          &lt;li key={index}&gt;{hobby}&lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+      &lt;p&gt;Ciudad: {direccion.ciudad}&lt;/p&gt;
+      &lt;button onClick={onSaludar}&gt;Saludar&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Uso
+&lt;PerfilUsuario
+  nombre="Ana García"
+  edad={25}
+  estaActivo={true}
+  hobbies={['Leer', 'Programar', 'Viajar']}
+  direccion={{ ciudad: 'Madrid', pais: 'España' }}
+  onSaludar={() => alert('¡Hola Ana!')}
+/&gt;</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Las props son read-only (solo lectura):</strong>
+                    <div class="code-block"><pre>// ❌ INCORRECTO: No puedes modificar props
+function Componente(props) {
+  props.nombre = 'Otro nombre';  // ❌ Error!
+  return &lt;h1&gt;{props.nombre}&lt;/h1&gt;;
+}
+
+// ✓ CORRECTO: Si necesitas modificar, usa estado (useState)
+function Componente({ nombreInicial }) {
+  const [nombre, setNombre] = useState(nombreInicial);
+  return &lt;h1&gt;{nombre}&lt;/h1&gt;;
+}</pre></div>
+                </div>
+
+                <h3>Spread operator con props:</h3>
+                <div class="code-block"><pre>function Input(props) {
+  return &lt;input {...props} /&gt;;
+}
+
+// Pasa todas las props al input
+&lt;Input type="text" placeholder="Nombre" maxLength={50} /&gt;
+
+// También puedes combinar
+function Input({ label, ...inputProps }) {
+  return (
+    &lt;div&gt;
+      &lt;label&gt;{label}&lt;/label&gt;
+      &lt;input {...inputProps} /&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="children">
+                <h2><i class="fas fa-layer-group"></i> Children Prop</h2>
+                <p><strong>children</strong> es una prop especial que contiene el contenido entre las etiquetas de apertura y cierre del componente.</p>
+
+                <h3>Uso básico de children:</h3>
+                <div class="code-block"><pre>// Componente contenedor
+function Card({ children }) {
+  return (
+    &lt;div className="card"&gt;
+      {children}
+    &lt;/div&gt;
+  );
+}
+
+// Uso
+function App() {
+  return (
+    &lt;Card&gt;
+      &lt;h2&gt;Título de la tarjeta&lt;/h2&gt;
+      &lt;p&gt;Este es el contenido&lt;/p&gt;
+      &lt;button&gt;Acción&lt;/button&gt;
+    &lt;/Card&gt;
+  );
+}
+
+// El children incluye todo lo que está entre &lt;Card&gt; y &lt;/Card&gt;</pre></div>
+
+                <h3>Componente Modal con children:</h3>
+                <div class="code-block"><pre>function Modal({ titulo, children, onCerrar }) {
+  return (
+    &lt;div className="modal-overlay"&gt;
+      &lt;div className="modal"&gt;
+        &lt;div className="modal-header"&gt;
+          &lt;h2&gt;{titulo}&lt;/h2&gt;
+          &lt;button onClick={onCerrar}&gt;×&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div className="modal-body"&gt;
+          {children}
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Uso
+function App() {
+  return (
+    &lt;Modal titulo="Confirmar acción" onCerrar={() => console.log('cerrar')}&gt;
+      &lt;p&gt;¿Estás seguro de que quieres continuar?&lt;/p&gt;
+      &lt;button&gt;Sí&lt;/button&gt;
+      &lt;button&gt;No&lt;/button&gt;
+    &lt;/Modal&gt;
+  );
+}</pre></div>
+
+                <h3>Layout con children:</h3>
+                <div class="code-block"><pre>function Container({ children }) {
+  return &lt;div className="container"&gt;{children}&lt;/div&gt;;
+}
+
+function PageLayout({ children }) {
+  return (
+    &lt;div&gt;
+      &lt;Header /&gt;
+      &lt;Container&gt;
+        {children}
+      &lt;/Container&gt;
+      &lt;Footer /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Uso
+function HomePage() {
+  return (
+    &lt;PageLayout&gt;
+      &lt;h1&gt;Bienvenido&lt;/h1&gt;
+      &lt;p&gt;Contenido de la página&lt;/p&gt;
+    &lt;/PageLayout&gt;
+  );
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="composicion">
+                <h2><i class="fas fa-puzzle-piece"></i> Composición de Componentes</h2>
+                <p><strong>Composición</strong> es el arte de combinar componentes pequeños para crear componentes más complejos.</p>
+
+                <h3>Ejemplo: Sistema de comentarios</h3>
+                <div class="code-block"><pre>// 1. Componente Avatar
+function Avatar({ src, alt }) {
+  return &lt;img src={src} alt={alt} className="avatar" /&gt;;
+}
+
+// 2. Componente UserInfo
+function UserInfo({ usuario }) {
+  return (
+    &lt;div className="user-info"&gt;
+      &lt;Avatar src={usuario.avatar} alt={usuario.nombre} /&gt;
+      &lt;div&gt;
+        &lt;h4&gt;{usuario.nombre}&lt;/h4&gt;
+        &lt;span&gt;{usuario.email}&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+// 3. Componente Comentario
+function Comentario({ autor, texto, fecha }) {
+  return (
+    &lt;div className="comentario"&gt;
+      &lt;UserInfo usuario={autor} /&gt;
+      &lt;p&gt;{texto}&lt;/p&gt;
+      &lt;small&gt;{fecha}&lt;/small&gt;
+    &lt;/div&gt;
+  );
+}
+
+// 4. Lista de Comentarios
+function ListaComentarios({ comentarios }) {
+  return (
+    &lt;div&gt;
+      {comentarios.map(comentario => (
+        &lt;Comentario
+          key={comentario.id}
+          autor={comentario.autor}
+          texto={comentario.texto}
+          fecha={comentario.fecha}
+        /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <h3>Ejemplo: Sistema de formularios</h3>
+                <div class="code-block"><pre>// Componente Input reutilizable
+function FormInput({ label, error, ...inputProps }) {
+  return (
+    &lt;div className="form-group"&gt;
+      &lt;label&gt;{label}&lt;/label&gt;
+      &lt;input {...inputProps} /&gt;
+      {error && &lt;span className="error"&gt;{error}&lt;/span&gt;}
+    &lt;/div&gt;
+  );
+}
+
+// Formulario que usa múltiples inputs
+function FormularioRegistro() {
+  return (
+    &lt;form&gt;
+      &lt;FormInput 
+        label="Nombre" 
+        type="text" 
+        placeholder="Tu nombre"
+        error="El nombre es requerido"
+      /&gt;
+      &lt;FormInput 
+        label="Email" 
+        type="email" 
+        placeholder="tu@email.com"
+      /&gt;
+      &lt;FormInput 
+        label="Contraseña" 
+        type="password"
+      /&gt;
+      &lt;button type="submit"&gt;Registrarse&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Ventajas de la composición:</strong>
+                    <ul>
+                        <li><strong>Reutilización:</strong> Componentes pequeños se usan en múltiples lugares</li>
+                        <li><strong>Mantenimiento:</strong> Más fácil encontrar y arreglar bugs</li>
+                        <li><strong>Testing:</strong> Componentes pequeños son más fáciles de testear</li>
+                        <li><strong>Legibilidad:</strong> Código más claro y autodocumentado</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="buenas-practicas">
+                <h2><i class="fas fa-check-circle"></i> Buenas Prácticas</h2>
+
+                <h3>1. Un componente, una responsabilidad:</h3>
+                <div class="code-block"><pre>// ❌ Componente hace demasiado
+function ProductoYCarrito() {
+  // Maneja producto Y carrito Y checkout... Demasiado!
+}
+
+// ✓ Componentes separados
+function Producto() { /* Solo muestra producto */ }
+function Carrito() { /* Solo maneja carrito */ }
+function Checkout() { /* Solo proceso de compra */ }</pre></div>
+
+                <h3>2. Nombres descriptivos:</h3>
+                <div class="code-block"><pre>// ❌ Nombres poco claros
+function Comp1() {}
+function X() {}
+
+// ✓ Nombres descriptivos
+function ProductCard() {}
+function UserProfileHeader() {}
+function ShoppingCartButton() {}</pre></div>
+
+                <h3>3. Props con destructuring:</h3>
+                <div class="code-block"><pre>// ❌ Sin destructuring
+function User(props) {
+  return &lt;div&gt;{props.nombre} - {props.email}&lt;/div&gt;;
+}
+
+// ✓ Con destructuring
+function User({ nombre, email }) {
+  return &lt;div&gt;{nombre} - {email}&lt;/div&gt;;
+}</pre></div>
+
+                <h3>4. Extraer componentes pequeños:</h3>
+                <div class="code-block"><pre>// ❌ Componente grande y monolítico
+function Dashboard() {
+  return (
+    &lt;div&gt;
+      &lt;div className="header"&gt;...20 líneas...&lt;/div&gt;
+      &lt;div className="sidebar"&gt;...30 líneas...&lt;/div&gt;
+      &lt;div className="main"&gt;...50 líneas...&lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+// ✓ Componentes separados
+function DashboardHeader() { /* ... */ }
+function DashboardSidebar() { /* ... */ }
+function DashboardMain() { /* ... */ }
+
+function Dashboard() {
+  return (
+    &lt;div&gt;
+      &lt;DashboardHeader /&gt;
+      &lt;DashboardSidebar /&gt;
+      &lt;DashboardMain /&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+
+                <h3>5. Valores por defecto para props opcionales:</h3>
+                <div class="code-block"><pre>function Button({ 
+  texto = 'Click', 
+  tipo = 'button', 
+  disabled = false,
+  onClick = () => {}
+}) {
+  return (
+    &lt;button type={tipo} disabled={disabled} onClick={onClick}&gt;
+      {texto}
+    &lt;/button&gt;
+  );
+}</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Evita estos errores comunes:</strong>
+                    <ul>
+                        <li>❌ Componentes con más de 200 líneas (divide en componentes más pequeños)</li>
+                        <li>❌ Modificar props directamente (son read-only)</li>
+                        <li>❌ Nombres de componentes en minúscula (deben empezar con mayúscula)</li>
+                        <li>❌ No usar keys en listas (causa problemas de renderizado)</li>
+                    </ul>
+                </div>
+
+                <h3>Estructura de archivos recomendada:</h3>
+                <div class="code-block"><pre>src/
+├── components/
+│   ├── Button/
+│   │   ├── Button.js
+│   │   ├── Button.css
+│   │   └── Button.test.js
+│   ├── Card/
+│   │   ├── Card.js
+│   │   └── Card.css
+│   └── Header/
+│       ├── Header.js
+│       └── Header.css
+└── App.js
+
+// Cada componente en su carpeta con sus estilos y tests</pre></div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

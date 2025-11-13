@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen React - Wiki 2º DAW</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-md) 0;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .command-table th {
+            background-color: var(--react-color);
+            color: #000;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .command-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .command-table tr:last-child td {
+            border-bottom: none;
+        }
+        .command-table tr:hover {
+            background-color: rgba(97, 218, 251, 0.05);
+        }
+        .command-table code {
+            background-color: rgba(97, 218, 251, 0.15);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+        </div>
+    </nav>
+
+    <div class="topics-page">
+        <div class="topics-header">
+            <div class="topics-icon" style="color: var(--react-color);">
+                <i class="fab fa-react"></i>
+            </div>
+            <h1 class="topics-title">Resumen React</h1>
+            <p class="topics-subtitle">Hooks, componentes y comandos esenciales</p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-terminal"></i> Comandos CLI</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>npx create-react-app nombre-app</code></td>
+                        <td>Crea nueva aplicación React</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm start</code></td>
+                        <td>Inicia servidor de desarrollo</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm run build</code></td>
+                        <td>Crea build de producción</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm test</code></td>
+                        <td>Ejecuta tests</td>
+                    </tr>
+                    <tr>
+                        <td><code>npm install react-router-dom</code></td>
+                        <td>Instala React Router</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-cubes"></i> Hooks Principales</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Hook</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>useState</code></td>
+                        <td><code>const [state, setState] = useState(valorInicial)</code></td>
+                        <td>Maneja estado en componente funcional</td>
+                    </tr>
+                    <tr>
+                        <td><code>useEffect</code></td>
+                        <td><code>useEffect(() => { }, [deps])</code></td>
+                        <td>Efectos secundarios y ciclo de vida</td>
+                    </tr>
+                    <tr>
+                        <td><code>useContext</code></td>
+                        <td><code>const value = useContext(MyContext)</code></td>
+                        <td>Consume contexto React</td>
+                    </tr>
+                    <tr>
+                        <td><code>useRef</code></td>
+                        <td><code>const ref = useRef(valorInicial)</code></td>
+                        <td>Referencia mutable que persiste renders</td>
+                    </tr>
+                    <tr>
+                        <td><code>useReducer</code></td>
+                        <td><code>const [state, dispatch] = useReducer(reducer, initialState)</code></td>
+                        <td>Alternativa a useState para lógica compleja</td>
+                    </tr>
+                    <tr>
+                        <td><code>useMemo</code></td>
+                        <td><code>const memoizedValue = useMemo(() => computeExpensive(a), [a])</code></td>
+                        <td>Memoriza cálculos costosos</td>
+                    </tr>
+                    <tr>
+                        <td><code>useCallback</code></td>
+                        <td><code>const memoizedFn = useCallback(() => {}, [deps])</code></td>
+                        <td>Memoriza funciones</td>
+                    </tr>
+                    <tr>
+                        <td><code>useNavigate</code></td>
+                        <td><code>const navigate = useNavigate()</code></td>
+                        <td>Navegación programática (React Router v6)</td>
+                    </tr>
+                    <tr>
+                        <td><code>useParams</code></td>
+                        <td><code>const { id } = useParams()</code></td>
+                        <td>Obtiene parámetros de URL (React Router)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-code"></i> Sintaxis JSX Esencial</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Expresiones</strong></td>
+                        <td><code>{variable}</code> o <code>{expresion}</code></td>
+                        <td>Inserta JavaScript en JSX</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Atributos</strong></td>
+                        <td><code>className</code>, <code>htmlFor</code></td>
+                        <td>Usa camelCase para atributos HTML</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Eventos</strong></td>
+                        <td><code>onClick={handleClick}</code></td>
+                        <td>Manejo de eventos en camelCase</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Condicional</strong></td>
+                        <td><code>{condicion && <Componente />}</code></td>
+                        <td>Renderizado condicional</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ternario</strong></td>
+                        <td><code>{condicion ? <A /> : <B />}</code></td>
+                        <td>Condicional con alternativa</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Map</strong></td>
+                        <td><code>{items.map(item => <Item key={item.id} />)}</code></td>
+                        <td>Renderiza listas (requiere key)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fragmentos</strong></td>
+                        <td><code>&lt;&gt;...&lt;/&gt;</code> o <code>&lt;React.Fragment&gt;</code></td>
+                        <td>Agrupa elementos sin nodo DOM</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-box"></i> Props y Componentes</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Ejemplo</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Componente Funcional</strong></td>
+                        <td><code>function MiComponente(props) { return ... }</code></td>
+                        <td>Componente como función</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Props</strong></td>
+                        <td><code>&lt;Componente prop1="valor" prop2={var} /&gt;</code></td>
+                        <td>Pasa datos al componente</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Destructuring</strong></td>
+                        <td><code>function Comp({ prop1, prop2 }) {}</code></td>
+                        <td>Extrae props directamente</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Children</strong></td>
+                        <td><code>props.children</code></td>
+                        <td>Contenido entre tags del componente</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Default Props</strong></td>
+                        <td><code>Comp.defaultProps = { prop: 'default' }</code></td>
+                        <td>Valores por defecto de props</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-route"></i> React Router (v6)</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Componente/Hook</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>BrowserRouter</code></td>
+                        <td><code>&lt;BrowserRouter&gt;&lt;App /&gt;&lt;/BrowserRouter&gt;</code></td>
+                        <td>Envuelve la aplicación</td>
+                    </tr>
+                    <tr>
+                        <td><code>Routes</code></td>
+                        <td><code>&lt;Routes&gt;...&lt;/Routes&gt;</code></td>
+                        <td>Contenedor de rutas</td>
+                    </tr>
+                    <tr>
+                        <td><code>Route</code></td>
+                        <td><code>&lt;Route path="/about" element={&lt;About /&gt;} /&gt;</code></td>
+                        <td>Define una ruta</td>
+                    </tr>
+                    <tr>
+                        <td><code>Link</code></td>
+                        <td><code>&lt;Link to="/about"&gt;About&lt;/Link&gt;</code></td>
+                        <td>Navegación declarativa</td>
+                    </tr>
+                    <tr>
+                        <td><code>NavLink</code></td>
+                        <td><code>&lt;NavLink to="/home" className={({isActive}) => ...} /&gt;</code></td>
+                        <td>Link con estado activo</td>
+                    </tr>
+                    <tr>
+                        <td><code>useNavigate</code></td>
+                        <td><code>navigate('/ruta')</code></td>
+                        <td>Navegación programática</td>
+                    </tr>
+                    <tr>
+                        <td><code>useParams</code></td>
+                        <td><code>const { id } = useParams()</code></td>
+                        <td>Obtiene parámetros de URL</td>
+                    </tr>
+                    <tr>
+                        <td><code>useLocation</code></td>
+                        <td><code>const location = useLocation()</code></td>
+                        <td>Obtiene información de ubicación</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-network-wired"></i> Fetch & Axios</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Sintaxis</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>fetch GET</code></td>
+                        <td><code>fetch(url).then(res => res.json())</code></td>
+                        <td>Petición GET con Fetch API</td>
+                    </tr>
+                    <tr>
+                        <td><code>fetch POST</code></td>
+                        <td><code>fetch(url, {method: 'POST', body: JSON.stringify(data)})</code></td>
+                        <td>Petición POST con Fetch</td>
+                    </tr>
+                    <tr>
+                        <td><code>axios.get</code></td>
+                        <td><code>axios.get(url).then(res => res.data)</code></td>
+                        <td>GET con Axios</td>
+                    </tr>
+                    <tr>
+                        <td><code>axios.post</code></td>
+                        <td><code>axios.post(url, data)</code></td>
+                        <td>POST con Axios</td>
+                    </tr>
+                    <tr>
+                        <td><code>async/await</code></td>
+                        <td><code>const res = await axios.get(url)</code></td>
+                        <td>Uso con async/await</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-lightbulb"></i> Conceptos Clave</h2>
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Virtual DOM</strong></td>
+                        <td>Representación en memoria del DOM real para optimizar renders</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Estado (State)</strong></td>
+                        <td>Datos internos del componente que pueden cambiar</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Props</strong></td>
+                        <td>Datos que se pasan de padre a hijo (inmutables)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>One-way Data Flow</strong></td>
+                        <td>Los datos fluyen de padres a hijos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Lifting State Up</strong></td>
+                        <td>Mover estado al componente padre común</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Controlled Components</strong></td>
+                        <td>Componentes de formulario controlados por React state</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Wiki 2º DAW - Tu repositorio de conocimiento en desarrollo web</p>
+    </footer>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Componentes y Templates - Angular</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="../../index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver</a>
+        </div>
+    </nav>
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-angular"></i> Componentes</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#introduccion" class="active">Introducción a Componentes</a></li>
+                <li><a href="#decorador">Decorador @Component</a></li>
+                <li><a href="#interpolacion">Interpolación</a></li>
+                <li><a href="#property">Property Binding</a></li>
+                <li><a href="#event">Event Binding</a></li>
+                <li><a href="#two-way">Two-Way Binding</a></li>
+                <li><a href="#comunicacion">Comunicación entre Componentes</a></li>
+                <li><a href="#lifecycle">Lifecycle Hooks</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color:var(--angular-color)"><i class="fab fa-angular"></i></div>
+                <h1>2. Componentes y Templates en Angular</h1>
+                <p class="detail-subtitle">Bloques fundamentales de construcción de aplicaciones Angular</p>
+            </div>
+
+            <div class="content-section" id="introduccion">
+                <h2><i class="fas fa-cubes"></i> Introducción a Componentes</h2>
+                <p>Los <strong>componentes</strong> son la piedra angular de Angular. Cada componente encapsula una parte de la interfaz de usuario junto con su lógica y estilos. Una aplicación Angular es un árbol de componentes que comienza desde el componente raíz <code>AppComponent</code>.</p>
+
+                <div class="info-box">
+                    <p><strong>Un componente Angular consiste en:</strong></p>
+                    <ul>
+                        <li><strong>Clase TypeScript:</strong> Contiene la lógica y los datos (archivo <code>.ts</code>)</li>
+                        <li><strong>Template HTML:</strong> Define la estructura visual (archivo <code>.html</code>)</li>
+                        <li><strong>Estilos CSS:</strong> Define la apariencia (archivo <code>.css</code> o <code>.scss</code>)</li>
+                        <li><strong>Metadatos:</strong> Configuración del decorador <code>@Component</code></li>
+                    </ul>
+                </div>
+
+                <h3>Anatomía de un componente:</h3>
+                <div class="code-block"><pre>// usuario.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-usuario',           // Tag HTML para usar el componente
+  templateUrl: './usuario.component.html',  // Ruta del template
+  styleUrls: ['./usuario.component.css']    // Ruta de los estilos
+})
+export class UsuarioComponent {
+  // Propiedades (datos del componente)
+  nombre: string = 'Ana García';
+  edad: number = 25;
+  email: string = 'ana@example.com';
+  activo: boolean = true;
+  
+  // Métodos (lógica del componente)
+  saludar(): void {
+    alert(`Hola, soy ${this.nombre}`);
+  }
+  
+  incrementarEdad(): void {
+    this.edad++;
+  }
+}</pre></div>
+
+                <h3>Template correspondiente:</h3>
+                <div class="code-block"><pre>&lt;!-- usuario.component.html --&gt;
+&lt;div class="usuario-card"&gt;
+  &lt;h2&gt;{{ nombre }}&lt;/h2&gt;
+  &lt;p&gt;Edad: {{ edad }} años&lt;/p&gt;
+  &lt;p&gt;Email: {{ email }}&lt;/p&gt;
+  &lt;p&gt;Estado: {{ activo ? 'Activo' : 'Inactivo' }}&lt;/p&gt;
+  &lt;button (click)="saludar()"&gt;Saludar&lt;/button&gt;
+  &lt;button (click)="incrementarEdad()"&gt;Cumplir años&lt;/button&gt;
+&lt;/div&gt;</pre></div>
+
+                <h3>Uso del componente:</h3>
+                <div class="code-block"><pre>&lt;!-- app.component.html --&gt;
+&lt;div class="container"&gt;
+  &lt;app-usuario&gt;&lt;/app-usuario&gt;  &lt;!-- Se renderiza usando el selector --&gt;
+&lt;/div&gt;</pre></div>
+            </div>
+
+            <div class="content-section" id="decorador">
+                <h2><i class="fas fa-at"></i> Decorador @Component</h2>
+                <p>El <strong>decorador @Component</strong> es una función que añade metadatos a la clase, transformándola en un componente Angular. Le dice a Angular cómo procesar la clase.</p>
+
+                <h3>Propiedades principales del decorador:</h3>
+                <div class="code-block"><pre>@Component({
+  // SELECTOR: Cómo se usa el componente en HTML
+  selector: 'app-producto',
+  // Como tag: &lt;app-producto&gt;&lt;/app-producto&gt;
+  
+  selector: '[app-producto]',
+  // Como atributo: &lt;div app-producto&gt;&lt;/div&gt;
+  
+  selector: '.app-producto',
+  // Como clase: &lt;div class="app-producto"&gt;&lt;/div&gt;
+  
+  // TEMPLATE: Define la vista (una de las dos opciones)
+  templateUrl: './producto.component.html',  // Template externo (recomendado)
+  // O
+  template: `
+    &lt;h1&gt;{{ titulo }}&lt;/h1&gt;
+    &lt;p&gt;{{ descripcion }}&lt;/p&gt;
+  `,  // Template inline (para componentes pequeños)
+  
+  // ESTILOS: Define la apariencia (una o varias opciones)
+  styleUrls: ['./producto.component.css'],  // Estilos externos (recomendado)
+  // O
+  styles: [`
+    h1 { color: blue; }
+    p { font-size: 14px; }
+  `],  // Estilos inline
+  
+  // PROVIDERS: Servicios disponibles solo en este componente
+  providers: [ProductoService],
+  
+  // ENCAPSULACIÓN: Controla cómo se aplican los estilos
+  encapsulation: ViewEncapsulation.Emulated,  // Por defecto (estilos aislados)
+  // ViewEncapsulation.None → Estilos globales
+  // ViewEncapsulation.ShadowDom → Usa Shadow DOM nativo
+  
+  // CHANGE DETECTION: Estrategia de detección de cambios
+  changeDetection: ChangeDetectionStrategy.Default,  // Por defecto
+  // ChangeDetectionStrategy.OnPush → Optimizado (solo cambia si @Input cambia)
+})
+export class ProductoComponent { }</pre></div>
+
+                <h3>Template inline vs externo:</h3>
+                <div class="code-block"><pre>// Template INLINE: Bueno para componentes pequeños (< 10 líneas)
+@Component({
+  selector: 'app-saludo',
+  template: `
+    &lt;div class="saludo"&gt;
+      &lt;h1&gt;Hola {{ nombre }}!&lt;/h1&gt;
+      &lt;p&gt;Bienvenido a Angular&lt;/p&gt;
+    &lt;/div&gt;
+  `,
+  styles: [`.saludo { padding: 20px; }`]
+})
+export class SaludoComponent {
+  nombre: string = 'Visitante';
+}
+
+// Template EXTERNO: Recomendado para componentes con más lógica visual
+@Component({
+  selector: 'app-lista-productos',
+  templateUrl: './lista-productos.component.html',
+  styleUrls: ['./lista-productos.component.css']
+})
+export class ListaProductosComponent {
+  productos: Producto[] = [];
+  // ... lógica compleja
+}</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Convención importante:</strong>
+                    <p>El selector de un componente debe ser único en toda la aplicación. Por convención, se usa el prefijo <code>app-</code> para componentes de tu aplicación.</p>
+                </div>
+            </div>
+
+            <div class="content-section" id="interpolacion">
+                <h2><i class="fas fa-brackets-curly"></i> Interpolación {{ }}</h2>
+                <p>La <strong>interpolación</strong> permite insertar valores dinámicos de TypeScript en el template HTML. Angular evalúa la expresión entre llaves dobles y la convierte en texto.</p>
+
+                <h3>Interpolación básica:</h3>
+                <div class="code-block"><pre>// Componente
+export class EjemploComponent {
+  titulo: string = 'Mi Aplicación Angular';
+  version: number = 17;
+  autor: string = 'Ana García';
+  fechaActual: Date = new Date();
+}
+
+// Template
+&lt;h1&gt;{{ titulo }}&lt;/h1&gt;
+&lt;p&gt;Versión: {{ version }}&lt;/p&gt;
+&lt;p&gt;Autor: {{ autor }}&lt;/p&gt;
+&lt;p&gt;Fecha: {{ fechaActual }}&lt;/p&gt;</pre></div>
+
+                <h3>Expresiones en interpolación:</h3>
+                <div class="code-block"><pre>// Componente
+export class CalculadoraComponent {
+  numero1: number = 10;
+  numero2: number = 5;
+  nombre: string = 'ana garcía';
+  precio: number = 99.99;
+  esMayorEdad: boolean = true;
+}
+
+// Template - Puedes usar expresiones JavaScript
+&lt;p&gt;Suma: {{ numero1 + numero2 }}&lt;/p&gt;           // 15
+&lt;p&gt;Multiplicación: {{ numero1 * numero2 }}&lt;/p&gt;  // 50
+&lt;p&gt;Nombre en mayúsculas: {{ nombre.toUpperCase() }}&lt;/p&gt;  // ANA GARCÍA
+&lt;p&gt;Precio formateado: ${{ precio.toFixed(2) }}&lt;/p&gt;  // $99.99
+&lt;p&gt;{{ esMayorEdad ? 'Mayor de edad' : 'Menor de edad' }}&lt;/p&gt;  // Operador ternario</pre></div>
+
+                <h3>Llamar métodos desde interpolación:</h3>
+                <div class="code-block"><pre>// Componente
+export class UsuarioComponent {
+  nombre: string = 'Ana';
+  apellido: string = 'García';
+  
+  obtenerNombreCompleto(): string {
+    return `${this.nombre} ${this.apellido}`;
+  }
+  
+  obtenerSaludo(): string {
+    const hora = new Date().getHours();
+    if (hora < 12) return 'Buenos días';
+    if (hora < 20) return 'Buenas tardes';
+    return 'Buenas noches';
+  }
+}
+
+// Template
+&lt;h1&gt;{{ obtenerNombreCompleto() }}&lt;/h1&gt;
+&lt;p&gt;{{ obtenerSaludo() }}, {{ nombre }}!&lt;/p&gt;</pre></div>
+
+                <h3>Acceso a objetos y arrays:</h3>
+                <div class="code-block"><pre>// Componente
+export class ProductoComponent {
+  producto = {
+    id: 1,
+    nombre: 'Laptop HP',
+    precio: 1200,
+    stock: 15,
+    categoria: {
+      id: 10,
+      nombre: 'Electrónica'
+    }
+  };
+  
+  colores: string[] = ['Rojo', 'Azul', 'Verde'];
+}
+
+// Template
+&lt;h2&gt;{{ producto.nombre }}&lt;/h2&gt;
+&lt;p&gt;Precio: ${{ producto.precio }}&lt;/p&gt;
+&lt;p&gt;Categoría: {{ producto.categoria.nombre }}&lt;/p&gt;
+&lt;p&gt;Primer color: {{ colores[0] }}&lt;/p&gt;
+&lt;p&gt;Total de colores: {{ colores.length }}&lt;/p&gt;</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Limitaciones de la interpolación:</strong>
+                    <ul>
+                        <li>❌ No puedes usar asignaciones: <code>{{ valor = 10 }}</code></li>
+                        <li>❌ No puedes usar operadores de incremento: <code>{{ contador++ }}</code></li>
+                        <li>❌ No puedes usar <code>new</code>, <code>typeof</code>, <code>instanceof</code></li>
+                        <li>❌ No puedes encadenar expresiones con <code>;</code></li>
+                        <li>✓ Solo expresiones que devuelvan un valor</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="property">
+                <h2><i class="fas fa-link"></i> Property Binding [propiedad]</h2>
+                <p><strong>Property Binding</strong> permite establecer valores de propiedades de elementos HTML o componentes desde el TypeScript. Se usa con corchetes <code>[]</code>.</p>
+
+                <h3>Binding a propiedades HTML:</h3>
+                <div class="code-block"><pre>// Componente
+export class ImagenComponent {
+  imagenUrl: string = 'https://example.com/imagen.jpg';
+  textoAlternativo: string = 'Descripción de la imagen';
+  ancho: number = 300;
+  estaDeshabilitado: boolean = false;
+  urlGoogle: string = 'https://www.google.com';
+}
+
+// Template
+&lt;img [src]="imagenUrl" [alt]="textoAlternativo" [width]="ancho"&gt;
+&lt;button [disabled]="estaDeshabilitado"&gt;Click&lt;/button&gt;
+&lt;a [href]="urlGoogle"&gt;Ir a Google&lt;/a&gt;
+&lt;input [value]="nombre" [type]="tipoInput"&gt;</pre></div>
+
+                <h3>Binding a atributos con attr:</h3>
+                <div class="code-block"><pre>// Algunos atributos HTML no tienen propiedades DOM equivalentes
+// Usa attr. para enlazarlos
+
+// Componente
+export class AccesibilidadComponent {
+  ariaLabel: string = 'Cerrar ventana';
+  colspan: number = 2;
+  role: string = 'navigation';
+}
+
+// Template
+&lt;button [attr.aria-label]="ariaLabel"&gt;X&lt;/button&gt;
+&lt;td [attr.colspan]="colspan"&gt;Celda combinada&lt;/td&gt;
+&lt;nav [attr.role]="role"&gt;Menú&lt;/nav&gt;</pre></div>
+
+                <h3>Class Binding (agregar/quitar clases):</h3>
+                <div class="code-block"><pre>// Componente
+export class EstilosComponent {
+  estaActivo: boolean = true;
+  tieneError: boolean = false;
+  esPremium: boolean = true;
+  clasesDinamicas: string = 'card destacado';
+}
+
+// Template
+
+// Binding a una sola clase (booleano)
+&lt;div [class.activo]="estaActivo"&gt;Elemento&lt;/div&gt;
+&lt;div [class.error]="tieneError"&gt;Mensaje&lt;/div&gt;
+
+// Binding a múltiples clases (string)
+&lt;div [class]="clasesDinamicas"&gt;Card&lt;/div&gt;
+
+// Binding a objeto de clases
+&lt;div [ngClass]="{
+  'activo': estaActivo,
+  'error': tieneError,
+  'premium': esPremium
+}"&gt;Elemento con múltiples clases&lt;/div&gt;</pre></div>
+
+                <h3>Style Binding (estilos dinámicos):</h3>
+                <div class="code-block"><pre>// Componente
+export class ColorComponent {
+  colorTexto: string = 'blue';
+  tamañoFuente: number = 20;
+  esVisible: boolean = true;
+  anchoElemento: string = '100%';
+}
+
+// Template
+
+// Binding a un estilo individual
+&lt;p [style.color]="colorTexto"&gt;Texto azul&lt;/p&gt;
+&lt;p [style.font-size.px]="tamañoFuente"&gt;Texto 20px&lt;/p&gt;
+&lt;div [style.width]="anchoElemento"&gt;Ancho completo&lt;/div&gt;
+&lt;div [style.display]="esVisible ? 'block' : 'none'"&gt;Visible&lt;/div&gt;
+
+// Binding a múltiples estilos
+&lt;div [ngStyle]="{
+  'color': colorTexto,
+  'font-size': tamañoFuente + 'px',
+  'background-color': '#f0f0f0',
+  'padding': '10px'
+}"&gt;Elemento estilizado&lt;/div&gt;</pre></div>
+
+                <h3>Diferencia entre interpolación y property binding:</h3>
+                <div class="code-block"><pre>// Ambos funcionan IGUAL para strings:
+&lt;img src="{{ imagenUrl }}"&gt;       // Interpolación
+&lt;img [src]="imagenUrl"&gt;           // Property binding
+
+// Pero property binding es MEJOR para:
+&lt;button [disabled]="estaDeshabilitado"&gt;&lt;/button&gt;  // Booleano
+&lt;img [width]="300"&gt;                                // Número
+&lt;app-hijo [producto]="productoObj"&gt;&lt;/app-hijo&gt;    // Objetos
+
+// Interpolación solo para strings en contenido:
+&lt;h1&gt;{{ titulo }}&lt;/h1&gt;</pre></div>
+            </div>
+
+            <div class="content-section" id="event">
+                <h2><i class="fas fa-mouse-pointer"></i> Event Binding (evento)</h2>
+                <p><strong>Event Binding</strong> permite escuchar eventos del DOM (clicks, teclas, hover, etc.) y ejecutar métodos del componente. Se usa con paréntesis <code>()</code>.</p>
+
+                <h3>Eventos básicos:</h3>
+                <div class="code-block"><pre>// Componente
+export class EventosComponent {
+  contador: number = 0;
+  mensaje: string = '';
+  
+  incrementar(): void {
+    this.contador++;
+  }
+  
+  decrementar(): void {
+    this.contador--;
+  }
+  
+  mostrarMensaje(): void {
+    this.mensaje = '¡Botón presionado!';
+  }
+  
+  manejarMouseEnter(): void {
+    console.log('Mouse entró al elemento');
+  }
+}
+
+// Template
+&lt;button (click)="incrementar()"&gt;Incrementar&lt;/button&gt;
+&lt;button (click)="decrementar()"&gt;Decrementar&lt;/button&gt;
+&lt;p&gt;Contador: {{ contador }}&lt;/p&gt;
+
+&lt;button (click)="mostrarMensaje()"&gt;Mostrar mensaje&lt;/button&gt;
+&lt;p&gt;{{ mensaje }}&lt;/p&gt;
+
+&lt;div (mouseenter)="manejarMouseEnter()"&gt;Pasa el mouse aquí&lt;/div&gt;</pre></div>
+
+                <h3>Objeto $event (acceder a datos del evento):</h3>
+                <div class="code-block"><pre>// Componente
+export class InputComponent {
+  nombre: string = '';
+  posicionMouse: { x: number, y: number } = { x: 0, y: 0 };
+  
+  manejarInput(evento: Event): void {
+    const target = evento.target as HTMLInputElement;
+    this.nombre = target.value;
+    console.log('Valor actual:', this.nombre);
+  }
+  
+  manejarClick(evento: MouseEvent): void {
+    console.log('Click en:', evento.clientX, evento.clientY);
+    console.log('Elemento:', evento.target);
+  }
+  
+  manejarTecla(evento: KeyboardEvent): void {
+    console.log('Tecla presionada:', evento.key);
+    
+    if (evento.key === 'Enter') {
+      console.log('Enter presionado');
+    }
+  }
+  
+  rastrearMouse(evento: MouseEvent): void {
+    this.posicionMouse = { x: evento.clientX, y: evento.clientY };
+  }
+}
+
+// Template
+&lt;input (input)="manejarInput($event)" placeholder="Escribe algo"&gt;
+&lt;p&gt;Escribiste: {{ nombre }}&lt;/p&gt;
+
+&lt;button (click)="manejarClick($event)"&gt;Click con info&lt;/button&gt;
+
+&lt;input (keydown)="manejarTecla($event)" placeholder="Presiona teclas"&gt;
+
+&lt;div (mousemove)="rastrearMouse($event)" style="height: 200px; border: 1px solid"&gt;
+  Mueve el mouse aquí - Posición: {{ posicionMouse.x }}, {{ posicionMouse.y }}
+&lt;/div&gt;</pre></div>
+
+                <h3>Eventos comunes de formularios:</h3>
+                <div class="code-block"><pre>// Componente
+export class FormularioComponent {
+  usuario = {
+    nombre: '',
+    email: '',
+    password: ''
+  };
+  
+  archivoSeleccionado: File | null = null;
+  
+  manejarSubmit(evento: Event): void {
+    evento.preventDefault();  // Evitar recarga de página
+    console.log('Formulario enviado:', this.usuario);
+  }
+  
+  manejarCambio(campo: string, evento: Event): void {
+    const target = evento.target as HTMLInputElement;
+    this.usuario[campo] = target.value;
+  }
+  
+  manejarFocus(): void {
+    console.log('Input enfocado');
+  }
+  
+  manejarBlur(): void {
+    console.log('Input desenfocado');
+  }
+  
+  manejarArchivo(evento: Event): void {
+    const target = evento.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      this.archivoSeleccionado = target.files[0];
+      console.log('Archivo seleccionado:', this.archivoSeleccionado.name);
+    }
+  }
+}
+
+// Template
+&lt;form (submit)="manejarSubmit($event)"&gt;
+  &lt;input 
+    type="text"
+    (input)="manejarCambio('nombre', $event)"
+    (focus)="manejarFocus()"
+    (blur)="manejarBlur()"
+    placeholder="Nombre"
+  &gt;
+  
+  &lt;input 
+    type="email"
+    (change)="manejarCambio('email', $event)"
+    placeholder="Email"
+  &gt;
+  
+  &lt;input 
+    type="password"
+    (input)="manejarCambio('password', $event)"
+    placeholder="Contraseña"
+  &gt;
+  
+  &lt;input type="file" (change)="manejarArchivo($event)"&gt;
+  
+  &lt;button type="submit"&gt;Enviar&lt;/button&gt;
+&lt;/form&gt;</pre></div>
+
+                <h3>Template reference variables (variables de referencia):</h3>
+                <div class="code-block"><pre>// En lugar de usar $event, puedes crear referencias a elementos
+
+// Template
+&lt;input #nombreInput type="text"&gt;
+&lt;button (click)="saludar(nombreInput.value)"&gt;Saludar&lt;/button&gt;
+
+&lt;input #emailInput type="email"&gt;
+&lt;p&gt;Email: {{ emailInput.value }}&lt;/p&gt;
+
+&lt;video #videoPlayer src="video.mp4"&gt;&lt;/video&gt;
+&lt;button (click)="videoPlayer.play()"&gt;Play&lt;/button&gt;
+&lt;button (click)="videoPlayer.pause()"&gt;Pause&lt;/button&gt;
+
+// Componente
+saludar(nombre: string): void {
+  alert(`Hola ${nombre}!`);
+}</pre></div>
+            </div>
+
+            <div class="content-section" id="two-way">
+                <h2><i class="fas fa-exchange-alt"></i> Two-Way Binding [(ngModel)]</h2>
+                <p><strong>Two-Way Data Binding</strong> sincroniza automáticamente datos entre el componente y el template en ambas direcciones. Los cambios en el input actualizan la propiedad y viceversa.</p>
+
+                <h3>Configuración de ngModel:</h3>
+                <div class="code-block"><pre>// 1. Importar FormsModule en el módulo
+import { FormsModule } from '@angular/forms';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    FormsModule  // Necesario para ngModel
+  ]
+})
+export class AppModule { }</pre></div>
+
+                <h3>Uso básico de ngModel:</h3>
+                <div class="code-block"><pre>// Componente
+export class FormularioComponent {
+  nombre: string = '';
+  email: string = '';
+  edad: number = 0;
+  aceptaTerminos: boolean = false;
+  pais: string = 'España';
+}
+
+// Template
+&lt;!-- Input de texto --&gt;
+&lt;input [(ngModel)]="nombre" type="text" placeholder="Tu nombre"&gt;
+&lt;p&gt;Hola {{ nombre }}!&lt;/p&gt;
+
+&lt;!-- Input de email --&gt;
+&lt;input [(ngModel)]="email" type="email" placeholder="Tu email"&gt;
+&lt;p&gt;Email: {{ email }}&lt;/p&gt;
+
+&lt;!-- Input de número --&gt;
+&lt;input [(ngModel)]="edad" type="number" min="0" max="120"&gt;
+&lt;p&gt;Tienes {{ edad }} años&lt;/p&gt;
+
+&lt;!-- Checkbox --&gt;
+&lt;label&gt;
+  &lt;input [(ngModel)]="aceptaTerminos" type="checkbox"&gt;
+  Acepto los términos
+&lt;/label&gt;
+&lt;p&gt;Aceptado: {{ aceptaTerminos }}&lt;/p&gt;
+
+&lt;!-- Select --&gt;
+&lt;select [(ngModel)]="pais"&gt;
+  &lt;option value="España"&gt;España&lt;/option&gt;
+  &lt;option value="México"&gt;México&lt;/option&gt;
+  &lt;option value="Argentina"&gt;Argentina&lt;/option&gt;
+&lt;/select&gt;
+&lt;p&gt;País seleccionado: {{ pais }}&lt;/p&gt;</pre></div>
+
+                <h3>ngModel con objetos complejos:</h3>
+                <div class="code-block"><pre>// Componente
+export class RegistroComponent {
+  usuario = {
+    nombre: '',
+    apellido: '',
+    email: '',
+    password: '',
+    genero: '',
+    newsletter: false
+  };
+  
+  registrar(): void {
+    console.log('Usuario registrado:', this.usuario);
+  }
+}
+
+// Template
+&lt;form&gt;
+  &lt;input [(ngModel)]="usuario.nombre" name="nombre" placeholder="Nombre"&gt;
+  &lt;input [(ngModel)]="usuario.apellido" name="apellido" placeholder="Apellido"&gt;
+  &lt;input [(ngModel)]="usuario.email" name="email" type="email"&gt;
+  &lt;input [(ngModel)]="usuario.password" name="password" type="password"&gt;
+  
+  &lt;label&gt;
+    &lt;input [(ngModel)]="usuario.genero" name="genero" type="radio" value="M"&gt; Masculino
+  &lt;/label&gt;
+  &lt;label&gt;
+    &lt;input [(ngModel)]="usuario.genero" name="genero" type="radio" value="F"&gt; Femenino
+  &lt;/label&gt;
+  
+  &lt;label&gt;
+    &lt;input [(ngModel)]="usuario.newsletter" name="newsletter" type="checkbox"&gt;
+    Suscribirse al newsletter
+  &lt;/label&gt;
+  
+  &lt;button (click)="registrar()"&gt;Registrar&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;pre&gt;{{ usuario | json }}&lt;/pre&gt;</pre></div>
+
+                <h3>Desglose de ngModel (cómo funciona internamente):</h3>
+                <div class="code-block"><pre>// [(ngModel)] es azúcar sintáctico que combina:
+
+// 1. Property binding [ngModel] (component → template)
+// 2. Event binding (ngModelChange) (template → component)
+
+// Estas tres formas son EQUIVALENTES:
+
+// Forma 1: Shorthand (recomendado)
+&lt;input [(ngModel)]="nombre"&gt;
+
+// Forma 2: Expandido (muestra cómo funciona)
+&lt;input [ngModel]="nombre" (ngModelChange)="nombre = $event"&gt;
+
+// Forma 3: Separado con método
+&lt;input [ngModel]="nombre" (ngModelChange)="actualizarNombre($event)"&gt;
+
+// Componente
+actualizarNombre(nuevoNombre: string): void {
+  this.nombre = nuevoNombre;
+  console.log('Nombre actualizado:', nuevoNombre);
+}</pre></div>
+
+                <div class="info-box">
+                    <strong>💡 Ventajas de ngModel:</strong>
+                    <ul>
+                        <li>✓ Sincronización automática bidireccional</li>
+                        <li>✓ Menos código que property + event binding manual</li>
+                        <li>✓ Ideal para formularios simples</li>
+                        <li>✓ Funciona con todos los tipos de input</li>
+                    </ul>
+                    <p><strong>Cuándo NO usar ngModel:</strong></p>
+                    <ul>
+                        <li>❌ Formularios complejos con validación → Usa Reactive Forms</li>
+                        <li>❌ Necesitas más control → Usa property/event binding separados</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section" id="comunicacion">
+                <h2><i class="fas fa-comments"></i> Comunicación entre Componentes</h2>
+                <p>Los componentes necesitan comunicarse entre sí. Angular ofrece varias formas de compartir datos entre componentes padre e hijo.</p>
+
+                <h3>@Input - Padre envía datos al hijo:</h3>
+                <div class="code-block"><pre>// COMPONENTE HIJO: producto-card.component.ts
+import { Component, Input } from '@angular/core';
+
+export interface Producto {
+  id: number;
+  nombre: string;
+  precio: number;
+}
+
+@Component({
+  selector: 'app-producto-card',
+  template: `
+    &lt;div class="card"&gt;
+      &lt;h3&gt;{{ producto.nombre }}&lt;/h3&gt;
+      &lt;p&gt;Precio: ${{ producto.precio }}&lt;/p&gt;
+    &lt;/div&gt;
+  `
+})
+export class ProductoCardComponent {
+  @Input() producto!: Producto;  // ! = definitivamente asignado
+  @Input() mostrarStock: boolean = true;  // Valor por defecto
+}
+
+// COMPONENTE PADRE
+export class ListaProductosComponent {
+  productos: Producto[] = [
+    { id: 1, nombre: 'Laptop', precio: 1200 },
+    { id: 2, nombre: 'Mouse', precio: 25 }
+  ];
+}
+
+// TEMPLATE PADRE
+&lt;div&gt;
+  &lt;app-producto-card 
+    *ngFor="let prod of productos"
+    [producto]="prod"
+    [mostrarStock]="true"
+  &gt;&lt;/app-producto-card&gt;
+&lt;/div&gt;</pre></div>
+
+                <h3>@Output - Hijo envía eventos al padre:</h3>
+                <div class="code-block"><pre>// COMPONENTE HIJO: contador.component.ts
+import { Component, Output, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-contador',
+  template: `
+    &lt;div&gt;
+      &lt;p&gt;Valor: {{ valor }}&lt;/p&gt;
+      &lt;button (click)="incrementar()"&gt;+&lt;/button&gt;
+      &lt;button (click)="decrementar()"&gt;-&lt;/button&gt;
+    &lt;/div&gt;
+  `
+})
+export class ContadorComponent {
+  valor: number = 0;
+  
+  @Output() cambioValor = new EventEmitter<number>();
+  
+  incrementar(): void {
+    this.valor++;
+    this.cambioValor.emit(this.valor);  // Emitir evento al padre
+  }
+  
+  decrementar(): void {
+    this.valor--;
+    this.cambioValor.emit(this.valor);
+  }
+}
+
+// COMPONENTE PADRE
+export class AppComponent {
+  valorRecibido: number = 0;
+  
+  manejarCambio(nuevoValor: number): void {
+    this.valorRecibido = nuevoValor;
+    console.log('Valor actualizado:', nuevoValor);
+  }
+}
+
+// TEMPLATE PADRE
+&lt;app-contador (cambioValor)="manejarCambio($event)"&gt;&lt;/app-contador&gt;
+&lt;p&gt;Valor en el padre: {{ valorRecibido }}&lt;/p&gt;</pre></div>
+
+                <h3>Comunicación bidireccional (@Input + @Output):</h3>
+                <div class="code-block"><pre>// HIJO: editor-nombre.component.ts
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-editor-nombre',
+  template: `
+    &lt;input 
+      [value]="nombre"
+      (input)="onNombreChange($event)"
+      placeholder="Nombre"
+    &gt;
+  `
+})
+export class EditorNombreComponent {
+  @Input() nombre: string = '';
+  @Output() nombreChange = new EventEmitter<string>();
+  
+  onNombreChange(evento: Event): void {
+    const target = evento.target as HTMLInputElement;
+    this.nombreChange.emit(target.value);
+  }
+}
+
+// PADRE
+export class AppComponent {
+  nombreUsuario: string = 'Ana';
+  
+  actualizarNombre(nuevoNombre: string): void {
+    this.nombreUsuario = nuevoNombre;
+  }
+}
+
+// TEMPLATE PADRE
+&lt;app-editor-nombre 
+  [nombre]="nombreUsuario"
+  (nombreChange)="actualizarNombre($event)"
+&gt;&lt;/app-editor-nombre&gt;
+
+&lt;!-- O usando banana-in-a-box [()] --&gt;
+&lt;app-editor-nombre [(nombre)]="nombreUsuario"&gt;&lt;/app-editor-nombre&gt;
+
+&lt;p&gt;Nombre: {{ nombreUsuario }}&lt;/p&gt;</pre></div>
+            </div>
+
+            <div class="content-section" id="lifecycle">
+                <h2><i class="fas fa-recycle"></i> Lifecycle Hooks (Ciclo de Vida)</h2>
+                <p>Los <strong>lifecycle hooks</strong> son métodos especiales que Angular llama en momentos específicos del ciclo de vida de un componente. Permiten ejecutar lógica en momentos clave.</p>
+
+                <h3>Principales lifecycle hooks:</h3>
+                <div class="code-block"><pre>import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+
+export class MiComponente implements OnInit, OnDestroy, OnChanges {
+  
+  // 1. CONSTRUCTOR - Se ejecuta PRIMERO
+  constructor() {
+    console.log('1. Constructor ejecutado');
+    // NO acceder a @Input aquí (aún no están disponibles)
+  }
+  
+  // 2. ngOnChanges - Cuando cambia un @Input
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('2. ngOnChanges - Inputs cambiaron:', changes);
+  }
+  
+  // 3. ngOnInit - Después del primer ngOnChanges
+  ngOnInit(): void {
+    console.log('3. ngOnInit - Componente inicializado');
+    // Lugar ideal para llamadas HTTP, suscripciones
+    // @Input ya están disponibles
+  }
+  
+  // 4. ngDoCheck - Cada detección de cambios
+  ngDoCheck(): void {
+    console.log('4. ngDoCheck - Change detection ejecutado');
+    // Se ejecuta MUCHO, usar con cuidado
+  }
+  
+  // 5. ngAfterContentInit - Después de proyectar contenido
+  ngAfterContentInit(): void {
+    console.log('5. ngAfterContentInit - Contenido proyectado');
+  }
+  
+  // 6. ngAfterContentChecked - Después de revisar contenido proyectado
+  ngAfterContentChecked(): void {
+    console.log('6. ngAfterContentChecked');
+  }
+  
+  // 7. ngAfterViewInit - Después de inicializar vistas hijas
+  ngAfterViewInit(): void {
+    console.log('7. ngAfterViewInit - Vista inicializada');
+    // Acceder a ViewChild aquí
+  }
+  
+  // 8. ngAfterViewChecked - Después de revisar vistas hijas
+  ngAfterViewChecked(): void {
+    console.log('8. ngAfterViewChecked');
+  }
+  
+  // 9. ngOnDestroy - Antes de destruir el componente
+  ngOnDestroy(): void {
+    console.log('9. ngOnDestroy - Componente destruido');
+    // Limpiar: unsubscribe, clear timers, etc.
+  }
+}</pre></div>
+
+                <h3>Uso práctico de ngOnInit:</h3>
+                <div class="code-block"><pre>export class UsuariosComponent implements OnInit {
+  usuarios: Usuario[] = [];
+  loading: boolean = true;
+  
+  constructor(private usuarioService: UsuarioService) {
+    // Solo inyección de dependencias
+  }
+  
+  ngOnInit(): void {
+    // Llamadas HTTP aquí
+    this.cargarUsuarios();
+  }
+  
+  cargarUsuarios(): void {
+    this.usuarioService.getUsuarios().subscribe({
+      next: (data) => {
+        this.usuarios = data;
+        this.loading = false;
+      },
+      error: (err) => console.error(err)
+    });
+  }
+}</pre></div>
+
+                <h3>Uso práctico de ngOnDestroy:</h3>
+                <div class="code-block"><pre>import { Subscription } from 'rxjs';
+
+export class TimerComponent implements OnInit, OnDestroy {
+  segundos: number = 0;
+  private timerSubscription?: Subscription;
+  private intervalo?: any;
+  
+  ngOnInit(): void {
+    // Crear timer
+    this.intervalo = setInterval(() => {
+      this.segundos++;
+    }, 1000);
+    
+    // Suscripción a observable
+    this.timerSubscription = this.miServicio.datos$.subscribe(
+      data => console.log(data)
+    );
+  }
+  
+  ngOnDestroy(): void {
+    // SIEMPRE limpiar recursos
+    if (this.intervalo) {
+      clearInterval(this.intervalo);
+    }
+    
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+    }
+    
+    console.log('Componente destruido, recursos liberados');
+  }
+}</pre></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Buenas prácticas con lifecycle hooks:</strong>
+                    <ul>
+                        <li>✓ Usa <code>ngOnInit</code> para lógica de inicialización (no el constructor)</li>
+                        <li>✓ SIEMPRE implementa <code>ngOnDestroy</code> si creas subscripciones/timers</li>
+                        <li>✓ <code>ngOnChanges</code> solo si tu componente tiene @Input</li>
+                        <li>❌ No hagas lógica pesada en <code>ngDoCheck</code> (se ejecuta mucho)</li>
+                        <li>❌ No modifiques @Input en ngOnChanges (puede causar errores)</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            function changeActiveLink() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', changeActiveLink);
+        });
+    </script>
+</body>
+</html>

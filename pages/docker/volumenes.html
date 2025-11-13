@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Volúmenes Docker - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-book-open"></i><h1>Wiki 2º DAW</h1></div>
+            <a href="./index.html" class="back-button"><i class="fas fa-arrow-left"></i> Volver a Docker</a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-docker"></i> Volúmenes</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#que-son" class="active">¿Qué son los Volúmenes?</a></li>
+                <li><a href="#tipos">Tipos de Volúmenes</a></li>
+                <li><a href="#bind-mounts">Bind Mounts</a></li>
+                <li><a href="#named-volumes">Named Volumes</a></li>
+                <li><a href="#gestionar">Gestionar Volúmenes</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="detail-header">
+                <div class="detail-icon" style="color: var(--docker-color);"><i class="fab fa-docker"></i></div>
+                <h1 class="detail-title">5. Volúmenes</h1>
+                <p class="detail-subtitle">Persistencia de datos</p>
+            </div>
+
+            <div class="content-section" id="que-son">
+                <h2><i class="fas fa-database"></i> ¿Qué son los Volúmenes?</h2>
+                <p>Los <strong>volúmenes</strong> permiten <strong>persistir datos</strong> fuera del ciclo de vida del contenedor. 
+                Sin volúmenes, cuando eliminas un contenedor, pierdes todos sus datos.</p>
+                <div class="info-box">
+                    <p><strong>Problema:</strong> Tienes una base de datos en un contenedor. Si lo eliminas, pierdes todos los datos.</p>
+                    <p><strong>Solución:</strong> Usa un volumen para almacenar los datos fuera del contenedor.</p>
+                </div>
+            </div>
+
+            <div class="content-section" id="tipos">
+                <h2><i class="fas fa-list"></i> Tipos de Volúmenes</h2>
+                <ul>
+                    <li><strong>Named Volumes:</strong> Gestionados por Docker (recomendado)</li>
+                    <li><strong>Bind Mounts:</strong> Montar carpeta del host en el contenedor</li>
+                    <li><strong>tmpfs Mounts:</strong> Almacenamiento temporal en memoria</li>
+                </ul>
+            </div>
+
+            <div class="content-section" id="bind-mounts">
+                <h2><i class="fas fa-folder-open"></i> Bind Mounts</h2>
+                <p>Montar una carpeta de tu máquina dentro del contenedor. Útil para desarrollo.</p>
+                <div class="code-block"><pre># Montar carpeta actual en /app del contenedor
+docker run -v $(pwd):/app mi-app
+
+# En Windows PowerShell
+docker run -v ${PWD}:/app mi-app
+
+# Ruta absoluta
+docker run -v /home/user/proyecto:/app mi-app
+
+# Solo lectura
+docker run -v $(pwd):/app:ro mi-app</pre></div>
+                <div class="warning-box">
+                    <p><strong>Cuidado:</strong> Los cambios en tu máquina se reflejan en el contenedor y viceversa.</p>
+                </div>
+            </div>
+
+            <div class="content-section" id="named-volumes">
+                <h2><i class="fas fa-hdd"></i> Named Volumes</h2>
+                <p>Volúmenes gestionados por Docker. Mejor para producción.</p>
+                <div class="code-block"><pre># Crear volumen
+docker volume create mi-volumen
+
+# Usar volumen
+docker run -v mi-volumen:/data mi-app
+
+# En Docker Compose
+version: '3.8'
+services:
+  database:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:</pre></div>
+            </div>
+
+            <div class="content-section" id="gestionar">
+                <h2><i class="fas fa-cogs"></i> Gestionar Volúmenes</h2>
+                <div class="code-block"><pre># Listar volúmenes
+docker volume ls
+
+# Crear volumen
+docker volume create mi-volumen
+
+# Inspeccionar volumen
+docker volume inspect mi-volumen
+
+# Eliminar volumen
+docker volume rm mi-volumen
+
+# Eliminar volúmenes no usados
+docker volume prune</pre></div>
+                <h3>Ejemplo Completo: MongoDB con Persistencia</h3>
+                <div class="code-block"><pre># Crear volumen
+docker volume create mongo-data
+
+# Ejecutar MongoDB con volumen
+docker run -d \
+  --name mongodb \
+  -p 27017:27017 \
+  -v mongo-data:/data/db \
+  mongo:6
+
+# Aunque elimines el contenedor, los datos permanecen en mongo-data
+docker rm -f mongodb
+
+# Crear nuevo contenedor con los mismos datos
+docker run -d \
+  --name mongodb-nuevo \
+  -v mongo-data:/data/db \
+  mongo:6</pre></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script>document.addEventListener('DOMContentLoaded',function(){const sections=document.querySelectorAll('.content-section');const navLinks=document.querySelectorAll('.sidebar-nav a');function changeActiveLink(){let currentSection='';sections.forEach(section=>{const sectionTop=section.offsetTop;if(window.pageYOffset>=sectionTop-100){currentSection=section.getAttribute('id');}});navLinks.forEach(link=>{link.classList.remove('active');if(link.getAttribute('href')==='#'+currentSection){link.classList.add('active');}});}window.addEventListener('scroll',changeActiveLink);});</script>
+</body>
+</html>
