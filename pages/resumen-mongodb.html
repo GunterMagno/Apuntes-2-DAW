@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen MongoDB - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-md) 0;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .summary-table thead {
+            background-color: var(--accent-primary);
+            color: var(--bg-primary);
+        }
+        .summary-table th, .summary-table td {
+            padding: var(--spacing-sm) var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+        .summary-table th {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .summary-table td:first-child {
+            font-family: 'Courier New', monospace;
+            color: var(--mongodb-color);
+            font-weight: 600;
+        }
+        .summary-table tr:hover {
+            background-color: var(--bg-card-hover);
+        }
+        .summary-table code {
+            background-color: var(--bg-primary);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <div class="detail-page">
+        <div class="detail-header">
+            <div class="detail-icon" style="color: var(--mongodb-color);">
+                <i class="fas fa-database"></i>
+            </div>
+            <h1 class="detail-title">Resumen Rápido: MongoDB</h1>
+            <p class="detail-subtitle">Referencia rápida de operaciones CRUD, agregaciones y comandos</p>
+        </div>
+
+        <!-- Comandos básicos de shell -->
+        <div class="content-section">
+            <h2><i class="fas fa-terminal"></i> Comandos de MongoDB Shell</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>mongosh</td>
+                        <td>Inicia el shell de MongoDB</td>
+                    </tr>
+                    <tr>
+                        <td>show dbs</td>
+                        <td>Muestra todas las bases de datos</td>
+                    </tr>
+                    <tr>
+                        <td>use nombreDB</td>
+                        <td>Cambia o crea una base de datos</td>
+                    </tr>
+                    <tr>
+                        <td>show collections</td>
+                        <td>Muestra todas las colecciones de la BD actual</td>
+                    </tr>
+                    <tr>
+                        <td>db.dropDatabase()</td>
+                        <td>Elimina la base de datos actual</td>
+                    </tr>
+                    <tr>
+                        <td>db.createCollection('nombre')</td>
+                        <td>Crea una nueva colección</td>
+                    </tr>
+                    <tr>
+                        <td>db.coleccion.drop()</td>
+                        <td>Elimina una colección</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Operaciones CRUD - Create -->
+        <div class="content-section">
+            <h2><i class="fas fa-plus-circle"></i> CREATE - Insertar documentos</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Qué hace</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>insertOne(doc)</td>
+                        <td>Inserta un solo documento</td>
+                        <td>db.users.insertOne({name: "Juan", age: 25})</td>
+                    </tr>
+                    <tr>
+                        <td>insertMany([docs])</td>
+                        <td>Inserta múltiples documentos</td>
+                        <td>db.users.insertMany([{...}, {...}])</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Operaciones CRUD - Read -->
+        <div class="content-section">
+            <h2><i class="fas fa-search"></i> READ - Consultar documentos</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Qué hace</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>find()</td>
+                        <td>Obtiene todos los documentos</td>
+                        <td>db.users.find()</td>
+                    </tr>
+                    <tr>
+                        <td>find(query)</td>
+                        <td>Obtiene documentos que cumplan el query</td>
+                        <td>db.users.find({age: {$gt: 18}})</td>
+                    </tr>
+                    <tr>
+                        <td>findOne(query)</td>
+                        <td>Obtiene el primer documento que coincida</td>
+                        <td>db.users.findOne({name: "Juan"})</td>
+                    </tr>
+                    <tr>
+                        <td>find().limit(n)</td>
+                        <td>Limita resultados a n documentos</td>
+                        <td>db.users.find().limit(10)</td>
+                    </tr>
+                    <tr>
+                        <td>find().skip(n)</td>
+                        <td>Salta los primeros n resultados</td>
+                        <td>db.users.find().skip(5)</td>
+                    </tr>
+                    <tr>
+                        <td>find().sort({campo: 1})</td>
+                        <td>Ordena resultados (1: ascendente, -1: descendente)</td>
+                        <td>db.users.find().sort({age: -1})</td>
+                    </tr>
+                    <tr>
+                        <td>countDocuments()</td>
+                        <td>Cuenta documentos que coincidan</td>
+                        <td>db.users.countDocuments({age: {$gte: 18}})</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Operaciones CRUD - Update -->
+        <div class="content-section">
+            <h2><i class="fas fa-edit"></i> UPDATE - Actualizar documentos</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Qué hace</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>updateOne(query, update)</td>
+                        <td>Actualiza el primer documento que coincida</td>
+                        <td>db.users.updateOne({name: "Juan"}, {$set: {age: 26}})</td>
+                    </tr>
+                    <tr>
+                        <td>updateMany(query, update)</td>
+                        <td>Actualiza todos los documentos que coincidan</td>
+                        <td>db.users.updateMany({city: "Madrid"}, {$set: {country: "Spain"}})</td>
+                    </tr>
+                    <tr>
+                        <td>replaceOne(query, doc)</td>
+                        <td>Reemplaza completamente un documento</td>
+                        <td>db.users.replaceOne({_id: id}, {name: "Pedro", age: 30})</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Operaciones CRUD - Delete -->
+        <div class="content-section">
+            <h2><i class="fas fa-trash"></i> DELETE - Eliminar documentos</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Qué hace</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>deleteOne(query)</td>
+                        <td>Elimina el primer documento que coincida</td>
+                        <td>db.users.deleteOne({name: "Juan"})</td>
+                    </tr>
+                    <tr>
+                        <td>deleteMany(query)</td>
+                        <td>Elimina todos los documentos que coincidan</td>
+                        <td>db.users.deleteMany({age: {$lt: 18}})</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Operadores de consulta -->
+        <div class="content-section">
+            <h2><i class="fas fa-filter"></i> Operadores de consulta más usados</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Operador</th>
+                        <th>Significado</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>$eq</td>
+                        <td>Igual a</td>
+                        <td>{age: {$eq: 25}}</td>
+                    </tr>
+                    <tr>
+                        <td>$ne</td>
+                        <td>No igual a</td>
+                        <td>{status: {$ne: "inactive"}}</td>
+                    </tr>
+                    <tr>
+                        <td>$gt</td>
+                        <td>Mayor que</td>
+                        <td>{age: {$gt: 18}}</td>
+                    </tr>
+                    <tr>
+                        <td>$gte</td>
+                        <td>Mayor o igual que</td>
+                        <td>{age: {$gte: 18}}</td>
+                    </tr>
+                    <tr>
+                        <td>$lt</td>
+                        <td>Menor que</td>
+                        <td>{price: {$lt: 100}}</td>
+                    </tr>
+                    <tr>
+                        <td>$lte</td>
+                        <td>Menor o igual que</td>
+                        <td>{price: {$lte: 50}}</td>
+                    </tr>
+                    <tr>
+                        <td>$in</td>
+                        <td>Valor está en array</td>
+                        <td>{status: {$in: ["active", "pending"]}}</td>
+                    </tr>
+                    <tr>
+                        <td>$nin</td>
+                        <td>Valor NO está en array</td>
+                        <td>{color: {$nin: ["red", "blue"]}}</td>
+                    </tr>
+                    <tr>
+                        <td>$and</td>
+                        <td>AND lógico</td>
+                        <td>{$and: [{age: {$gt: 18}}, {city: "Madrid"}]}</td>
+                    </tr>
+                    <tr>
+                        <td>$or</td>
+                        <td>OR lógico</td>
+                        <td>{$or: [{age: {$lt: 18}}, {status: "student"}]}</td>
+                    </tr>
+                    <tr>
+                        <td>$not</td>
+                        <td>NOT lógico</td>
+                        <td>{age: {$not: {$gt: 18}}}</td>
+                    </tr>
+                    <tr>
+                        <td>$exists</td>
+                        <td>Campo existe o no</td>
+                        <td>{email: {$exists: true}}</td>
+                    </tr>
+                    <tr>
+                        <td>$regex</td>
+                        <td>Expresión regular</td>
+                        <td>{name: {$regex: /^J/i}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Operadores de actualización -->
+        <div class="content-section">
+            <h2><i class="fas fa-wrench"></i> Operadores de actualización</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Operador</th>
+                        <th>Qué hace</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>$set</td>
+                        <td>Establece valor de un campo</td>
+                        <td>{$set: {age: 26}}</td>
+                    </tr>
+                    <tr>
+                        <td>$unset</td>
+                        <td>Elimina un campo</td>
+                        <td>{$unset: {temporaryField: ""}}</td>
+                    </tr>
+                    <tr>
+                        <td>$inc</td>
+                        <td>Incrementa valor numérico</td>
+                        <td>{$inc: {views: 1}}</td>
+                    </tr>
+                    <tr>
+                        <td>$mul</td>
+                        <td>Multiplica valor numérico</td>
+                        <td>{$mul: {price: 1.1}}</td>
+                    </tr>
+                    <tr>
+                        <td>$rename</td>
+                        <td>Renombra un campo</td>
+                        <td>{$rename: {oldName: "newName"}}</td>
+                    </tr>
+                    <tr>
+                        <td>$push</td>
+                        <td>Añade elemento a array</td>
+                        <td>{$push: {tags: "new"}}</td>
+                    </tr>
+                    <tr>
+                        <td>$pull</td>
+                        <td>Elimina elemento de array</td>
+                        <td>{$pull: {tags: "old"}}</td>
+                    </tr>
+                    <tr>
+                        <td>$addToSet</td>
+                        <td>Añade a array si no existe</td>
+                        <td>{$addToSet: {tags: "unique"}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Índices -->
+        <div class="content-section">
+            <h2><i class="fas fa-bolt"></i> Índices - Mejorar rendimiento</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Qué hace</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>createIndex()</td>
+                        <td>Crea un índice en un campo</td>
+                        <td>db.users.createIndex({email: 1})</td>
+                    </tr>
+                    <tr>
+                        <td>createIndex() unique</td>
+                        <td>Crea índice único (no duplicados)</td>
+                        <td>db.users.createIndex({email: 1}, {unique: true})</td>
+                    </tr>
+                    <tr>
+                        <td>getIndexes()</td>
+                        <td>Lista todos los índices</td>
+                        <td>db.users.getIndexes()</td>
+                    </tr>
+                    <tr>
+                        <td>dropIndex()</td>
+                        <td>Elimina un índice</td>
+                        <td>db.users.dropIndex("email_1")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Agregaciones -->
+        <div class="content-section">
+            <h2><i class="fas fa-chart-bar"></i> Pipeline de agregación</h2>
+            <p>Para análisis y transformaciones complejas de datos.</p>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Stage</th>
+                        <th>Qué hace</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>$match</td>
+                        <td>Filtra documentos (como find)</td>
+                        <td>{$match: {age: {$gte: 18}}}</td>
+                    </tr>
+                    <tr>
+                        <td>$group</td>
+                        <td>Agrupa documentos y calcula</td>
+                        <td>{$group: {_id: "$city", total: {$sum: 1}}}</td>
+                    </tr>
+                    <tr>
+                        <td>$sort</td>
+                        <td>Ordena documentos</td>
+                        <td>{$sort: {age: -1}}</td>
+                    </tr>
+                    <tr>
+                        <td>$project</td>
+                        <td>Selecciona/transforma campos</td>
+                        <td>{$project: {name: 1, age: 1, _id: 0}}</td>
+                    </tr>
+                    <tr>
+                        <td>$limit</td>
+                        <td>Limita número de documentos</td>
+                        <td>{$limit: 10}</td>
+                    </tr>
+                    <tr>
+                        <td>$skip</td>
+                        <td>Salta documentos</td>
+                        <td>{$skip: 5}</td>
+                    </tr>
+                    <tr>
+                        <td>$lookup</td>
+                        <td>Join con otra colección</td>
+                        <td>{$lookup: {from: "orders", localField: "_id", ...}}</td>
+                    </tr>
+                    <tr>
+                        <td>$unwind</td>
+                        <td>Descompone array en documentos</td>
+                        <td>{$unwind: "$tags"}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Mongoose (Node.js) -->
+        <div class="content-section">
+            <h2><i class="fab fa-node-js"></i> Mongoose - ODM para Node.js</h2>
+            
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Concepto/Método</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>mongoose.connect()</td>
+                        <td>Conecta a MongoDB</td>
+                        <td>mongoose.connect('mongodb://localhost/mydb')</td>
+                    </tr>
+                    <tr>
+                        <td>Schema</td>
+                        <td>Define estructura del documento</td>
+                        <td>new Schema({ name: String, age: Number })</td>
+                    </tr>
+                    <tr>
+                        <td>Model</td>
+                        <td>Crea modelo desde schema</td>
+                        <td>mongoose.model('User', userSchema)</td>
+                    </tr>
+                    <tr>
+                        <td>save()</td>
+                        <td>Guarda documento en BD</td>
+                        <td>await user.save()</td>
+                    </tr>
+                    <tr>
+                        <td>Model.create()</td>
+                        <td>Crea y guarda documento</td>
+                        <td>await User.create({name: "Juan"})</td>
+                    </tr>
+                    <tr>
+                        <td>Model.find()</td>
+                        <td>Encuentra documentos</td>
+                        <td>await User.find({age: {$gt: 18}})</td>
+                    </tr>
+                    <tr>
+                        <td>Model.findById()</td>
+                        <td>Encuentra por ID</td>
+                        <td>await User.findById(id)</td>
+                    </tr>
+                    <tr>
+                        <td>Model.findByIdAndUpdate()</td>
+                        <td>Actualiza por ID</td>
+                        <td>await User.findByIdAndUpdate(id, {age: 26})</td>
+                    </tr>
+                    <tr>
+                        <td>Model.findByIdAndDelete()</td>
+                        <td>Elimina por ID</td>
+                        <td>await User.findByIdAndDelete(id)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <div class="info-box">
+                <h4><i class="fas fa-lightbulb"></i> Consejo importante</h4>
+                <p><strong>MongoDB es flexible</strong>: no necesitas definir esquemas rígidos. Cada documento puede tener campos diferentes.</p>
+                <p><strong>Diseña pensando en consultas</strong>: a diferencia de SQL, en MongoDB a veces duplicas datos para optimizar lecturas.</p>
+                <p><strong>Usa índices</strong>: son cruciales para rendimiento en colecciones grandes. Indexa campos que usas frecuentemente en queries.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Wiki Personal 2º DAW</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
