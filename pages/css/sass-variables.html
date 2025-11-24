@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Variables - Sass - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="./index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver a CSS & Sass
+            </a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-dollar-sign"></i> Variables Sass</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#intro" class="active">Introducción</a></li>
+                <li><a href="#declaracion">Declaración</a></li>
+                <li><a href="#scope">Scope</a></li>
+                <li><a href="#interpolacion">Interpolación</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <h1>Variables en Sass</h1>
+
+            <article id="intro" class="content-section">
+                <h2><i class="fas fa-info-circle"></i> ¿Qué son las Variables?</h2>
+                <p>Las variables en Sass permiten almacenar valores que se pueden reutilizar en todo el código CSS.</p>
+
+                <div class="code-block">
+<pre><code>$primary-color: #2965f1;
+$font-stack: 'Inter', sans-serif;
+$spacing: 20px;
+
+body {
+    font-family: $font-stack;
+    color: $primary-color;
+    margin: $spacing;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="declaracion" class="content-section">
+                <h2><i class="fas fa-code"></i> Declaración de Variables</h2>
+
+                <div class="code-block">
+<pre><code>// Variables globales
+$primary-color: #2965f1;
+$secondary-color: #cd6799;
+$dark-bg: #1a1a1a;
+
+// Variables locales
+.card {
+    $card-padding: 20px;
+    padding: $card-padding;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="scope" class="content-section">
+                <h2><i class="fas fa-layer-group"></i> Scope de Variables</h2>
+
+                <div class="code-block">
+<pre><code>$global-var: #fff;
+
+.container {
+    $local-var: 10px; // Solo disponible en .container
+    margin: $local-var;
+    color: $global-var; // Acceso a variable global
+}
+
+// $local-var no existe aquí
+.otro {
+    color: $global-var; // ✓
+    // margin: $local-var; // ✗ Error
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="interpolacion" class="content-section">
+                <h2><i class="fas fa-hashtag"></i> Interpolación</h2>
+
+                <div class="code-block">
+<pre><code>$name: "header";
+$side: "top";
+
+.#{$name} {
+    margin-#{$side}: 20px;
+}
+
+// Resultado:
+// .header {
+//     margin-top: 20px;
+// }</code></pre>
+                </div>
+            </article>
+
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

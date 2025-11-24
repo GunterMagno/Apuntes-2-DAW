@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Box Model - CSS - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="./index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver a CSS & Sass
+            </a>
+        </div>
+    </nav>
+
+    <!-- Contenido con Sidebar -->
+    <div class="content-with-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-box"></i> Box Model</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#concepto" class="active">Concepto</a></li>
+                <li><a href="#content">Content</a></li>
+                <li><a href="#padding">Padding</a></li>
+                <li><a href="#border">Border</a></li>
+                <li><a href="#margin">Margin</a></li>
+                <li><a href="#box-sizing">Box Sizing</a></li>
+                <li><a href="#display">Display</a></li>
+            </ul>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <h1>Box Model - Modelo de Caja CSS</h1>
+
+            <article id="concepto" class="content-section">
+                <h2><i class="fas fa-info-circle"></i> ¿Qué es el Box Model?</h2>
+                <p>El Box Model describe cómo se calcula el espacio que ocupa un elemento en una página web. Cada elemento es una caja rectangular compuesta por cuatro áreas:</p>
+
+                <div class="info-box">
+                    <h4>Componentes del Box Model (de dentro hacia fuera):</h4>
+                    <ul>
+                        <li><strong>Content:</strong> El contenido real (texto, imagen, etc.)</li>
+                        <li><strong>Padding:</strong> Espacio interno entre el contenido y el borde</li>
+                        <li><strong>Border:</strong> El borde del elemento</li>
+                        <li><strong>Margin:</strong> Espacio externo entre este elemento y otros</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article id="content" class="content-section">
+                <h2><i class="fas fa-file-alt"></i> Content - Contenido</h2>
+
+                <div class="code-block">
+<pre><code>.box {
+    width: 300px;
+    height: 200px;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="padding" class="content-section">
+                <h2><i class="fas fa-compress-arrows-alt"></i> Padding - Espacio Interno</h2>
+
+                <div class="code-block">
+<pre><code>/* Padding uniforme */
+.box {
+    padding: 20px;
+}
+
+/* Padding vertical y horizontal */
+.box {
+    padding: 10px 20px;
+}
+
+/* Cada lado individual */
+.box {
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+}
+
+/* Notación abreviada (top, right, bottom, left) */
+.box {
+    padding: 10px 20px 10px 20px;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="border" class="content-section">
+                <h2><i class="fas fa-border-style"></i> Border - Borde</h2>
+
+                <div class="code-block">
+<pre><code>/* Border completo */
+.box {
+    border: 2px solid black;
+}
+
+/* Border individual */
+.box {
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+}
+
+/* Bordes específicos */
+.box {
+    border-top: 1px solid red;
+    border-bottom: 2px dashed blue;
+}
+
+/* Border radius */
+.box {
+    border-radius: 10px;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="margin" class="content-section">
+                <h2><i class="fas fa-expand-arrows-alt"></i> Margin - Espacio Externo</h2>
+
+                <div class="code-block">
+<pre><code>/* Margin uniforme */
+.box {
+    margin: 20px;
+}
+
+/* Centrar horizontalmente */
+.box {
+    margin: 0 auto;
+}
+
+/* Margin negativo */
+.box {
+    margin-top: -10px;
+}
+
+/* Auto margins para centrar */
+.container {
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="box-sizing" class="content-section">
+                <h2><i class="fas fa-ruler-combined"></i> Box Sizing</h2>
+
+                <div class="info-box">
+                    <h4>Diferencia entre content-box y border-box:</h4>
+                    <ul>
+                        <li><strong>content-box (default):</strong> width/height solo incluye el contenido</li>
+                        <li><strong>border-box (recomendado):</strong> width/height incluye padding y border</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+<pre><code>/* Default - content-box */
+.box1 {
+    box-sizing: content-box;
+    width: 300px;
+    padding: 20px;
+    border: 5px solid black;
+    /* Ancho total: 300 + 40 + 10 = 350px */
+}
+
+/* Recomendado - border-box */
+.box2 {
+    box-sizing: border-box;
+    width: 300px;
+    padding: 20px;
+    border: 5px solid black;
+    /* Ancho total: 300px (incluye todo) */
+}
+
+/* Aplicar a todos los elementos */
+* {
+    box-sizing: border-box;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="display" class="content-section">
+                <h2><i class="fas fa-desktop"></i> Display</h2>
+
+                <div class="code-block">
+<pre><code>/* Block - Ocupa todo el ancho disponible */
+div {
+    display: block;
+}
+
+/* Inline - Solo ocupa el espacio necesario */
+span {
+    display: inline;
+}
+
+/* Inline-block - Como inline pero acepta width/height */
+.button {
+    display: inline-block;
+    width: 200px;
+}
+
+/* None - Oculta el elemento */
+.hidden {
+    display: none;
+}</code></pre>
+                </div>
+            </article>
+
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

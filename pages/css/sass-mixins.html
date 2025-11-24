@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Mixins - Sass - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="./index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver a CSS & Sass
+            </a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-blender"></i> Mixins Sass</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#intro" class="active">Introducción</a></li>
+                <li><a href="#basicos">Mixins Básicos</a></li>
+                <li><a href="#parametros">Con Parámetros</a></li>
+                <li><a href="#content">@content</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <h1>Mixins en Sass</h1>
+
+            <article id="intro" class="content-section">
+                <h2><i class="fas fa-info-circle"></i> ¿Qué son los Mixins?</h2>
+                <p>Los mixins son bloques de código reutilizables que pueden aceptar parámetros y generar CSS dinámico.</p>
+
+                <div class="code-block">
+<pre><code>@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    @include flex-center;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="basicos" class="content-section">
+                <h2><i class="fas fa-cube"></i> Mixins Básicos</h2>
+
+                <div class="code-block">
+<pre><code>@mixin reset-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+ul {
+    @include reset-list;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="parametros" class="content-section">
+                <h2><i class="fas fa-sliders-h"></i> Mixins con Parámetros</h2>
+
+                <div class="code-block">
+<pre><code>@mixin button($bg-color, $text-color: white) {
+    background: $bg-color;
+    color: $text-color;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+}
+
+.btn-primary {
+    @include button(#2965f1);
+}
+
+.btn-success {
+    @include button(#28a745, #000);
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="content" class="content-section">
+                <h2><i class="fas fa-file-code"></i> @content en Mixins</h2>
+
+                <div class="code-block">
+<pre><code>@mixin responsive($breakpoint) {
+    @if $breakpoint == mobile {
+        @media (max-width: 768px) { @content; }
+    } @else if $breakpoint == tablet {
+        @media (max-width: 1024px) { @content; }
+    }
+}
+
+.sidebar {
+    width: 300px;
+    
+    @include responsive(mobile) {
+        width: 100%;
+    }
+}</code></pre>
+                </div>
+            </article>
+
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

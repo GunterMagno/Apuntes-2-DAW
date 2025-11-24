@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>@scope - CSS - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="./index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver a CSS & Sass
+            </a>
+        </div>
+    </nav>
+
+    <!-- Contenido con Sidebar -->
+    <div class="content-with-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-layer-group"></i> @scope - CSS</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#introduccion" class="active">Introducción</a></li>
+                <li><a href="#sintaxis">Sintaxis Básica</a></li>
+                <li><a href="#como-funciona">Cómo Funciona</a></li>
+                <li><a href="#scope-root">Scope Root</a></li>
+                <li><a href="#scope-limit">Scope Limit</a></li>
+                <li><a href="#ejemplos-practicos">Ejemplos Prácticos</a></li>
+                <li><a href="#especificidad">Especificidad</a></li>
+                <li><a href="#casos-uso">Casos de Uso</a></li>
+                <li><a href="#ventajas">Ventajas</a></li>
+                <li><a href="#compatibilidad">Compatibilidad</a></li>
+            </ul>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <h1>@scope - Estilos con Alcance Limitado</h1>
+
+            <div class="intro-section">
+                <p><code>@scope</code> es una nueva funcionalidad de CSS que permite limitar el alcance de los estilos a una región específica del DOM, evitando conflictos de estilos y mejorando la modularidad del código.</p>
+            </div>
+
+            <!-- INTRODUCCIÓN -->
+            <article id="introduccion" class="content-section">
+                <h2><i class="fas fa-info-circle"></i> ¿Qué es @scope?</h2>
+                <p>La regla <code>@scope</code> permite definir estilos que solo se aplican dentro de un contexto específico del documento HTML. Esto es especialmente útil en aplicaciones grandes donde diferentes componentes pueden tener clases con nombres similares.</p>
+
+                <div class="info-box">
+                    <strong><i class="fas fa-lightbulb"></i> Dato importante:</strong> @scope es parte de la especificación CSS Cascading and Inheritance Level 6 y proporciona una alternativa nativa a metodologías como BEM o CSS Modules.
+                </div>
+
+                <h3>Problema que resuelve</h3>
+                <p>Sin @scope, los estilos globales pueden afectar elementos no deseados:</p>
+
+                <div class="code-block">
+<pre><code>/* Sin @scope - Afecta a TODOS los .title */
+.title {
+    color: blue;
+    font-size: 24px;
+}
+
+/* Esto afectará a .title en toda la página */</code></pre>
+                </div>
+            </article>
+
+            <!-- SINTAXIS BÁSICA -->
+            <article id="sintaxis" class="content-section">
+                <h2><i class="fas fa-code"></i> Sintaxis Básica</h2>
+                
+                <div class="code-block">
+<pre><code>@scope (scope-root) {
+    /* Estilos que solo se aplican dentro de scope-root */
+    .elemento {
+        propiedad: valor;
+    }
+}
+
+/* Con límite de alcance */
+@scope (scope-root) to (scope-limit) {
+    /* Estilos aplicados entre scope-root y scope-limit */
+    .elemento {
+        propiedad: valor;
+    }
+}</code></pre>
+                </div>
+
+                <h3>Componentes principales:</h3>
+                <ul>
+                    <li><strong>scope-root:</strong> Define dónde comienza el alcance (el contenedor)</li>
+                    <li><strong>scope-limit (to):</strong> Define dónde termina el alcance (opcional)</li>
+                    <li><strong>Selectores internos:</strong> Solo afectan elementos dentro del scope</li>
+                </ul>
+            </article>
+
+            <!-- CÓMO FUNCIONA -->
+            <article id="como-funciona" class="content-section">
+                <h2><i class="fas fa-cogs"></i> ¿Cómo Funciona?</h2>
+                
+                <p>@scope crea un "contexto de estilo" donde los selectores solo coinciden con elementos que son descendientes del scope root (y opcionalmente, no descendientes del scope limit).</p>
+
+                <h3>Ejemplo Visual</h3>
+                
+                <div class="code-example">
+<pre><span class="comment">/* HTML */</span>
+&lt;<span class="keyword">div</span> <span class="property">class</span>=<span class="value">"card"</span>&gt;
+    &lt;<span class="keyword">h2</span> <span class="property">class</span>=<span class="value">"title"</span>&gt;Título de la Card&lt;/<span class="keyword">h2</span>&gt;
+    &lt;<span class="keyword">p</span>&gt;Contenido de la card&lt;/<span class="keyword">p</span>&gt;
+&lt;/<span class="keyword">div</span>&gt;
+
+&lt;<span class="keyword">div</span> <span class="property">class</span>=<span class="value">"sidebar"</span>&gt;
+    &lt;<span class="keyword">h2</span> <span class="property">class</span>=<span class="value">"title"</span>&gt;Título del Sidebar&lt;/<span class="keyword">h2</span>&gt;
+    &lt;<span class="keyword">p</span>&gt;Contenido del sidebar&lt;/<span class="keyword">p</span>&gt;
+&lt;/<span class="keyword">div</span>&gt;
+
+<span class="comment">/* CSS con @scope */</span>
+<span class="keyword">@scope</span> (<span class="selector">.card</span>) {
+    <span class="selector">.title</span> {
+        <span class="property">color</span>: <span class="value">blue</span>;
+        <span class="property">font-size</span>: <span class="value">24px</span>;
+    }
+}
+
+<span class="keyword">@scope</span> (<span class="selector">.sidebar</span>) {
+    <span class="selector">.title</span> {
+        <span class="property">color</span>: <span class="value">red</span>;
+        <span class="property">font-size</span>: <span class="value">18px</span>;
+    }
+}
+
+<span class="comment">/* Resultado:
+   - .title dentro de .card será azul y 24px
+   - .title dentro de .sidebar será rojo y 18px
+   - NO hay conflictos entre ambos */</span></pre>
+                </div>
+            </article>
+
+            <!-- SCOPE ROOT -->
+            <article id="scope-root" class="content-section">
+                <h2><i class="fas fa-bullseye"></i> Scope Root - El Contenedor</h2>
+                
+                <p>El scope root define el elemento contenedor donde comenzarán a aplicarse los estilos.</p>
+
+                <div class="code-example">
+<pre><span class="comment">/* Scope root con selector de clase */</span>
+<span class="keyword">@scope</span> (<span class="selector">.component</span>) {
+    <span class="selector">h1</span> { <span class="property">color</span>: <span class="value">navy</span>; }
+    <span class="selector">p</span> { <span class="property">line-height</span>: <span class="value">1.6</span>; }
+}
+
+<span class="comment">/* Scope root con selector de ID */</span>
+<span class="keyword">@scope</span> (<span class="selector">#main-content</span>) {
+    <span class="selector">.button</span> { <span class="property">background</span>: <span class="value">green</span>; }
+}
+
+<span class="comment">/* Scope root con selector de atributo */</span>
+<span class="keyword">@scope</span> (<span class="selector">[data-theme="dark"]</span>) {
+    <span class="selector">.text</span> { <span class="property">color</span>: <span class="value">white</span>; }
+}
+
+<span class="comment">/* Scope root con selector complejo */</span>
+<span class="keyword">@scope</span> (<span class="selector">article.blog-post</span>) {
+    <span class="selector">img</span> { <span class="property">border-radius</span>: <span class="value">8px</span>; }
+}</pre>
+                </div>
+
+                <h3>Selector :scope</h3>
+                <p>Dentro de un @scope, puedes usar el selector <code>:scope</code> para referirte al elemento root:</p>
+
+                <div class="code-example">
+<pre><span class="keyword">@scope</span> (<span class="selector">.card</span>) {
+    <span class="comment">/* Aplica estilos al propio elemento .card */</span>
+    <span class="selector">:scope</span> {
+        <span class="property">border</span>: <span class="value">1px solid #ccc</span>;
+        <span class="property">padding</span>: <span class="value">20px</span>;
+    }
+    
+    <span class="comment">/* Aplica a descendientes */</span>
+    <span class="selector">.title</span> {
+        <span class="property">font-weight</span>: <span class="value">bold</span>;
+    }
+}</pre>
+                </div>
+            </article>
+
+            <!-- SCOPE LIMIT -->
+            <article id="scope-limit" class="content-section">
+                <h2><i class="fas fa-stop-circle"></i> Scope Limit - El Límite</h2>
+                
+                <p>El scope limit (usando <code>to</code>) define un límite donde los estilos dejan de aplicarse, incluso dentro del scope root.</p>
+
+                <div class="code-example">
+<pre><span class="comment">/* HTML */</span>
+&lt;<span class="keyword">article</span> <span class="property">class</span>=<span class="value">"post"</span>&gt;
+    &lt;<span class="keyword">h1</span>&gt;Título del Post&lt;/<span class="keyword">h1</span>&gt;
+    &lt;<span class="keyword">p</span>&gt;Este párrafo estará estilizado&lt;/<span class="keyword">p</span>&gt;
+    
+    &lt;<span class="keyword">div</span> <span class="property">class</span>=<span class="value">"comments"</span>&gt;
+        &lt;<span class="keyword">h2</span>&gt;Comentarios&lt;/<span class="keyword">h2</span>&gt;
+        &lt;<span class="keyword">p</span>&gt;Este párrafo NO estará estilizado&lt;/<span class="keyword">p</span>&gt;
+    &lt;/<span class="keyword">div</span>&gt;
+&lt;/<span class="keyword">article</span>&gt;
+
+<span class="comment">/* CSS con scope limit */</span>
+<span class="keyword">@scope</span> (<span class="selector">.post</span>) <span class="keyword">to</span> (<span class="selector">.comments</span>) {
+    <span class="selector">p</span> {
+        <span class="property">color</span>: <span class="value">blue</span>;
+        <span class="property">font-size</span>: <span class="value">16px</span>;
+    }
+}
+
+<span class="comment">/* Resultado:
+   - El &lt;p&gt; dentro de .post pero FUERA de .comments: azul
+   - El &lt;p&gt; dentro de .comments: estilo por defecto (no afectado) */</span></pre>
+                </div>
+
+                <h3>Casos de uso del scope limit</h3>
+                <ul>
+                    <li>Excluir secciones anidadas (ej: comentarios, widgets embebidos)</li>
+                    <li>Prevenir que estilos afecten componentes internos independientes</li>
+                    <li>Crear "zonas neutras" dentro de un scope más grande</li>
+                </ul>
+
+                <div class="demo-box">
+                    <h4>Ejemplo práctico: Card con sección especial</h4>
+                    <div class="code-example">
+<pre><span class="keyword">@scope</span> (<span class="selector">.product-card</span>) <span class="keyword">to</span> (<span class="selector">.reviews</span>) {
+    <span class="comment">/* Estilos para el contenido de la card */</span>
+    <span class="selector">h3</span> { <span class="property">color</span>: <span class="value">#333</span>; }
+    <span class="selector">p</span> { <span class="property">margin</span>: <span class="value">10px 0</span>; }
+}
+
+<span class="keyword">@scope</span> (<span class="selector">.reviews</span>) {
+    <span class="comment">/* Estilos específicos para las reviews */</span>
+    <span class="selector">h3</span> { <span class="property">color</span>: <span class="value">#0066cc</span>; }
+    <span class="selector">p</span> { <span class="property">font-style</span>: <span class="value">italic</span>; }
+}</pre>
+                    </div>
+                </div>
+            </article>
+
+            <!-- EJEMPLOS PRÁCTICOS -->
+            <article id="ejemplos-practicos" class="content-section">
+                <h2><i class="fas fa-laptop-code"></i> Ejemplos Prácticos</h2>
+
+                <h3>Ejemplo 1: Sistema de Tarjetas</h3>
+                <div class="code-example">
+<pre><span class="comment">/* HTML */</span>
+&lt;<span class="keyword">div</span> <span class="property">class</span>=<span class="value">"card card-primary"</span>&gt;
+    &lt;<span class="keyword">h2</span> <span class="property">class</span>=<span class="value">"title"</span>&gt;Card Principal&lt;/<span class="keyword">h2</span>&gt;
+    &lt;<span class="keyword">p</span> <span class="property">class</span>=<span class="value">"description"</span>&gt;Descripción&lt;/<span class="keyword">p</span>&gt;
+&lt;/<span class="keyword">div</span>&gt;
+
+&lt;<span class="keyword">div</span> <span class="property">class</span>=<span class="value">"card card-secondary"</span>&gt;
+    &lt;<span class="keyword">h2</span> <span class="property">class</span>=<span class="value">"title"</span>&gt;Card Secundaria&lt;/<span class="keyword">h2</span>&gt;
+    &lt;<span class="keyword">p</span> <span class="property">class</span>=<span class="value">"description"</span>&gt;Descripción&lt;/<span class="keyword">p</span>&gt;
+&lt;/<span class="keyword">div</span>&gt;
+
+<span class="comment">/* CSS */</span>
+<span class="keyword">@scope</span> (<span class="selector">.card-primary</span>) {
+    <span class="selector">:scope</span> {
+        <span class="property">background</span>: <span class="value">linear-gradient(135deg, #667eea 0%, #764ba2 100%)</span>;
+        <span class="property">color</span>: <span class="value">white</span>;
+    }
+    
+    <span class="selector">.title</span> {
+        <span class="property">font-size</span>: <span class="value">28px</span>;
+        <span class="property">font-weight</span>: <span class="value">bold</span>;
+    }
+    
+    <span class="selector">.description</span> {
+        <span class="property">opacity</span>: <span class="value">0.9</span>;
+    }
+}
+
+<span class="keyword">@scope</span> (<span class="selector">.card-secondary</span>) {
+    <span class="selector">:scope</span> {
+        <span class="property">background</span>: <span class="value">#f0f0f0</span>;
+        <span class="property">color</span>: <span class="value">#333</span>;
+    }
+    
+    <span class="selector">.title</span> {
+        <span class="property">font-size</span>: <span class="value">20px</span>;
+        <span class="property">color</span>: <span class="value">#666</span>;
+    }
+}</pre>
+                </div>
+
+                <h3>Ejemplo 2: Tema Claro/Oscuro</h3>
+                <div class="code-example">
+<pre><span class="keyword">@scope</span> (<span class="selector">[data-theme="light"]</span>) {
+    <span class="selector">:scope</span> {
+        <span class="property">background-color</span>: <span class="value">#ffffff</span>;
+        <span class="property">color</span>: <span class="value">#000000</span>;
+    }
+    
+    <span class="selector">.button</span> {
+        <span class="property">background</span>: <span class="value">#007bff</span>;
+        <span class="property">color</span>: <span class="value">white</span>;
+    }
+    
+    <span class="selector">.input</span> {
+        <span class="property">border</span>: <span class="value">1px solid #ccc</span>;
+        <span class="property">background</span>: <span class="value">white</span>;
+    }
+}
+
+<span class="keyword">@scope</span> (<span class="selector">[data-theme="dark"]</span>) {
+    <span class="selector">:scope</span> {
+        <span class="property">background-color</span>: <span class="value">#1a1a1a</span>;
+        <span class="property">color</span>: <span class="value">#ffffff</span>;
+    }
+    
+    <span class="selector">.button</span> {
+        <span class="property">background</span>: <span class="value">#0d6efd</span>;
+        <span class="property">color</span>: <span class="value">white</span>;
+    }
+    
+    <span class="selector">.input</span> {
+        <span class="property">border</span>: <span class="value">1px solid #444</span>;
+        <span class="property">background</span>: <span class="value">#2a2a2a</span>;
+        <span class="property">color</span>: <span class="value">white</span>;
+    }
+}</pre>
+                </div>
+
+                <h3>Ejemplo 3: Componente de Blog Post</h3>
+                <div class="code-example">
+<pre>&lt;<span class="keyword">article</span> <span class="property">class</span>=<span class="value">"blog-post"</span>&gt;
+    &lt;<span class="keyword">header</span> <span class="property">class</span>=<span class="value">"post-header"</span>&gt;
+        &lt;<span class="keyword">h1</span>&gt;Título del Post&lt;/<span class="keyword">h1</span>&gt;
+        &lt;<span class="keyword">p</span> <span class="property">class</span>=<span class="value">"meta"</span>&gt;Por Juan - 24 Nov 2025&lt;/<span class="keyword">p</span>&gt;
+    &lt;/<span class="keyword">header</span>&gt;
+    
+    &lt;<span class="keyword">div</span> <span class="property">class</span>=<span class="value">"post-content"</span>&gt;
+        &lt;<span class="keyword">p</span>&gt;Contenido del artículo...&lt;/<span class="keyword">p</span>&gt;
+        &lt;<span class="keyword">blockquote</span>&gt;Cita importante&lt;/<span class="keyword">blockquote</span>&gt;
+    &lt;/<span class="keyword">div</span>&gt;
+    
+    &lt;<span class="keyword">aside</span> <span class="property">class</span>=<span class="value">"author-bio"</span>&gt;
+        &lt;<span class="keyword">h3</span>&gt;Sobre el autor&lt;/<span class="keyword">h3</span>&gt;
+        &lt;<span class="keyword">p</span>&gt;Biografía del autor...&lt;/<span class="keyword">p</span>&gt;
+    &lt;/<span class="keyword">aside</span>&gt;
+&lt;/<span class="keyword">article</span>&gt;
+
+<span class="comment">/* Estilos para el contenido del post, excluyendo la bio del autor */</span>
+<span class="keyword">@scope</span> (<span class="selector">.blog-post</span>) <span class="keyword">to</span> (<span class="selector">.author-bio</span>) {
+    <span class="selector">h1</span> {
+        <span class="property">font-size</span>: <span class="value">2.5rem</span>;
+        <span class="property">color</span>: <span class="value">#1a1a1a</span>;
+        <span class="property">margin-bottom</span>: <span class="value">0.5rem</span>;
+    }
+    
+    <span class="selector">p</span> {
+        <span class="property">font-size</span>: <span class="value">1.1rem</span>;
+        <span class="property">line-height</span>: <span class="value">1.8</span>;
+        <span class="property">color</span>: <span class="value">#333</span>;
+    }
+    
+    <span class="selector">blockquote</span> {
+        <span class="property">border-left</span>: <span class="value">4px solid #007bff</span>;
+        <span class="property">padding-left</span>: <span class="value">20px</span>;
+        <span class="property">font-style</span>: <span class="value">italic</span>;
+        <span class="property">color</span>: <span class="value">#666</span>;
+    }
+}
+
+<span class="comment">/* Estilos específicos para la bio del autor */</span>
+<span class="keyword">@scope</span> (<span class="selector">.author-bio</span>) {
+    <span class="selector">:scope</span> {
+        <span class="property">background</span>: <span class="value">#f8f9fa</span>;
+        <span class="property">padding</span>: <span class="value">20px</span>;
+        <span class="property">border-radius</span>: <span class="value">8px</span>;
+    }
+    
+    <span class="selector">h3</span> {
+        <span class="property">font-size</span>: <span class="value">1.3rem</span>;
+        <span class="property">color</span>: <span class="value">#007bff</span>;
+    }
+    
+    <span class="selector">p</span> {
+        <span class="property">font-size</span>: <span class="value">0.95rem</span>;
+        <span class="property">color</span>: <span class="value">#666</span>;
+    }
+}</pre>
+                </div>
+
+                <h3>Ejemplo 4: Navegación con Tabs</h3>
+                <div class="code-example">
+<pre><span class="keyword">@scope</span> (<span class="selector">.tab-panel</span>) {
+    <span class="selector">:scope</span> {
+        <span class="property">border</span>: <span class="value">1px solid #ddd</span>;
+        <span class="property">border-radius</span>: <span class="value">8px</span>;
+        <span class="property">padding</span>: <span class="value">20px</span>;
+    }
+    
+    <span class="selector">.tab-header</span> {
+        <span class="property">display</span>: <span class="value">flex</span>;
+        <span class="property">gap</span>: <span class="value">10px</span>;
+        <span class="property">border-bottom</span>: <span class="value">2px solid #e0e0e0</span>;
+    }
+    
+    <span class="selector">.tab-button</span> {
+        <span class="property">padding</span>: <span class="value">10px 20px</span>;
+        <span class="property">background</span>: <span class="value">transparent</span>;
+        <span class="property">border</span>: <span class="value">none</span>;
+        <span class="property">cursor</span>: <span class="value">pointer</span>;
+    }
+    
+    <span class="selector">.tab-button.active</span> {
+        <span class="property">color</span>: <span class="value">#007bff</span>;
+        <span class="property">border-bottom</span>: <span class="value">3px solid #007bff</span>;
+        <span class="property">font-weight</span>: <span class="value">bold</span>;
+    }
+    
+    <span class="selector">.tab-content</span> {
+        <span class="property">padding-top</span>: <span class="value">20px</span>;
+    }
+}</pre>
+                </div>
+            </article>
+
+            <!-- ESPECIFICIDAD -->
+            <article id="especificidad" class="content-section">
+                <h2><i class="fas fa-balance-scale"></i> Especificidad y Cascade</h2>
+                
+                <p>Los estilos dentro de @scope tienen un comportamiento especial respecto a la especificidad:</p>
+
+                <div class="info-box">
+                    <strong>Regla importante:</strong> Los estilos dentro de @scope tienen mayor "proximidad" al elemento, lo que les da prioridad sobre estilos globales con la misma especificidad.
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Estilo</th>
+                            <th>Especificidad</th>
+                            <th>Prioridad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Estilo global</td>
+                            <td>0-1-0 (.class)</td>
+                            <td>Baja</td>
+                        </tr>
+                        <tr>
+                            <td>Estilo dentro de @scope</td>
+                            <td>0-1-0 (.class)</td>
+                            <td>Media (mayor proximidad)</td>
+                        </tr>
+                        <tr>
+                            <td>Estilo con mayor especificidad</td>
+                            <td>0-2-0 (.class.class)</td>
+                            <td>Alta</td>
+                        </tr>
+                        <tr>
+                            <td>Estilo inline</td>
+                            <td>1-0-0</td>
+                            <td>Muy alta</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Ejemplo de Especificidad</h3>
+                <div class="code-example">
+<pre><span class="comment">/* Estilo global */</span>
+<span class="selector">.button</span> {
+    <span class="property">background</span>: <span class="value">gray</span>; <span class="comment">/* No se aplicará */</span>
+}
+
+<span class="comment">/* Estilo dentro de scope - GANA por proximidad */</span>
+<span class="keyword">@scope</span> (<span class="selector">.toolbar</span>) {
+    <span class="selector">.button</span> {
+        <span class="property">background</span>: <span class="value">blue</span>; <span class="comment">/* Este se aplica */</span>
+    }
+}
+
+<span class="comment">/* Pero un selector más específico aún gana */</span>
+<span class="selector">.toolbar .button.primary</span> {
+    <span class="property">background</span>: <span class="value">green</span>; <span class="comment">/* Este gana sobre el scope */</span>
+}</pre>
+                </div>
+
+                <h3>Scopes Anidados</h3>
+                <p>Cuando tienes scopes anidados, el scope más cercano tiene prioridad:</p>
+
+                <div class="code-example">
+<pre><span class="keyword">@scope</span> (<span class="selector">.outer</span>) {
+    <span class="selector">.title</span> {
+        <span class="property">color</span>: <span class="value">blue</span>;
+    }
+    
+    <span class="keyword">@scope</span> (<span class="selector">.inner</span>) {
+        <span class="selector">.title</span> {
+            <span class="property">color</span>: <span class="value">red</span>; <span class="comment">/* Gana por estar más cerca */</span>
+        }
+    }
+}</pre>
+                </div>
+            </article>
+
+            <!-- CASOS DE USO -->
+            <article id="casos-uso" class="content-section">
+                <h2><i class="fas fa-tasks"></i> Casos de Uso Comunes</h2>
+
+                <div class="success-box">
+                    <h3>1. Sistema de Componentes</h3>
+                    <p>Crear componentes reutilizables sin conflictos de nombres:</p>
+                    <div class="code-example">
+<pre><span class="keyword">@scope</span> (<span class="selector">.modal</span>) {
+    <span class="selector">.header</span> { <span class="comment">/* Solo afecta headers dentro de modales */</span> }
+    <span class="selector">.footer</span> { <span class="comment">/* Solo afecta footers dentro de modales */</span> }
+}</pre>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <h3>2. Temas Contextuales</h3>
+                    <p>Aplicar diferentes temas a secciones específicas:</p>
+                    <div class="code-example">
+<pre><span class="keyword">@scope</span> (<span class="selector">.admin-panel</span>) {
+    <span class="selector">:scope</span> { <span class="property">--primary-color</span>: <span class="value">#8b0000</span>; }
+}
+
+<span class="keyword">@scope</span> (<span class="selector">.user-dashboard</span>) {
+    <span class="selector">:scope</span> { <span class="property">--primary-color</span>: <span class="value">#0066cc</span>; }
+}</pre>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <h3>3. Protección de Estilos</h3>
+                    <p>Proteger componentes de estilos globales no deseados:</p>
+                    <div class="code-example">
+<pre><span class="keyword">@scope</span> (<span class="selector">.widget</span>) <span class="keyword">to</span> (<span class="selector">.widget-excluded</span>) {
+    <span class="comment">/* Estilos solo dentro de .widget pero no en .widget-excluded */</span>
+    <span class="selector">*</span> {
+        <span class="property">box-sizing</span>: <span class="value">border-box</span>;
+    }
+}</pre>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <h3>4. Layouts Complejos</h3>
+                    <p>Diferentes estilos para diferentes regiones de la página:</p>
+                    <div class="code-example">
+<pre><span class="keyword">@scope</span> (<span class="selector">header</span>) {
+    <span class="selector">nav</span> { <span class="comment">/* Navegación del header */</span> }
+}
+
+<span class="keyword">@scope</span> (<span class="selector">footer</span>) {
+    <span class="selector">nav</span> { <span class="comment">/* Navegación del footer, estilos diferentes */</span> }
+}</pre>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <h3>5. Microfrontends</h3>
+                    <p>Aislar estilos de diferentes aplicaciones en la misma página:</p>
+                    <div class="code-example">
+<pre><span class="keyword">@scope</span> (<span class="selector">[data-app="app1"]</span>) {
+    <span class="comment">/* Estilos exclusivos para app1 */</span>
+}
+
+<span class="keyword">@scope</span> (<span class="selector">[data-app="app2"]</span>) {
+    <span class="comment">/* Estilos exclusivos para app2 */</span>
+}</pre>
+                    </div>
+                </div>
+            </article>
+
+            <!-- VENTAJAS -->
+            <article id="ventajas" class="content-section">
+                <h2><i class="fas fa-check-circle"></i> Ventajas de Usar @scope</h2>
+
+                <ul class="advantages-list">
+                    <li>
+                        <strong><i class="fas fa-shield-alt"></i> Encapsulación:</strong> 
+                        Los estilos están aislados y no afectan el resto de la página
+                    </li>
+                    <li>
+                        <strong><i class="fas fa-puzzle-piece"></i> Modularidad:</strong> 
+                        Facilita la creación de componentes independientes y reutilizables
+                    </li>
+                    <li>
+                        <strong><i class="fas fa-code"></i> Código más limpio:</strong> 
+                        No necesitas prefijos largos o metodologías como BEM
+                    </li>
+                    <li>
+                        <strong><i class="fas fa-tachometer-alt"></i> Rendimiento:</strong> 
+                        El navegador puede optimizar mejor los estilos al conocer su alcance
+                    </li>
+                    <li>
+                        <strong><i class="fas fa-wrench"></i> Mantenibilidad:</strong> 
+                        Más fácil entender y modificar estilos específicos de componentes
+                    </li>
+                    <li>
+                        <strong><i class="fas fa-users"></i> Trabajo en equipo:</strong> 
+                        Reduce conflictos cuando varios desarrolladores trabajan en paralelo
+                    </li>
+                    <li>
+                        <strong><i class="fas fa-globe"></i> Nativo:</strong> 
+                        No requiere preprocesadores ni herramientas adicionales
+                    </li>
+                </ul>
+
+                <h3>Comparación con otras soluciones</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Solución</th>
+                            <th>Ventajas</th>
+                            <th>Desventajas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>@scope (nativo)</strong></td>
+                            <td>No requiere herramientas, rendimiento optimizado</td>
+                            <td>Soporte limitado en navegadores antiguos</td>
+                        </tr>
+                        <tr>
+                            <td><strong>BEM (metodología)</strong></td>
+                            <td>Compatible con todos los navegadores</td>
+                            <td>Nombres de clases largos, verboso</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CSS Modules</strong></td>
+                            <td>Buen soporte, automatizado</td>
+                            <td>Requiere build step y configuración</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Shadow DOM</strong></td>
+                            <td>Encapsulación total</td>
+                            <td>Complejidad, dificulta estilos globales</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+
+            <!-- COMPATIBILIDAD -->
+            <article id="compatibilidad" class="content-section">
+                <h2><i class="fas fa-browser"></i> Compatibilidad con Navegadores</h2>
+
+                <div class="warning-box">
+                    <strong><i class="fas fa-exclamation-triangle"></i> Advertencia:</strong> @scope es una funcionalidad relativamente nueva. Verifica la compatibilidad actual antes de usar en producción.
+                </div>
+
+                <h3>Estado actual (Noviembre 2025)</h3>
+                <ul>
+                    <li><strong>Chrome/Edge:</strong> Soporte desde versión 118+ (Septiembre 2023)</li>
+                    <li><strong>Safari:</strong> Soporte desde versión 17.4+ (Marzo 2024)</li>
+                    <li><strong>Firefox:</strong> En desarrollo, disponible con flag experimental</li>
+                    <li><strong>Opera:</strong> Soportado (basado en Chromium)</li>
+                </ul>
+
+                <h3>Detección de soporte</h3>
+                <div class="code-example">
+<pre><span class="comment">/* JavaScript */</span>
+<span class="keyword">if</span> (CSS.supports(<span class="value">'selector(:scope)'</span>)) {
+    console.log(<span class="value">'@scope es soportado'</span>);
+} <span class="keyword">else</span> {
+    console.log(<span class="value">'@scope NO es soportado'</span>);
+}
+
+<span class="comment">/* CSS con fallback */</span>
+<span class="selector">.component .title</span> {
+    <span class="property">color</span>: <span class="value">blue</span>; <span class="comment">/* Fallback */</span>
+}
+
+<span class="keyword">@supports</span> (selector(:scope)) {
+    <span class="keyword">@scope</span> (<span class="selector">.component</span>) {
+        <span class="selector">.title</span> {
+            <span class="property">color</span>: <span class="value">navy</span>; <span class="comment">/* Usado si @scope está soportado */</span>
+        }
+    }
+}</pre>
+                </div>
+
+                <h3>Estrategias de Fallback</h3>
+                <div class="code-example">
+<pre><span class="comment">/* 1. Selectores tradicionales como fallback */</span>
+<span class="selector">.card .title</span> { <span class="property">color</span>: <span class="value">black</span>; }
+
+<span class="keyword">@scope</span> (<span class="selector">.card</span>) {
+    <span class="selector">.title</span> { <span class="property">color</span>: <span class="value">blue</span>; }
+}
+
+<span class="comment">/* 2. Progressive enhancement */</span>
+<span class="selector">.button</span> {
+    <span class="comment">/* Estilos base para todos */</span>
+    <span class="property">padding</span>: <span class="value">10px 20px</span>;
+}
+
+<span class="keyword">@scope</span> (<span class="selector">.premium-section</span>) {
+    <span class="comment">/* Mejoras solo si el navegador lo soporta */</span>
+    <span class="selector">.button</span> {
+        <span class="property">background</span>: <span class="value">linear-gradient(45deg, gold, orange)</span>;
+    }
+}</pre>
+                </div>
+
+                <div class="info-box">
+                    <strong>Recomendación:</strong> Para proyectos en producción, considera usar PostCSS con un plugin que transforme @scope a selectores tradicionales para navegadores sin soporte.
+                </div>
+            </article>
+
+            <div class="resources-section">
+                <h2>Recursos Adicionales</h2>
+                <ul>
+                    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@scope" target="_blank">MDN - @scope</a></li>
+                    <li><a href="https://developer.chrome.com/articles/at-scope/" target="_blank">Chrome Developers - @scope</a></li>
+                    <li><a href="https://www.w3.org/TR/css-cascade-6/#scoped-styles" target="_blank">W3C Specification - Scoped Styles</a></li>
+                    <li><a href="https://caniuse.com/css-cascade-scope" target="_blank">Can I Use - @scope</a></li>
+                </ul>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Introducción a Sass - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="./index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver a CSS & Sass
+            </a>
+        </div>
+    </nav>
+
+    <!-- Contenido con Sidebar -->
+    <div class="content-with-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fab fa-sass"></i> Introducción a Sass</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#que-es" class="active">¿Qué es Sass?</a></li>
+                <li><a href="#instalacion">Instalación</a></li>
+                <li><a href="#sintaxis">Sintaxis</a></li>
+                <li><a href="#variables">Variables</a></li>
+                <li><a href="#anidamiento">Anidamiento</a></li>
+                <li><a href="#mixins">Mixins</a></li>
+                <li><a href="#extend">@extend</a></li>
+                <li><a href="#modulos">Módulos</a></li>
+                <li><a href="#funciones">Funciones</a></li>
+                <li><a href="#compilacion">Compilación</a></li>
+            </ul>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <h1>Introducción a Sass</h1>
+
+            <article id="que-es" class="content-section">
+                <h2><i class="fas fa-info-circle"></i> ¿Qué es Sass?</h2>
+                <p><strong>Sass (Syntactically Awesome Style Sheets)</strong> es un preprocesador CSS que extiende las capacidades de CSS con características avanzadas como variables, anidamiento, mixins, funciones y más.</p>
+                
+                <div class="info-box">
+                    <h3>Ventajas de Sass</h3>
+                    <ul>
+                        <li>✓ <strong>Variables:</strong> Reutiliza valores (colores, fuentes, etc.)</li>
+                        <li>✓ <strong>Anidamiento:</strong> Código más organizado y legible</li>
+                        <li>✓ <strong>Mixins:</strong> Evita repetición de código</li>
+                        <li>✓ <strong>Funciones:</strong> Operaciones y cálculos dinámicos</li>
+                        <li>✓ <strong>Modularidad:</strong> Organiza tu código en múltiples archivos</li>
+                        <li>✓ <strong>Herencia:</strong> Comparte estilos entre selectores</li>
+                    </ul>
+                </div>
+
+                <p>Sass se compila a CSS estándar, por lo que es compatible con todos los navegadores.</p>
+            </article>
+
+            <article id="instalacion" class="content-section">
+                <h2><i class="fas fa-download"></i> Instalación</h2>
+
+                <h3>1. Usando npm (Node.js)</h3>
+                <div class="code-block">
+                    <pre><code># Instalación global
+npm install -g sass
+
+# Instalación local en proyecto
+npm install --save-dev sass</code></pre>
+                </div>
+
+                <h3>2. Verificar instalación</h3>
+                <div class="code-block">
+                    <pre><code>sass --version</code></pre>
+                </div>
+
+                <h3>3. Otras opciones</h3>
+                <ul>
+                    <li><strong>Standalone:</strong> Descarga desde <a href="https://sass-lang.com/install" target="_blank">sass-lang.com</a></li>
+                    <li><strong>VS Code:</strong> Extensión "Live Sass Compiler"</li>
+                    <li><strong>Build Tools:</strong> Webpack, Vite, Gulp, etc.</li>
+                </ul>
+            </article>
+
+            <article id="sintaxis" class="content-section">
+                <h2><i class="fas fa-code"></i> Sintaxis: SCSS vs Sass</h2>
+
+                <h3>SCSS (Recomendado) - Similar a CSS</h3>
+                <div class="code-block">
+                    <pre><code>// archivo.scss
+$primary-color: #3498db;
+
+.button {
+    background-color: $primary-color;
+    padding: 10px 20px;
+    
+    &:hover {
+        background-color: darken($primary-color, 10%);
+    }
+}</code></pre>
+                </div>
+
+                <h3>Sass (Indentada) - Sin llaves ni punto y coma</h3>
+                <div class="code-block">
+                    <pre><code>// archivo.sass
+$primary-color: #3498db
+
+.button
+    background-color: $primary-color
+    padding: 10px 20px
+    
+    &:hover
+        background-color: darken($primary-color, 10%)</code></pre>
+                </div>
+
+                <div class="info-box">
+                    <strong>Recomendación:</strong> Usa SCSS (.scss) ya que es más similar a CSS y más popular en la comunidad.
+                </div>
+            </article>
+
+            <article id="variables" class="content-section">
+                <h2><i class="fas fa-dollar-sign"></i> Variables</h2>
+
+                <p>Las variables permiten almacenar valores que puedes reutilizar en todo tu código.</p>
+
+                <div class="code-block">
+                    <pre><code>// Definir variables
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$font-stack: 'Helvetica', Arial, sans-serif;
+$base-padding: 16px;
+$border-radius: 8px;
+
+// Usar variables
+.button {
+    background-color: $primary-color;
+    font-family: $font-stack;
+    padding: $base-padding;
+    border-radius: $border-radius;
+}
+
+.card {
+    border: 1px solid $secondary-color;
+    padding: $base-padding * 2; // Operaciones matemáticas
+    border-radius: $border-radius;
+}</code></pre>
+                </div>
+
+                <h3>Alcance de Variables</h3>
+                <div class="code-block">
+                    <pre><code>$global-color: blue;
+
+.container {
+    $local-color: red; // Solo disponible dentro de .container
+    
+    color: $global-color;
+    background: $local-color;
+    
+    .child {
+        color: $local-color; // Accesible en descendientes
+    }
+}
+
+.other {
+    color: $global-color; // ✓
+    // color: $local-color; // ✗ Error - no definida
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="anidamiento" class="content-section">
+                <h2><i class="fas fa-indent"></i> Anidamiento</h2>
+
+                <p>Refleja la jerarquía HTML en tu CSS, haciendo el código más organizado.</p>
+
+                <div class="code-block">
+                    <pre><code>// Sass
+.navbar {
+    background: #333;
+    padding: 20px;
+    
+    .logo {
+        font-size: 24px;
+        color: white;
+    }
+    
+    .nav-menu {
+        list-style: none;
+        
+        li {
+            display: inline-block;
+            margin: 0 10px;
+            
+            a {
+                color: white;
+                text-decoration: none;
+                
+                &:hover {
+                    color: #007bff;
+                }
+            }
+        }
+    }
+}
+
+// Compilado a CSS:
+.navbar { background: #333; padding: 20px; }
+.navbar .logo { font-size: 24px; color: white; }
+.navbar .nav-menu { list-style: none; }
+.navbar .nav-menu li { display: inline-block; margin: 0 10px; }
+.navbar .nav-menu li a { color: white; text-decoration: none; }
+.navbar .nav-menu li a:hover { color: #007bff; }</code></pre>
+                </div>
+
+                <h3>Operador & (selector padre)</h3>
+                <div class="code-block">
+                    <pre><code>.button {
+    background: blue;
+    
+    &:hover { background: darkblue; }
+    &:active { background: navy; }
+    &.primary { background: green; }
+    &-large { padding: 20px; } // .button-large
+    .icon & { margin-left: 10px; } // .icon .button
+}</code></pre>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Evita anidar demasiado:</strong> Máximo 3-4 niveles de profundidad para mantener la especificidad bajo control.
+                </div>
+            </article>
+
+            <article id="mixins" class="content-section">
+                <h2><i class="fas fa-magic"></i> Mixins</h2>
+
+                <p>Los mixins permiten reutilizar grupos de declaraciones CSS con parámetros opcionales.</p>
+
+                <h3>Mixin básico</h3>
+                <div class="code-block">
+                    <pre><code>@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    @include flex-center;
+    height: 100vh;
+}</code></pre>
+                </div>
+
+                <h3>Mixin con parámetros</h3>
+                <div class="code-block">
+                    <pre><code>@mixin button($bg-color, $text-color: white) {
+    background-color: $bg-color;
+    color: $text-color;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    
+    &:hover {
+        background-color: darken($bg-color, 10%);
+    }
+}
+
+.btn-primary {
+    @include button(#007bff);
+}
+
+.btn-success {
+    @include button(#28a745, black);
+}</code></pre>
+                </div>
+
+                <h3>Mixin con contenido (@content)</h3>
+                <div class="code-block">
+                    <pre><code>@mixin responsive($breakpoint) {
+    @if $breakpoint == mobile {
+        @media (max-width: 768px) { @content; }
+    }
+    @else if $breakpoint == tablet {
+        @media (max-width: 1024px) { @content; }
+    }
+    @else if $breakpoint == desktop {
+        @media (min-width: 1025px) { @content; }
+    }
+}
+
+.container {
+    width: 100%;
+    
+    @include responsive(mobile) {
+        padding: 10px;
+    }
+    
+    @include responsive(desktop) {
+        padding: 20px;
+        max-width: 1200px;
+    }
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="extend" class="content-section">
+                <h2><i class="fas fa-share-alt"></i> @extend y Herencia</h2>
+
+                <p>Comparte estilos entre selectores sin duplicar código.</p>
+
+                <div class="code-block">
+                    <pre><code>.message {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.success {
+    @extend .message;
+    border-color: #28a745;
+    background-color: #d4edda;
+}
+
+.error {
+    @extend .message;
+    border-color: #dc3545;
+    background-color: #f8d7da;
+}
+
+.warning {
+    @extend .message;
+    border-color: #ffc107;
+    background-color: #fff3cd;
+}</code></pre>
+                </div>
+
+                <h3>Placeholders (%) - Mejor práctica</h3>
+                <div class="code-block">
+                    <pre><code>%message-base {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.success {
+    @extend %message-base;
+    border-color: #28a745;
+}
+
+.error {
+    @extend %message-base;
+    border-color: #dc3545;
+}
+
+// %message-base no aparece en el CSS compilado</code></pre>
+                </div>
+            </article>
+
+            <article id="modulos" class="content-section">
+                <h2><i class="fas fa-puzzle-piece"></i> Módulos y @use</h2>
+
+                <p>Organiza tu código en múltiples archivos usando el sistema moderno de módulos.</p>
+
+                <h3>Estructura de archivos</h3>
+                <div class="code-block">
+                    <pre><code>// _variables.scss
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+
+// _mixins.scss
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+// styles.scss (archivo principal)
+@use 'variables';
+@use 'mixins';
+
+.container {
+    background: variables.$primary-color;
+    @include mixins.flex-center;
+}</code></pre>
+                </div>
+
+                <h3>Namespace personalizado</h3>
+                <div class="code-block">
+                    <pre><code>@use 'variables' as vars;
+@use 'mixins' as *; // Sin namespace
+
+.button {
+    color: vars.$primary-color;
+    @include flex-center; // Sin prefijo
+}</code></pre>
+                </div>
+
+                <div class="info-box">
+                    <strong>@use vs @import:</strong> @use es el sistema moderno y recomendado. @import está deprecado.
+                </div>
+            </article>
+
+            <article id="funciones" class="content-section">
+                <h2><i class="fas fa-calculator"></i> Funciones</h2>
+
+                <h3>Funciones de Color</h3>
+                <div class="code-block">
+                    <pre><code>$base-color: #007bff;
+
+.button {
+    background: $base-color;
+    
+    &:hover {
+        background: darken($base-color, 10%);
+    }
+    
+    &:active {
+        background: lighten($base-color, 10%);
+    }
+}
+
+.text {
+    color: mix(red, blue, 50%); // Mezcla colores
+    background: rgba($base-color, 0.5); // Añade transparencia
+}</code></pre>
+                </div>
+
+                <h3>Funciones Matemáticas</h3>
+                <div class="code-block">
+                    <pre><code>$base-size: 16px;
+
+.text-small { font-size: $base-size * 0.875; }
+.text-large { font-size: $base-size * 1.25; }
+
+// Funciones incorporadas
+.box {
+    width: percentage(0.5); // 50%
+    padding: round(15.6px); // 16px
+    margin: ceil(10.2px); // 11px
+}</code></pre>
+                </div>
+
+                <h3>Funciones Personalizadas</h3>
+                <div class="code-block">
+                    <pre><code>@function rem($pixels) {
+    @return $pixels / 16px * 1rem;
+}
+
+.heading {
+    font-size: rem(24px); // 1.5rem
+    margin-bottom: rem(16px); // 1rem
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="compilacion" class="content-section">
+                <h2><i class="fas fa-cogs"></i> Compilación</h2>
+
+                <h3>Comandos básicos</h3>
+                <div class="code-block">
+                    <pre><code># Compilar archivo único
+sass input.scss output.css
+
+# Watch mode (compilación automática)
+sass --watch input.scss:output.css
+
+# Watch carpeta completa
+sass --watch sass:css
+
+# Estilo de salida
+sass --style=compressed input.scss output.css</code></pre>
+                </div>
+
+                <h3>Estilos de salida</h3>
+                <ul>
+                    <li><strong>expanded:</strong> CSS legible (default)</li>
+                    <li><strong>compressed:</strong> CSS minificado para producción</li>
+                </ul>
+
+                <h3>Configuración en package.json</h3>
+                <div class="code-block">
+                    <pre><code>{
+  "scripts": {
+    "sass": "sass --watch sass:css",
+    "sass:build": "sass --style=compressed sass:css"
+  },
+  "devDependencies": {
+    "sass": "^1.69.0"
+  }
+}</code></pre>
+                </div>
+
+                <h3>Ejecutar</h3>
+                <div class="code-block">
+                    <pre><code>npm run sass        # Desarrollo
+npm run sass:build  # Producción</code></pre>
+                </div>
+            </article>
+
+            <div class="info-box">
+                <h3>Recursos Adicionales</h3>
+                <ul>
+                    <li><a href="https://sass-lang.com/" target="_blank">Sass Official Website</a></li>
+                    <li><a href="https://sass-lang.com/documentation" target="_blank">Documentación Oficial</a></li>
+                    <li><a href="https://www.sassmeister.com/" target="_blank">SassMeister - Playground Online</a></li>
+                    <li><a href="https://github.com/sass/sass" target="_blank">Sass en GitHub</a></li>
+                </ul>
+            </div>
+
+            <div class="navigation-section">
+                <a href="index.html" class="btn-secondary">← Volver al Índice</a>
+                <a href="resumen.html" class="btn-primary">Ver Resumen →</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

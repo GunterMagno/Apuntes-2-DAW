@@ -937,6 +937,63 @@ code {
     font-size: 0.9rem;
 }
 
+/* Topic list - Alternative sidebar style */
+.topic-list {
+    list-style: none;
+}
+
+.topic-list > li {
+    margin-bottom: 6px;
+}
+
+.topic-list a {
+    display: block;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.topic-list a:hover {
+    color: var(--accent-primary);
+    background-color: rgba(99, 102, 241, 0.12);
+    padding-left: 16px;
+}
+
+.topic-list a.active,
+.topic-list a.highlighted {
+    color: white;
+    background-color: var(--accent-primary);
+    font-weight: 600;
+}
+
+.topic-list .resumen-link {
+    color: var(--java-color);
+    font-weight: 600;
+}
+
+.topic-list .resumen-link:hover {
+    background-color: rgba(245, 158, 108, 0.12);
+}
+
+.topic-category {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-xs);
+    padding-left: 12px;
+}
+
+.topic-category:first-child {
+    margin-top: 0;
+}
+
 .sidebar-nav a:hover {
     color: var(--accent-primary);
     background-color: rgba(99, 102, 241, 0.12);

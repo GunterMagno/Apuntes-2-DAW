@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Selectores Avanzados - CSS - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="./index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver a CSS & Sass
+            </a>
+        </div>
+    </nav>
+
+    <!-- Contenido con Sidebar -->
+    <div class="content-with-sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-crosshairs"></i> Selectores Avanzados</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#pseudo-clases" class="active">Pseudo-clases</a></li>
+                <li><a href="#pseudo-elementos">Pseudo-elementos</a></li>
+                <li><a href="#atributos">Selectores de atributo</a></li>
+                <li><a href="#combinadores">Combinadores</a></li>
+                <li><a href="#nth">Selectores :nth</a></li>
+            </ul>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <h1>Selectores Avanzados CSS</h1>
+
+            <article id="pseudo-clases" class="content-section">
+                <h2><i class="fas fa-mouse-pointer"></i> Pseudo-clases</h2>
+                <p>Las pseudo-clases permiten seleccionar elementos basándose en su estado o posición.</p>
+
+                <h3>Pseudo-clases de interacción</h3>
+                <div class="code-block">
+<pre><code>/* Cuando el mouse está sobre el elemento */
+a:hover {
+    color: blue;
+}
+
+/* Cuando el elemento tiene el foco */
+input:focus {
+    border-color: blue;
+}
+
+/* Cuando el elemento está activo (siendo clicado) */
+button:active {
+    transform: scale(0.95);
+}</code></pre>
+                </div>
+
+                <h3>Pseudo-clases de estado</h3>
+                <div class="code-block">
+<pre><code>/* Checkbox marcado */
+input:checked {
+    background: green;
+}
+
+/* Input deshabilitado */
+input:disabled {
+    opacity: 0.5;
+}
+
+/* Input válido/inválido */
+input:valid {
+    border-color: green;
+}
+
+input:invalid {
+    border-color: red;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="pseudo-elementos" class="content-section">
+                <h2><i class="fas fa-puzzle-piece"></i> Pseudo-elementos</h2>
+                <p>Los pseudo-elementos permiten estilizar partes específicas de un elemento.</p>
+
+                <div class="code-block">
+<pre><code>/* Antes del contenido */
+.title::before {
+    content: "📌 ";
+}
+
+/* Después del contenido */
+.link::after {
+    content: " →";
+}
+
+/* Primera letra */
+p::first-letter {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+/* Primera línea */
+p::first-line {
+    color: blue;
+}
+
+/* Texto seleccionado */
+::selection {
+    background: yellow;
+    color: black;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="atributos" class="content-section">
+                <h2><i class="fas fa-tags"></i> Selectores de Atributo</h2>
+                
+                <div class="code-block">
+<pre><code>/* Tiene el atributo */
+[disabled] {
+    cursor: not-allowed;
+}
+
+/* Atributo con valor exacto */
+[type="text"] {
+    border: 1px solid gray;
+}
+
+/* Empieza con */
+[class^="btn-"] {
+    padding: 10px 20px;
+}
+
+/* Termina con */
+[href$=".pdf"] {
+    color: red;
+}
+
+/* Contiene */
+[class*="primary"] {
+    background: blue;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="combinadores" class="content-section">
+                <h2><i class="fas fa-link"></i> Combinadores</h2>
+
+                <div class="code-block">
+<pre><code>/* Descendiente (cualquier nivel) */
+div p {
+    color: blue;
+}
+
+/* Hijo directo */
+ul > li {
+    list-style: none;
+}
+
+/* Hermano adyacente */
+h1 + p {
+    font-size: 1.2em;
+}
+
+/* Hermanos generales */
+h1 ~ p {
+    margin-top: 1em;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="nth" class="content-section">
+                <h2><i class="fas fa-list-ol"></i> Selectores :nth</h2>
+
+                <div class="code-block">
+<pre><code>/* Primer elemento */
+li:first-child {
+    font-weight: bold;
+}
+
+/* Último elemento */
+li:last-child {
+    border-bottom: none;
+}
+
+/* Elemento n */
+li:nth-child(3) {
+    color: red;
+}
+
+/* Elementos pares */
+tr:nth-child(even) {
+    background: #f0f0f0;
+}
+
+/* Elementos impares */
+tr:nth-child(odd) {
+    background: white;
+}
+
+/* Cada 3 elementos */
+li:nth-child(3n) {
+    color: blue;
+}</code></pre>
+                </div>
+            </article>
+
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

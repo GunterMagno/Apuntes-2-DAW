@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>CSS & Sass - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="../../index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <div class="topics-page">
+        <div class="topics-header">
+            <div class="topics-icon" style="color: #2965f1;">
+                <i class="fab fa-css3-alt"></i>
+            </div>
+            <h1 class="topics-title">CSS & Sass</h1>
+            <p class="topics-subtitle">Estilos modernos y preprocesamiento CSS</p>
+        </div>
+
+        <!-- Sección CSS -->
+        <div class="section-divider">
+            <h2><i class="fab fa-css3-alt"></i> CSS - Cascading Style Sheets</h2>
+        </div>
+
+        <div class="topics-grid">
+            <a href="introduccion.html" class="topic-card">
+                <div class="topic-number" style="background-color: #2965f1;">1</div>
+                <h3 class="topic-title">Introducción a CSS</h3>
+                <p class="topic-description">Qué es CSS, sintaxis básica, selectores, propiedades comunes y formas de aplicar estilos.</p>
+            </a>
+
+            <a href="selectores.html" class="topic-card">
+                <div class="topic-number" style="background-color: #2965f1;">2</div>
+                <h3 class="topic-title">Selectores Avanzados</h3>
+                <p class="topic-description">Pseudo-clases, pseudo-elementos, selectores de atributo y combinadores.</p>
+            </a>
+
+            <a href="box-model.html" class="topic-card">
+                <div class="topic-number" style="background-color: #2965f1;">3</div>
+                <h3 class="topic-title">Box Model</h3>
+                <p class="topic-description">Modelo de caja, margin, padding, border, box-sizing y display.</p>
+            </a>
+
+            <a href="flexbox.html" class="topic-card">
+                <div class="topic-number" style="background-color: #2965f1;">4</div>
+                <h3 class="topic-title">Flexbox</h3>
+                <p class="topic-description">Sistema de layout unidimensional, flex-container, flex-items y propiedades principales.</p>
+            </a>
+
+            <a href="grid.html" class="topic-card">
+                <div class="topic-number" style="background-color: #2965f1;">5</div>
+                <h3 class="topic-title">CSS Grid</h3>
+                <p class="topic-description">Sistema de layout bidimensional, grid-template, áreas y alineación.</p>
+            </a>
+
+            <a href="responsive.html" class="topic-card">
+                <div class="topic-number" style="background-color: #2965f1;">6</div>
+                <h3 class="topic-title">Diseño Responsive</h3>
+                <p class="topic-description">Media queries, mobile-first, unidades relativas y viewport.</p>
+            </a>
+
+            <a href="animaciones.html" class="topic-card">
+                <div class="topic-number" style="background-color: #2965f1;">7</div>
+                <h3 class="topic-title">Animaciones y Transiciones</h3>
+                <p class="topic-description">Transitions, transforms, keyframes y animaciones CSS.</p>
+            </a>
+
+            <a href="scope.html" class="topic-card">
+                <div class="topic-number" style="background-color: #2965f1;">8</div>
+                <h3 class="topic-title">@scope</h3>
+                <p class="topic-description">Nueva funcionalidad CSS para limitar el alcance de estilos a regiones específicas del DOM.</p>
+            </a>
+        </div>
+
+        <!-- Sección Sass -->
+        <div class="section-divider">
+            <h2><i class="fab fa-sass"></i> Sass - Preprocesador CSS</h2>
+        </div>
+
+        <div class="topics-grid">
+            <a href="sass-intro.html" class="topic-card">
+                <div class="topic-number" style="background-color: #cd6799;">1</div>
+                <h3 class="topic-title">Introducción a Sass</h3>
+                <p class="topic-description">Preprocesador CSS, instalación, sintaxis SCSS vs Sass y compilación.</p>
+            </a>
+
+            <a href="sass-variables.html" class="topic-card">
+                <div class="topic-number" style="background-color: #cd6799;">2</div>
+                <h3 class="topic-title">Variables y Anidamiento</h3>
+                <p class="topic-description">Variables Sass, operaciones, anidamiento y selector &.</p>
+            </a>
+
+            <a href="sass-mixins.html" class="topic-card">
+                <div class="topic-number" style="background-color: #cd6799;">3</div>
+                <h3 class="topic-title">Mixins y Funciones</h3>
+                <p class="topic-description">@mixin, @include, funciones integradas y personalizadas.</p>
+            </a>
+
+            <a href="sass-modules.html" class="topic-card">
+                <div class="topic-number" style="background-color: #cd6799;">4</div>
+                <h3 class="topic-title">Módulos y @extend</h3>
+                <p class="topic-description">@use, @forward, @extend, placeholders y organización de código.</p>
+            </a>
+
+            <a href="resumen.html" class="topic-card summary-card">
+                <div class="topic-number" style="background: linear-gradient(135deg, #2965f1 0%, #cd6799 100%);">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h3 class="topic-title">Resumen Completo</h3>
+                <p class="topic-description">Resumen de CSS y Sass con todos los conceptos clave y mejores prácticas.</p>
+            </a>
+        </div>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

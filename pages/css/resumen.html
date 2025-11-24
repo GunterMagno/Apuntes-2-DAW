@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Resumen CSS & Sass - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="./index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver a CSS & Sass
+            </a>
+        </div>
+    </nav>
+
+    <!-- Página de Resumen -->
+    <div class="resume-page">
+        <div class="resume-header">
+            <div class="resume-icon" style="background: linear-gradient(135deg, #2965f1 0%, #cd6799 100%);">
+                <i class="fas fa-clipboard-list"></i>
+            </div>
+            <h1>Resumen de CSS & Sass</h1>
+            <p>Repaso completo de conceptos clave, sintaxis y mejores prácticas</p>
+        </div>
+
+        <main class="resume-content">
+            <h1>Resumen de CSS & Sass</h1>
+        
+        <div class="resume-section">
+            <h2><i class="fab fa-css3-alt"></i> CSS - Cascading Style Sheets</h2>
+            
+            <h3>Conceptos Fundamentales</h3>
+            <ul>
+                <li>CSS controla la presentación visual de HTML</li>
+                <li>Separación de contenido (HTML) y presentación (CSS)</li>
+                <li>Sistema de cascada y especificidad</li>
+            </ul>
+
+            <h3>Selectores Principales</h3>
+            <ul>
+                <li><strong>Elemento:</strong> <code>p { }</code></li>
+                <li><strong>Clase:</strong> <code>.nombre { }</code></li>
+                <li><strong>ID:</strong> <code>#nombre { }</code></li>
+                <li><strong>Atributo:</strong> <code>[type="text"] { }</code></li>
+                <li><strong>Pseudo-clases:</strong> <code>:hover, :focus, :nth-child()</code></li>
+            </ul>
+
+            <h3>Box Model</h3>
+            <ul>
+                <li><strong>Content:</strong> Contenido del elemento</li>
+                <li><strong>Padding:</strong> Espacio interno</li>
+                <li><strong>Border:</strong> Borde del elemento</li>
+                <li><strong>Margin:</strong> Espacio externo</li>
+                <li><code>box-sizing: border-box;</code> - Recomendado</li>
+            </ul>
+
+            <h3>@scope - Nuevo en CSS</h3>
+            <ul>
+                <li>Limita el alcance de estilos a regiones específicas del DOM</li>
+                <li><code>@scope (.contenedor) { ... }</code></li>
+                <li><code>@scope (.contenedor) to (.limite) { ... }</code></li>
+                <li>Mejora la modularidad y evita conflictos de estilos</li>
+                <li>Soporte: Chrome 118+, Safari 17.4+</li>
+            </ul>
+        </div>
+
+        <div class="resume-section">
+            <h2><i class="fab fa-sass"></i> Sass - Preprocesador CSS</h2>
+            
+            <h3>¿Qué es Sass?</h3>
+            <ul>
+                <li>Preprocesador CSS que extiende las capacidades de CSS estándar</li>
+                <li>Dos sintaxis: SCSS (similar a CSS) y Sass (indentada)</li>
+                <li>Se compila a CSS estándar para los navegadores</li>
+            </ul>
+
+            <h3>Variables</h3>
+            <ul>
+                <li><code>$primary-color: #007bff;</code></li>
+                <li><code>$font-stack: 'Helvetica', sans-serif;</code></li>
+                <li>Reutilización de valores en todo el proyecto</li>
+                <li>Operaciones matemáticas: <code>$base-padding * 2</code></li>
+            </ul>
+
+            <h3>Anidamiento</h3>
+            <ul>
+                <li>Refleja la jerarquía HTML en CSS</li>
+                <li>Usa <code>&</code> para referenciar el selector padre</li>
+                <li>Evita el anidamiento excesivo (máximo 3-4 niveles)</li>
+            </ul>
+
+            <h3>Mixins</h3>
+            <ul>
+                <li><code>@mixin nombre($param) { ... }</code></li>
+                <li><code>@include nombre(valor);</code></li>
+                <li>Reutiliza bloques de código con parámetros</li>
+                <li>Ideal para vendor prefixes y responsive design</li>
+            </ul>
+
+            <h3>Funciones</h3>
+            <ul>
+                <li><strong>Color:</strong> <code>darken(), lighten(), mix()</code></li>
+                <li><strong>Matemáticas:</strong> <code>percentage(), round()</code></li>
+                <li><strong>Personalizadas:</strong> <code>@function nombre() { @return ... }</code></li>
+            </ul>
+
+            <h3>@extend y Herencia</h3>
+            <ul>
+                <li><code>@extend .clase;</code> - Comparte estilos</li>
+                <li>Placeholders: <code>%nombre { ... }</code></li>
+                <li>Reduce la duplicación de código</li>
+            </ul>
+
+            <h3>Módulos (@use)</h3>
+            <ul>
+                <li><code>@use 'archivo';</code> - Sistema moderno de importación</li>
+                <li><code>@use 'archivo' as nombre;</code> - Alias</li>
+                <li><code>archivo.$variable</code> - Acceso a variables</li>
+                <li>Reemplaza a <code>@import</code> (deprecado)</li>
+            </ul>
+
+            <h3>Compilación</h3>
+            <ul>
+                <li><strong>CLI:</strong> <code>sass input.scss output.css</code></li>
+                <li><strong>Watch:</strong> <code>sass --watch input.scss:output.css</code></li>
+                <li><strong>Estilos:</strong> expanded (legible), compressed (producción)</li>
+            </ul>
+        </div>
+
+        <div class="resume-section">
+            <h2><i class="fas fa-lightbulb"></i> Mejores Prácticas</h2>
+            <ul>
+                <li>Usa SCSS en lugar de sintaxis indentada (más compatible con CSS)</li>
+                <li>Organiza tu código en múltiples archivos con @use</li>
+                <li>Define variables para valores reutilizables</li>
+                <li>Crea mixins para patrones repetitivos</li>
+                <li>Evita anidar más de 3-4 niveles</li>
+                <li>Usa placeholders (%) en lugar de clases para @extend</li>
+                <li>Aprovecha @scope en CSS para componentes aislados</li>
+                <li>Compila en modo compressed para producción</li>
+            </ul>
+        </div>
+    </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

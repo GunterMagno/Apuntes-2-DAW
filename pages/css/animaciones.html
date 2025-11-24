@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Animaciones - CSS - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="./index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver a CSS & Sass
+            </a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-play"></i> Animaciones</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#transitions" class="active">Transitions</a></li>
+                <li><a href="#transforms">Transforms</a></li>
+                <li><a href="#animations">Animations</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <h1>Animaciones y Transiciones CSS</h1>
+
+            <article id="transitions" class="content-section">
+                <h2><i class="fas fa-exchange-alt"></i> Transitions</h2>
+
+                <div class="code-block">
+<pre><code>.button {
+    background: blue;
+    transition: background 0.3s ease;
+}
+
+.button:hover {
+    background: darkblue;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="animations" class="content-section">
+                <h2><i class="fas fa-film"></i> Animations</h2>
+
+                <div class="code-block">
+<pre><code>@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.element {
+    animation: slideIn 0.5s ease;
+}</code></pre>
+                </div>
+            </article>
+
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

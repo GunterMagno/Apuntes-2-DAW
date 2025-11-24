@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Flexbox - CSS - Wiki 2º DAW</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Wiki 2º DAW</h1>
+            </div>
+            <a href="./index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver a CSS & Sass
+            </a>
+        </div>
+    </nav>
+
+    <div class="content-with-sidebar">
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><i class="fas fa-grip-horizontal"></i> Flexbox</h3>
+            <ul class="sidebar-nav">
+                <li><a href="#intro" class="active">Introducción</a></li>
+                <li><a href="#container">Flex Container</a></li>
+                <li><a href="#items">Flex Items</a></li>
+                <li><a href="#direction">Direction</a></li>
+                <li><a href="#justify">Justify Content</a></li>
+                <li><a href="#align">Align Items</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <h1>Flexbox - Sistema de Layout Unidimensional</h1>
+
+            <article id="intro" class="content-section">
+                <h2><i class="fas fa-info-circle"></i> ¿Qué es Flexbox?</h2>
+                <p>Flexbox es un sistema de layout unidimensional (filas o columnas) que facilita la distribución y alineación de elementos.</p>
+
+                <div class="code-block">
+<pre><code>.container {
+    display: flex;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="container" class="content-section">
+                <h2><i class="fas fa-box"></i> Propiedades del Contenedor</h2>
+
+                <div class="code-block">
+<pre><code>.flex-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}</code></pre>
+                </div>
+            </article>
+
+            <article id="items" class="content-section">
+                <h2><i class="fas fa-cubes"></i> Propiedades de los Items</h2>
+
+                <div class="code-block">
+<pre><code>.flex-item {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 200px;
+    /* Shorthand */
+    flex: 1 1 200px;
+    
+    align-self: flex-start;
+    order: 2;
+}</code></pre>
+                </div>
+            </article>
+
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>
